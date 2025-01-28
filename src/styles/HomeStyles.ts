@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     marginLeft: 29,
   },
   text: {
-    fontFamily: 'Pretendard-Thin',
+    fontFamily: 'Pretendard-SemiBold',
     // fontWeight: 'bold',
     fontSize: 18,
     color: '#333',
