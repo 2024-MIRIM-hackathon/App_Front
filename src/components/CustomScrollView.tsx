@@ -64,7 +64,8 @@ const styles = StyleSheet.create({
     height: 178,
   },
   contentContainer: {
-    paddingHorizontal: 29,
+    paddingLeft: 29,
+    paddingRight: 21,
     height: 178,
   },
   scrollBarContainer: {
