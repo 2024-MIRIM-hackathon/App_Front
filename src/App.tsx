@@ -75,17 +75,28 @@ const CustomTabBar = ({
           }
         };
 
+        // 탭별로 다른 아이콘 및 활성화 상태 적용
         let iconSource;
         if (route.name === '홈') {
-          iconSource = require('./assets/images/logo.png');
+          iconSource = isFocused
+            ? require('./assets/images/home_active.png')  // 활성화 아이콘
+            : require('./assets/images/home_inactive.png');  // 비활성화 아이콘
         } else if (route.name === '퀴즈') {
-          iconSource = require('./assets/images/logo.png');
+          iconSource = isFocused
+            ? require('./assets/images/quiz_active.png')
+            : require('./assets/images/quiz_inactive.png');
         } else if (route.name === '사전') {
-          iconSource = require('./assets/images/logo.png');
+          iconSource = isFocused
+            ? require('./assets/images/dictionary_active.png')
+            : require('./assets/images/dictionary_inactive.png');
         } else if (route.name === '달력') {
-          iconSource = require('./assets/images/logo.png');
+          iconSource = isFocused
+            ? require('./assets/images/calendar_active.png')
+            : require('./assets/images/calendar_inactive.png');
         } else if (route.name === 'My') {
-          iconSource = require('./assets/images/logo.png');
+          iconSource = isFocused
+            ? require('./assets/images/mypage_active.png')
+            : require('./assets/images/mypage_inactive.png');
         }
 
         return (
@@ -93,12 +104,11 @@ const CustomTabBar = ({
             <Image
               source={iconSource}
               style={{
-                width: 30,
-                height: 30,
-                tintColor: isFocused ? '#3498db' : '#7f8c8d',
+                width: 22,
+                height: 23,
               }}
             />
-            <Text style={{ color: isFocused ? '#000000' : '#5B5B5B', fontFamily: 'Pretendard-Regular', marginTop: 8 }}>
+            <Text style={{ color: isFocused ? '#000000' : '#5B5B5B', fontFamily: 'Pretendard-Regular', marginTop: 8, fontSize: 10, }}>
               {route.name}
             </Text>
           </TouchableOpacity>
@@ -115,15 +125,19 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width - 26,
     height: 74,
     backgroundColor: '#fff',
-    borderRadius: 36,
+    borderRadius: 100,
     position: 'absolute',
-    bottom: 33,
+    bottom: 21,
+    borderWidth: 0.1,
+    borderColor: 'white',
     left: 13,
     paddingHorizontal: 45,
-    borderWidth: 2,
-    borderColor: '#F2F1F6',
     justifyContent: 'space-between',
     alignItems: 'center',
+    elevation: 1,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05, 
+    shadowRadius: 35.8,
   },
 });
 

@@ -68,7 +68,7 @@ function Home() {
                         <Text style={styles.learningIng}>4/2 진행 중</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.learningContainer} activeOpacity={1}>
+                <TouchableOpacity style={[styles.learningContainer, {marginBottom: 107}]} activeOpacity={1}>
                     <View style={styles.learningItem}>
                         <Image source={require('../assets/images/write.png')} style={styles.writeImg} />
                         <Text style={styles.learningActivity}>글 읽기 연습</Text>
