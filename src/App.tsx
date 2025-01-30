@@ -1,15 +1,16 @@
 import React from 'react';
 import 'react-native-gesture-handler';
 import { View, Text, TouchableOpacity, Image, Dimensions, StyleSheet } from 'react-native';
-import { NavigationContainer, Route } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { getFocusedRouteNameFromRoute, NavigationContainer, Route, RouteProp } from '@react-navigation/native';
+import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import QuizScreen from './screens/Quiz'; 
-import DictionaryScreen from './screens/Dictionary'; 
-import HomeScreen from './screens/Home'; 
-import CalendarScreen from './screens/Calendar'; 
-import MyPageScreen from './screens/MyPage'; 
+import QuizScreen from './screens/Quiz';
+import DictionaryScreen from './screens/Dictionary';
+import HomeScreen from './screens/Home';
+import CalendarScreen from './screens/Calendar';
+import MyPageScreen from './screens/MyPage';
+import LearningScreen from './screens/Learning';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -30,7 +31,7 @@ const DictionaryStack = () => (
 const HomeStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Home" component={HomeScreen} />
-    <Stack.Screen name="Quiz" component={QuizScreen} />
+    <Stack.Screen name="Learning" component={LearningScreen} />
   </Stack.Navigator>
 );
 
@@ -48,15 +49,14 @@ const MyPageStack = () => (
 
 // CustomTabBar 컴포넌트
 const CustomTabBar = ({
-    state,
-    descriptors,
-    navigation
-  }: {
-    state: any;
-    descriptors: any;
-    navigation: any;
-  }) => {
-  const windowWidth = Dimensions.get('window').width;
+  state,
+  descriptors,
+  navigation
+}: {
+  state: any;
+  descriptors: any;
+  navigation: any;
+}) => {
   return (
     <View style={styles.tabBarContainer}>
       {state.routes.map((route: Route<string>, index: number) => {
@@ -136,23 +136,43 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 1,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05, 
+    shadowOpacity: 0.05,
     shadowRadius: 35.8,
   },
 });
 
+const AppTabNavigator = () => (
+  <Tab.Navigator
+      initialRouteName="홈"
+      tabBar={(props) => {
+        const routeName = getFocusedRouteNameFromRoute(props.state.routes[props.state.index]) || '홈';
+        const validRoutes = ['퀴즈', '사전', '홈', '달력', 'My'];
+
+        if (validRoutes.includes(routeName)) {
+          return <CustomTabBar {...props} />;
+        }
+
+        return null;
+      }}
+      screenOptions={({ route }) => ({
+        headerShown: false,
+      })}
+    >
+    <Tab.Screen name="퀴즈" component={QuizStack} options={{ headerShown: false }} />
+    <Tab.Screen name="사전" component={DictionaryStack} options={{ headerShown: false }} />
+    <Tab.Screen name="홈" component={HomeStack} options={{ headerShown: false }} />
+    <Tab.Screen name="달력" component={CalendarStack} options={{ headerShown: false }} />
+    <Tab.Screen name="My" component={MyPageStack} options={{ headerShown: false }} />
+  </Tab.Navigator>
+);
+
 const App = () => {
   return (
     <NavigationContainer>
-      <Tab.Navigator initialRouteName="홈" tabBar={(props) => <CustomTabBar {...props} />}>
-        <Tab.Screen name="퀴즈" component={QuizStack} options={{ headerShown: false }} />
-        <Tab.Screen name="사전" component={DictionaryStack} options={{ headerShown: false }} />
-        <Tab.Screen name="홈" component={HomeStack} options={{ headerShown: false }} />
-        <Tab.Screen name="달력" component={CalendarStack} options={{ headerShown: false }} />
-        <Tab.Screen name="My" component={MyPageStack} options={{ headerShown: false }} />
-      </Tab.Navigator>
+      <AppTabNavigator />
     </NavigationContainer>
   );
 };
 
 export default App;
+

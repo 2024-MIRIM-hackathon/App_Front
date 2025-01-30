@@ -2,6 +2,18 @@
   "migIndex": 1,
   "data": [
     {
+      "path": "src/assets/fonts/NanumMyeongjo.ttf",
+      "sha1": "fff5fd3f51dfff394c88948a703ea746b3ef52fb"
+    },
+    {
+      "path": "src/assets/fonts/NanumMyeongjoBold.ttf",
+      "sha1": "4b5299e387fea8bab768cb78c228b304dfe35391"
+    },
+    {
+      "path": "src/assets/fonts/NanumMyeongjoExtraBold.ttf",
+      "sha1": "a891c3233a43468b46159004e253c095064b5de3"
+    },
+    {
       "path": "src/assets/fonts/Pretendard-Black.otf",
       "sha1": "b9162985d25a21b393185c6139d283fba46fd739"
     },
@@ -36,10 +48,6 @@
     {
       "path": "src/assets/fonts/Pretendard-Thin.otf",
       "sha1": "72cf55b4d2ea4adc75123f33ca839c10cabfaab4"
-    },
-    {
-      "path": "src/assets/images/logo.png",
-      "sha1": "627664c13b25dfe05de7a84dc7de40e95c1d2da9"
     }
   ]
 }

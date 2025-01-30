@@ -61,7 +61,7 @@ function Home() {
                     </TouchableWithoutFeedback>
                 </CustomScrollView>
                 <Text style={styles.learningText}>학습</Text>
-                <TouchableOpacity style={styles.learningContainer} activeOpacity={1} onPress={() => navigation.navigate("Quiz")}>
+                <TouchableOpacity style={styles.learningContainer} activeOpacity={1} onPress={() => navigation.navigate("Learning")}>
                     <View style={styles.learningItem}>
                         <Image source={require('../assets/images/book.png')} style={styles.bookImg} />
                         <Text style={styles.learningActivity}>책 문장 단어학습</Text>

@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   logoImg: {
     width: 59,
     height: 28.09,
-    marginTop: 30,
+    marginTop: 32,
     marginLeft: 29,
   },
   issuesText: {
