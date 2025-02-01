@@ -71,7 +71,7 @@ function Home() {
                         <Text style={styles.learningIng}>4/2 진행 중</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.learningContainer, {marginBottom: 107}]} activeOpacity={1}>
+                <TouchableOpacity style={[styles.learningContainer, {marginBottom: 107}]} activeOpacity={1} onPress={() => navigation.navigate("Reading")}>
                     <View style={styles.learningItem}>
                         <Write />
                         <Text style={styles.learningActivity}>글 읽기 연습</Text>
