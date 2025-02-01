@@ -9,6 +9,9 @@ import {
     Linking,
     TouchableOpacity,
 } from 'react-native';
+import Logo from '../assets/svg/logo';
+import Book from '../assets/svg/book';
+import Write from '../assets/svg/write';
 
 import CustomScrollView from '../components/CustomScrollView';
 import { useNavigation } from '@react-navigation/native';
@@ -23,7 +26,7 @@ function Home() {
         <View style={styles.body}>
             <StatusBar barStyle="dark-content" backgroundColor="#F6F5FA" />
             <ScrollView showsVerticalScrollIndicator={false}>
-                <Image source={require('../assets/images/logo.png')} style={styles.logoImg} />
+                <Logo style={styles.logo}/>
                 <Text style={styles.issuesText}>요즘 문학이슈</Text>
                 <CustomScrollView>
                     <TouchableWithoutFeedback onPress={() => Linking.openURL('https://www.example.com')} >
@@ -63,14 +66,14 @@ function Home() {
                 <Text style={styles.learningText}>학습</Text>
                 <TouchableOpacity style={styles.learningContainer} activeOpacity={1} onPress={() => navigation.navigate("Learning")}>
                     <View style={styles.learningItem}>
-                        <Image source={require('../assets/images/book.png')} style={styles.bookImg} />
+                        <Book />
                         <Text style={styles.learningActivity}>책 문장 단어학습</Text>
                         <Text style={styles.learningIng}>4/2 진행 중</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.learningContainer, {marginBottom: 107}]} activeOpacity={1}>
                     <View style={styles.learningItem}>
-                        <Image source={require('../assets/images/write.png')} style={styles.writeImg} />
+                        <Write />
                         <Text style={styles.learningActivity}>글 읽기 연습</Text>
                         <Text style={styles.learningIng}>미완료</Text>
                     </View>

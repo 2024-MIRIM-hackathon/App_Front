@@ -13,16 +13,18 @@ interface CustomScrollViewProps {
   contentWidth?: number;
 }
 
-const CustomScrollView = ({ children, contentWidth = 1070 }: CustomScrollViewProps) => {
+const windowWidth = Dimensions.get('window').width;
+const scrollBarContainerWidth = windowWidth - 29 * 2;
+
+
+const CustomScrollView = ({ children, contentWidth = scrollBarContainerWidth*3+76 }: CustomScrollViewProps) => {
   const scrollX = useSharedValue(0);
-  const windowWidth = Dimensions.get('window').width;
 
   const scrollHandler = useAnimatedScrollHandler((event) => {
     scrollX.value = event.contentOffset.x;
   });
 
   const scrollBarStyle = useAnimatedStyle(() => {
-    const scrollBarContainerWidth = windowWidth - 29 * 2;
     const scrollBarWidth = (scrollBarContainerWidth / contentWidth) * windowWidth;
     const translateX = (scrollX.value / (contentWidth - windowWidth)) * (scrollBarContainerWidth - scrollBarWidth);
 
@@ -43,7 +45,7 @@ const CustomScrollView = ({ children, contentWidth = 1070 }: CustomScrollViewPro
         showsHorizontalScrollIndicator={false}>
 
         {children.map((child, index) => (
-          <View key={index} style={{ width: 332, height: 178, marginRight: 8 }}>
+          <View key={index} style={{ width: scrollBarContainerWidth, height: undefined, marginRight: 8 }}>
             {child}
           </View>
         ))}
@@ -58,15 +60,16 @@ const CustomScrollView = ({ children, contentWidth = 1070 }: CustomScrollViewPro
 
 const styles = StyleSheet.create({
   container: {
-    height: 202,
+    height: undefined,
   },
   scrollView: {
-    height: 178,
+    height: undefined,
+    marginBottom: 21,
   },
   contentContainer: {
     paddingLeft: 29,
     paddingRight: 21,
-    height: 178,
+    height: undefined,
   },
   scrollBarContainer: {
     position: 'absolute',
@@ -76,6 +79,7 @@ const styles = StyleSheet.create({
     height: 3,
     backgroundColor: 'white',
     borderRadius: 3,
+    
   },
   scrollBar: {
     height: 3,
