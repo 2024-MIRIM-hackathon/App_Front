@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
         fontFamily: 'NanumMyeongjoBold',
     },
     BookInfo: {
+        alignItems: 'flex-end',
         marginHorizontal: 26,
         marginBottom: 25,
         flexDirection: 'row',
