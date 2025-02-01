@@ -1,6 +1,6 @@
 import React from 'react';
 import 'react-native-gesture-handler';
-import { View, Text, TouchableOpacity, Image, Dimensions, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Dimensions, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { getFocusedRouteNameFromRoute, NavigationContainer, Route, RouteProp } from '@react-navigation/native';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -164,7 +164,13 @@ const AppTabNavigator = () => (
 const App = () => {
   return (
     <NavigationContainer>
-      <AppTabNavigator />
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={-95}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+      >
+        <AppTabNavigator />
+      </KeyboardAvoidingView>
     </NavigationContainer>
   );
 };
