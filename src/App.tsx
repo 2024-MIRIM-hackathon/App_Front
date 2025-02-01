@@ -12,6 +12,17 @@ import CalendarScreen from './screens/Calendar';
 import MyPageScreen from './screens/MyPage';
 import LearningScreen from './screens/Learning';
 
+import HomeActive from './assets/svg/HomeActive';
+import HomeInactive from './assets/svg/HomeInactive';
+import QuizActive from './assets/svg/QuizActive';
+import QuizInactive from './assets/svg/QuizInactive';
+import DictionaryActive from './assets/svg/DictionaryActive';
+import DictionaryInactive from './assets/svg/DictionaryInactive';
+import CalendarActive from './assets/svg/CalendarActive';
+import CalendarInactive from './assets/svg/CalendarInactive';
+import MyPageActive from './assets/svg/MyPageActive';
+import MyPageInactive from './assets/svg/MyPageInactive';
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -76,38 +87,22 @@ const CustomTabBar = ({
         };
 
         // 탭별로 다른 아이콘 및 활성화 상태 적용
-        let iconSource;
+        let IconComponent;
         if (route.name === '홈') {
-          iconSource = isFocused
-            ? require('./assets/images/home_active.png')  // 활성화 아이콘
-            : require('./assets/images/home_inactive.png');  // 비활성화 아이콘
+          IconComponent = isFocused ? <HomeActive /> : <HomeInactive />;
         } else if (route.name === '퀴즈') {
-          iconSource = isFocused
-            ? require('./assets/images/quiz_active.png')
-            : require('./assets/images/quiz_inactive.png');
+          IconComponent = isFocused ? <QuizActive /> : <QuizInactive />;
         } else if (route.name === '사전') {
-          iconSource = isFocused
-            ? require('./assets/images/dictionary_active.png')
-            : require('./assets/images/dictionary_inactive.png');
+          IconComponent = isFocused ? <DictionaryActive /> : <DictionaryInactive />;
         } else if (route.name === '달력') {
-          iconSource = isFocused
-            ? require('./assets/images/calendar_active.png')
-            : require('./assets/images/calendar_inactive.png');
+          IconComponent = isFocused ? <CalendarActive /> : <CalendarInactive />;
         } else if (route.name === 'My') {
-          iconSource = isFocused
-            ? require('./assets/images/mypage_active.png')
-            : require('./assets/images/mypage_inactive.png');
+          IconComponent = isFocused ? <MyPageActive /> : <MyPageInactive />;
         }
 
         return (
           <TouchableOpacity key={route.key} onPress={onPress} style={{ alignItems: 'center' }}>
-            <Image
-              source={iconSource}
-              style={{
-                width: 22,
-                height: 23,
-              }}
-            />
+            {IconComponent}
             <Text style={{ color: isFocused ? '#000000' : '#5B5B5B', fontFamily: 'Pretendard-Regular', marginTop: 8, fontSize: 10, }}>
               {route.name}
             </Text>
@@ -143,26 +138,24 @@ const styles = StyleSheet.create({
 
 const AppTabNavigator = () => (
   <Tab.Navigator
-      initialRouteName="홈"
-      tabBar={(props) => {
-        const routeName = getFocusedRouteNameFromRoute(props.state.routes[props.state.index]) || '홈';
-        const validRoutes = ['퀴즈', '사전', '홈', '달력', 'My'];
+    initialRouteName="홈"
+    tabBar={(props) => {
+      const route = props.state.routes[props.state.index];
+      let routeName = getFocusedRouteNameFromRoute(route) || route.name;
 
-        if (validRoutes.includes(routeName)) {
-          return <CustomTabBar {...props} />;
-        }
-
+      if (routeName === 'Learning') {
         return null;
-      }}
-      screenOptions={({ route }) => ({
-        headerShown: false,
-      })}
+      }
+
+      return <CustomTabBar {...props} />;
+    }}
+    screenOptions={{ headerShown: false }}
     >
-    <Tab.Screen name="퀴즈" component={QuizStack} options={{ headerShown: false }} />
-    <Tab.Screen name="사전" component={DictionaryStack} options={{ headerShown: false }} />
-    <Tab.Screen name="홈" component={HomeStack} options={{ headerShown: false }} />
-    <Tab.Screen name="달력" component={CalendarStack} options={{ headerShown: false }} />
-    <Tab.Screen name="My" component={MyPageStack} options={{ headerShown: false }} />
+    <Tab.Screen name="퀴즈" component={QuizStack} />
+    <Tab.Screen name="사전" component={DictionaryStack} />
+    <Tab.Screen name="홈" component={HomeStack} />
+    <Tab.Screen name="달력" component={CalendarStack} />
+    <Tab.Screen name="My" component={MyPageStack} />
   </Tab.Navigator>
 );
 

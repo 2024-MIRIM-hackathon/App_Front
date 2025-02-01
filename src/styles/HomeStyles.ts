@@ -6,9 +6,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#F6F5FA',
   },
-  logoImg: {
-    width: 59,
-    height: 28.09,
+  logo: {
     marginTop: 32,
     marginLeft: 29,
   },
@@ -21,7 +19,6 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   issuesContainer: {
-    flex: 1,
     borderRadius: 18,
     backgroundColor: 'white',
     paddingVertical: 23,
@@ -53,25 +50,15 @@ const styles = StyleSheet.create({
     marginLeft: 29,
   },
   learningContainer: {
-    flex: 1,
     paddingHorizontal: 29,
   },
   learningItem: {
-    width: '100%',
     height: 183,
     borderRadius: 18,
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 14,
-  },
-  bookImg: {
-    width: 57,
-    height: 44,
-  },
-  writeImg: {
-    width: 36,
-    height: 52,
   },
   learningActivity: {
     fontSize: 17,
