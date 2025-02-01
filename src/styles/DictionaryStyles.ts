@@ -75,6 +75,14 @@ const styles = StyleSheet.create({
         fontFamily: 'Pretendard-Regular',
         color: '#323232',
         marginBottom: 21,
+    },
+    nothing: {
+        position: 'absolute',
+        alignSelf: 'center',
+        top: '200%',
+        fontSize: 16,
+        fontFamily: 'Pretendard-Medium',
+        color: '#424242',
     }
 });
 
