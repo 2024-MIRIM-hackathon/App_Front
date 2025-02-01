@@ -1,4 +1,7 @@
 import { StyleSheet, Dimensions } from "react-native";
+import { rgbaColor } from "react-native-reanimated/lib/typescript/Colors";
+
+const Width = Dimensions.get('window').width - (29 * 2);
 
 const styles = StyleSheet.create({
     body: {
@@ -51,7 +54,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 24.5,
     },
     carouselItemContainer: {
-        width: Dimensions.get('window').width - (29 * 2),
+        width: Width,
         marginHorizontal: 4.5,
     },
     carouselItem: {
@@ -134,6 +137,60 @@ const styles = StyleSheet.create({
     dotFocused: {
         backgroundColor: '#424242',
     },
+    background: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+        zIndex: 10,
+    },
+    warningContainer: {
+        width: Width < 322 ? Width : 322,
+        height: 311,
+        paddingTop: 21,
+        paddingBottom: 26,
+        alignItems: 'center',
+        backgroundColor: 'white',
+        borderRadius: 18,
+    },
+    warningImg: {
+        width: 66,
+        height: 66,
+    },
+    warningSure: {
+        fontSize: 19,
+        fontFamily: 'Pretendard-Bold',
+        marginTop: -3,
+        marginBottom: 7,
+    },
+    warningText: {
+        fontSize: 11,
+        fontFamily: 'Pretendard-Medium',
+        color: '#616161',
+        marginBottom: 26,
+    },
+    button: {
+        width: 268,
+        height: 47,
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: 14,
+        fontFamily: 'Pretendard-Medium',
+        borderRadius: 5,
+    },
+    yes: {
+        backgroundColor: '#FFE400',
+        marginBottom: 11,
+    },
+    no: {
+        borderWidth: 1,
+        borderColor: '#FFE400',
+    }
 });
 
 export default styles;
