@@ -33,9 +33,6 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontFamily: 'Pretendard-Medium',
     },
-    carouselContainer: {
-        marginTop: 50,
-    },
     item: {
         backgroundColor: '#FF6347',
         borderRadius: 5,
@@ -44,10 +41,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     appBackground: {
-        justifyContent: 'center',
         alignItems: 'center',
+        marginTop: 49,
         flex: 1,
-        marginBottom: 86,
     },
     row: {
         flexDirection: 'row',

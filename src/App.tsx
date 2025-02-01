@@ -11,6 +11,7 @@ import HomeScreen from './screens/Home';
 import CalendarScreen from './screens/Calendar';
 import MyPageScreen from './screens/MyPage';
 import LearningScreen from './screens/Learning';
+import ReadingScreen from './screens/Reading';
 
 import HomeActive from './assets/svg/HomeActive';
 import HomeInactive from './assets/svg/HomeInactive';
@@ -43,6 +44,7 @@ const HomeStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Home" component={HomeScreen} />
     <Stack.Screen name="Learning" component={LearningScreen} />
+    <Stack.Screen name="Reading" component={ReadingScreen} />
   </Stack.Navigator>
 );
 
@@ -143,7 +145,7 @@ const AppTabNavigator = () => (
       const route = props.state.routes[props.state.index];
       let routeName = getFocusedRouteNameFromRoute(route) || route.name;
 
-      if (routeName === 'Learning') {
+      if (routeName === 'Learning' || routeName === 'Reading') {
         return null;
       }
 
