@@ -39,6 +39,7 @@ function Dictionary() {
     };
 
     const toggleshowTotal = (bookmarked: boolean) => {
+        setSearchText('');
         if(bookmarked){
             const filtered = wordData.filter(item => item.bookmarked === bookmarked);
             setFilteredWords(filtered);
