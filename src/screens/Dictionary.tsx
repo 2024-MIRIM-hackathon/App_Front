@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, StatusBar, Text, Image, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import { disassemble } from 'es-hangul';
 
 import styles from '../styles/DictionaryStyles';
 
@@ -9,6 +10,7 @@ import Spread from '../assets/svg/spread';
 import Fold from '../assets/svg/fold';
 
 const wordData = [
+    { word: "기사", meaning: "특정 목적을 위해 활용되는 지식과 방법.", example: "새로운 기술은 항상 세상을 바꿔놓는다.", bookmarked: true, showMore: false },
     { word: "기술", meaning: "특정 목적을 위해 활용되는 지식과 방법.", example: "새로운 기술은 항상 세상을 바꿔놓는다.", bookmarked: true, showMore: false },
     { word: "도전", meaning: "어려운 일에 맞서 싸우는 것.", example: "그는 항상 도전을 즐긴다.", bookmarked: true, showMore: false },
     { word: "미래", meaning: "앞으로 일어날 시간이나 사건.", example: "우리는 더 나은 미래를 위해 노력한다.", bookmarked: false, showMore: false },
@@ -31,21 +33,35 @@ function Dictionary() {
     const handleSearch = (text: string) => {
         setSearchText(text);
         if (text.trim() === '') {
-            setFilteredWords(wordData); 
-        } else {
-            const filtered = wordData.filter(item => item.word.includes(text));
+            setFilteredWords(wordData);
+        } 
+        else {
+            const filtered = wordData.filter(item => {
+                return disassemble(item.word).startsWith(disassemble(text)); 
+              });
             setFilteredWords(filtered);
         }
     };
 
     const toggleshowTotal = (bookmarked: boolean) => {
-        setSearchText('');
-        if(bookmarked){
-            const filtered = wordData.filter(item => item.bookmarked === bookmarked);
-            setFilteredWords(filtered);
+        if (searchText === '') {
+            if (bookmarked) {
+                const filtered = wordData.filter(item => item.bookmarked === bookmarked);
+                setFilteredWords(filtered);
+            }
+            else {
+                setFilteredWords(wordData);
+            }
         }
         else {
-            setFilteredWords(wordData);
+            if (bookmarked) {
+                const filtered = wordData.filter(item => item.word.includes(searchText) && item.bookmarked === bookmarked);
+                setFilteredWords(filtered);
+            }
+            else {
+                const filtered = wordData.filter(item => item.word.includes(searchText));
+                setFilteredWords(filtered);
+            }
         }
     }
 
@@ -76,31 +92,35 @@ function Dictionary() {
                     onChangeText={handleSearch} />
             </View>
             <View style={styles.categoryContainer}>
-                <TouchableOpacity style={{ marginRight: 8 }} onPress={() => {setShowTotal(true); toggleshowTotal(false)}}><Text style={[styles.category, { color: showTotal ? '#424242' : '#BDBDBD' }]}>전체</Text></TouchableOpacity>
-                <TouchableOpacity onPress={() => {setShowTotal(false); toggleshowTotal(true);}}><Text style={[styles.category, { color: showTotal ? '#BDBDBD' : '#424242' }]}>북마크</Text></TouchableOpacity>
+                <TouchableOpacity style={{ marginRight: 8 }} onPress={() => { setShowTotal(true); toggleshowTotal(false) }}><Text style={[styles.category, { color: showTotal ? '#424242' : '#BDBDBD' }]}>전체</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => { setShowTotal(false); toggleshowTotal(true); }}><Text style={[styles.category, { color: showTotal ? '#BDBDBD' : '#424242' }]}>북마크</Text></TouchableOpacity>
             </View>
             <ScrollView showsVerticalScrollIndicator={false}>
-                {filteredWords.map((item, index) => (
-                    <View key={index} style={[styles.wordContainer, { borderRadius: item.showMore ? 22 : 100 }]}>
-                        <View style={styles.topContainer}>
-                            <TouchableOpacity onPress={() => toggleBookmark(index)} activeOpacity={1}>
-                                {item.bookmarked ? <BookmarkedIcon style={{ marginTop: 4 }} /> : <UnbookmarkedIcon style={{ marginTop: 4 }} />}
-                            </TouchableOpacity>
-                            <Text style={styles.word}>{item.word}</Text>
-                            <TouchableOpacity onPress={() => toggleShowMore(index)} activeOpacity={1}>
-                                {item.showMore ? <Fold style={{ marginTop: 6 }} /> : <Spread style={{ marginTop: 6 }} />}
-                            </TouchableOpacity>
-                        </View>
-                        {item.showMore && (
-                            <View style={[styles.moreContainer]}>
-                                <Text style={styles.moreText}>의미</Text>
-                                <Text style={styles.infoText}>{item.meaning}</Text>
-                                <Text style={styles.moreText}>예문</Text>
-                                <Text style={styles.infoText}>{item.example}</Text>
+                {filteredWords.length === 0 ? (
+                    <Text style={styles.nothing}>일치하는 단어가 없어요!</Text>
+                ) : (
+                    filteredWords.map((item, index) => (
+                        <View key={index} style={[styles.wordContainer, { borderRadius: item.showMore ? 22 : 100 }]}>
+                            <View style={styles.topContainer}>
+                                <TouchableOpacity onPress={() => toggleBookmark(index)} activeOpacity={1}>
+                                    {item.bookmarked ? <BookmarkedIcon style={{ marginTop: 4 }} /> : <UnbookmarkedIcon style={{ marginTop: 4 }} />}
+                                </TouchableOpacity>
+                                <Text style={styles.word}>{item.word}</Text>
+                                <TouchableOpacity onPress={() => toggleShowMore(index)} activeOpacity={1}>
+                                    {item.showMore ? <Fold style={{ marginTop: 6 }} /> : <Spread style={{ marginTop: 6 }} />}
+                                </TouchableOpacity>
                             </View>
-                        )}
-                    </View>
-                ))}
+                            {item.showMore && (
+                                <View style={[styles.moreContainer]}>
+                                    <Text style={styles.moreText}>의미</Text>
+                                    <Text style={styles.infoText}>{item.meaning}</Text>
+                                    <Text style={styles.moreText}>예문</Text>
+                                    <Text style={styles.infoText}>{item.example}</Text>
+                                </View>
+                            )}
+                        </View>
+                    ))
+                )}
                 <View style={{ height: 101 }} />
             </ScrollView>
         </View>
