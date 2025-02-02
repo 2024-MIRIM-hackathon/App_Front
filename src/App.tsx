@@ -1,6 +1,6 @@
 import React from 'react';
 import 'react-native-gesture-handler';
-import { View, Text, TouchableOpacity, Image, Dimensions, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Dimensions, StyleSheet, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { getFocusedRouteNameFromRoute, NavigationContainer, Route, RouteProp } from '@react-navigation/native';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -29,19 +29,19 @@ const Tab = createBottomTabNavigator();
 
 // 각 화면에서 열 수 있는 페이지
 const QuizStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
+  <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
     <Stack.Screen name="Quiz" component={QuizScreen} />
   </Stack.Navigator>
 );
 
 const DictionaryStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
+  <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
     <Stack.Screen name="Dictionary" component={DictionaryScreen} />
   </Stack.Navigator>
 );
 
 const HomeStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
+  <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
     <Stack.Screen name="Home" component={HomeScreen} />
     <Stack.Screen name="Learning" component={LearningScreen} />
     <Stack.Screen name="Reading" component={ReadingScreen} />
@@ -49,13 +49,13 @@ const HomeStack = () => (
 );
 
 const CalendarStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
+  <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
     <Stack.Screen name="Calendar" component={CalendarScreen} />
   </Stack.Navigator>
 );
 
 const MyPageStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
+  <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
     <Stack.Screen name="MyPage" component={MyPageScreen} />
   </Stack.Navigator>
 );
@@ -165,11 +165,13 @@ const App = () => {
   return (
     <NavigationContainer>
       <KeyboardAvoidingView
-        keyboardVerticalOffset={-95}
+        keyboardVerticalOffset={-65}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
       >
-        <AppTabNavigator />
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <AppTabNavigator />
+        </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </NavigationContainer>
   );
