@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard-SemiBold',
     marginTop: 30,
     marginLeft: 29,
-    marginBottom: 24,
+    marginBottom: 23,
     fontSize: 18,
     color: 'black',
   },

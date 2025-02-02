@@ -43,7 +43,6 @@ const CustomScrollView = ({ children, contentWidth = scrollBarContainerWidth*3+7
         scrollEventThrottle={16}
         contentContainerStyle={styles.contentContainer}
         showsHorizontalScrollIndicator={false}>
-
         {children.map((child, index) => (
           <View key={index} style={{ width: scrollBarContainerWidth, height: undefined, marginRight: 8 }}>
             {child}
