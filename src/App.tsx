@@ -12,6 +12,7 @@ import CalendarScreen from './screens/Calendar';
 import MyPageScreen from './screens/MyPage';
 import LearningScreen from './screens/Learning';
 import ReadingScreen from './screens/Reading';
+import WordQuiz from './screens/WordQuiz';
 
 import HomeActive from './assets/svg/HomeActive';
 import HomeInactive from './assets/svg/HomeInactive';
@@ -27,10 +28,17 @@ import MyPageInactive from './assets/svg/MyPageInactive';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+export type RootStackParamList = {
+  WordQuiz: { quizVersion: boolean };
+};
+const WordQuizStack = createStackNavigator<RootStackParamList>();
+
+
 // 각 화면에서 열 수 있는 페이지
 const QuizStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
     <Stack.Screen name="Quiz" component={QuizScreen} />
+    <WordQuizStack.Screen name="WordQuiz" component={WordQuiz} />
   </Stack.Navigator>
 );
 
@@ -145,7 +153,7 @@ const AppTabNavigator = () => (
       const route = props.state.routes[props.state.index];
       let routeName = getFocusedRouteNameFromRoute(route) || route.name;
 
-      if (routeName === 'Learning' || routeName === 'Reading') {
+      if (routeName === 'Learning' || routeName === 'Reading' || routeName === 'WordQuiz') {
         return null;
       }
 
