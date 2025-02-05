@@ -108,14 +108,27 @@ function Dictionary() {
 
   const handleSearch = (text: string) => {
     setSearchText(text);
-    if (text.trim() === '') {
-      setFilteredWords(wordData);
-    } else {
-      const filtered = wordData.filter(item => {
-        return disassemble(item.word).startsWith(disassemble(text));
-      });
-      setFilteredWords(filtered);
+    let filtered = wordData;
+    if(showTotal){
+        if (text.trim() === '') {
+            filtered = wordData;
+        } else {
+            filtered = wordData.filter(item => {
+                return disassemble(item.word).startsWith(disassemble(text));
+            });
+        }
+    } else{
+        if (text.trim() === '') {
+            filtered = wordData.filter(item => {
+                return (disassemble(item.word).startsWith(disassemble(text))) && item.bookmarked;
+            });
+        } else {
+            filtered = wordData.filter(item => {
+                return (disassemble(item.word).startsWith(disassemble(text))) && item.bookmarked;
+            });
+        }
     }
+    setFilteredWords(filtered);
   };
 
   const toggleshowTotal = (bookmarked: boolean) => {
