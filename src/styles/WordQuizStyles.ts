@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
     quizScroll: {
         paddingLeft: interval,
         paddingRight: interval-13,
-        height: undefined,
     },
     quizStartImg: {
         width: 332,
@@ -110,7 +109,47 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 0,
         alignSelf: 'center',
-    }
+    },
+    quizEndText: {
+        textAlign: 'center',
+        letterSpacing: 0.3,
+        lineHeight: 29, 
+        marginTop: 127,
+        marginBottom: 112,
+        fontSize: 19,
+        fontFamily: 'Pretendard-Bold',
+    },
+    endView: {
+        width: 218,
+        height: 47,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: '#FFE400',
+        marginBottom: 4,
+    },
+    endText: {
+        fontSize: 14,
+        fontFamily: 'Pretendard-Medium',
+    },
+    dotContainer: {
+        width: 46,
+        height: 7,
+        justifyContent: 'space-between',
+        marginTop: 22,
+        flexDirection: 'row',
+        marginBottom: Dimensions.get('window').height - 669,
+    }, 
+    dot: {
+        width: 7,
+        height: 7,
+        backgroundColor: '#BDBDBD',
+        borderRadius: 10,
+    },
+    dotFocused: {
+        backgroundColor: '#424242',
+    },
 });
 
 export default styles;
