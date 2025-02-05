@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, StatusBar, Text, ScrollView, Image, Dimensions, TouchableNativeFeedback, Animated } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
 
 import styles from '../styles/WordQuizStyles';
 import { StackScreenProps } from '@react-navigation/stack';
 
 import { RootStackParamList } from "../App";
+import { Easing } from 'react-native-reanimated';
 
 type Props = StackScreenProps<RootStackParamList, "WordQuiz">;
 
@@ -40,52 +42,44 @@ const Answer = ({ answer }: { answer: boolean }) => {
 const interval = (Dimensions.get('window').width - 332) / 2;
 
 const WordQuiz: React.FC<Props> = ({ route }) => {
+    const navigation = useNavigation();
+
     const { quizVersion } = route.params;
     const [quizStart, setQuizStart] = useState(true);
     const [scroll, setScroll] = useState(true);
     const [answer, setAnswer] = useState<boolean | null>(null);
     const [check, setCheck] = useState<Number | null>(null);
-    const [timeText, setTimeText] = useState(16);
-    const TintervalRef = useRef<NodeJS.Timeout | null>(null);
     
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const getStyle = (index: number, answer: boolean) => {
         if (answer === true) {
-            return { borderColor: '#00CF28', color: '#00CF28' }; // 정답 스타일
+            return { borderColor: '#00CF28', color: '#00CF28' };
         } else if (check === index) {
-            return { borderColor: '#FF0000', color: '#FF0000' }; // 선택&틀린 답 스타일
+            return { borderColor: '#FF0000', color: '#FF0000' };
         }
-        return {}; // 기본 스타일
+        return {}; 
     };
 
     const answerPress = (index: number) => {
         setCheck(index);
     };
 
-    const startTime = () => {
-        if(TintervalRef.current) return;
-        TintervalRef.current = setInterval(() => {
-            setTimeText((prev) => {
-                if (prev <= 0) { 
-                    clearInterval(TintervalRef.current!); 
-                    TintervalRef.current = null; 
-                    refAnimation.stopAnimation(); 
-                    setAnswer(false);
-                    setCheck(-1);
-                    next();
-                    return 0;
-                }
-                return prev - 1;
-            });
-        }, 900); 
-    };
-
     const refAnimation = useRef(new Animated.Value(0)).current;
+    const timeAnimation = useRef(new Animated.Value(15)).current;
+    const [displayTime, setDisplayTime] = useState(15);
     const scrollViewRef = useRef<ScrollView | null>(null);
     const indexToOffset = (index: number) => {
-        return index * (332 + 13) ;
+        return index * (332 + 13);
     };
+    useEffect(() => {
+        const listener = timeAnimation.addListener(({ value }) => {
+            setDisplayTime(Math.round(value));
+        });
+        return () => {
+            timeAnimation.removeListener(listener);
+        };
+    }, [timeAnimation]);
     useEffect(() => {
         const offset = indexToOffset(currentIndex);
         if (scrollViewRef.current) {
@@ -95,25 +89,44 @@ const WordQuiz: React.FC<Props> = ({ route }) => {
             setQuizStart(true);
         }
 
-        startTime();
+        timeAnimation.setValue(15);
+        Animated.timing(timeAnimation, {
+            toValue: 0,
+            useNativeDriver: false,
+            duration: 15000,
+            easing: Easing.linear,
+        }).start(({ finished }) => {
+            if (finished && !scroll) {
+                setAnswer(false);
+                setCheck(-1);
+                next();
+            }
+        });
 
         refAnimation.setValue(0);
         Animated.timing(refAnimation, {
             toValue: 288,
             useNativeDriver: false,
             duration: 15000, 
+            easing: Easing.linear,
         }).start();
     }, [currentIndex]);    
 
     const next = () => {
         setTimeout(() => {
-            setTimeText(16);
             setCheck(null);
             setAnswer(null);
             setCurrentIndex((pre)=>pre+1);
         }, 2000);
     };
 
+    const oneMore = () => {
+        setQuizStart(true);
+        setScroll(true);
+        setCheck(null);
+        setAnswer(null);
+        setCurrentIndex(0);
+    }
 
     return (
         <View style={{ flex: 1 }}>
@@ -157,17 +170,29 @@ const WordQuiz: React.FC<Props> = ({ route }) => {
                                         </View>
                                     </View>
                                     {answer === null && <View style={{ height: 84, paddingTop: 62, paddingBottom: 16, justifyContent: 'flex-end' }}>
-                                        <Text style={styles.timeText}>{timeText}초</Text>
+                                        <Text style={styles.timeText}>{displayTime}초</Text>
                                         <View style={styles.timeContainer}><Animated.View style={[styles.time, {width: refAnimation}]} /></View>
                                     </View>}
                                 </View>
                             </View>
                         ))}
-                        <View style={styles.quizStartImg}>
-                            <Image style={styles.quizStartImg} source={require('../assets/images/quizStartImg.png')} />
-                            <Text style={styles.quizStartText}>준비가 다 되셨으면{'\n'}넘겨주세요!</Text>
+                        <View style={{width: 332, height: 466, borderRadius: 18, backgroundColor: 'white', alignItems: 'center'}}>
+                            <Text style={styles.quizEndText}>모두 완료!{'\n'}수고했어요!</Text>
+                            <TouchableNativeFeedback onPress={() => navigation.goBack()}><View style={[styles.endView, {backgroundColor: '#FFE400'}]}><Text style={styles.endText}>나가기</Text></View></TouchableNativeFeedback>
+                            <TouchableNativeFeedback onPress={() => oneMore()}><View style={styles.endView}><Text style={styles.endText}>한 번 더 하기</Text></View></TouchableNativeFeedback>
                         </View>
                     </ScrollView>
+                    {!quizStart && <View style={styles.dotContainer}>
+                        {data.map((_, index) => {
+                            const isFocused = currentIndex >= index+1;
+                            return (
+                                <View
+                                    key={index}
+                                    style={[styles.dot, isFocused && styles.dotFocused]}
+                                />
+                            );
+                        })}
+                    </View>}
                 </View>
             </LinearGradient>
         </View>
