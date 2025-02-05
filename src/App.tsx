@@ -36,20 +36,20 @@ const WordQuizStack = createStackNavigator<RootStackParamList>();
 
 // 각 화면에서 열 수 있는 페이지
 const QuizStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
+  <Stack.Navigator screenOptions={{ headerShown: false, animation: 'none' }}>
     <Stack.Screen name="Quiz" component={QuizScreen} />
     <WordQuizStack.Screen name="WordQuiz" component={WordQuiz} />
   </Stack.Navigator>
 );
 
 const DictionaryStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
+  <Stack.Navigator screenOptions={{ headerShown: false, animation: 'none' }}>
     <Stack.Screen name="Dictionary" component={DictionaryScreen} />
   </Stack.Navigator>
 );
 
 const HomeStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
+  <Stack.Navigator screenOptions={{ headerShown: false, animation: 'none' }}>
     <Stack.Screen name="Home" component={HomeScreen} />
     <Stack.Screen name="Learning" component={LearningScreen} />
     <Stack.Screen name="Reading" component={ReadingScreen} />
@@ -57,13 +57,13 @@ const HomeStack = () => (
 );
 
 const CalendarStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
+  <Stack.Navigator screenOptions={{ headerShown: false, animation: 'none' }}>
     <Stack.Screen name="Calendar" component={CalendarScreen} />
   </Stack.Navigator>
 );
 
 const MyPageStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
+  <Stack.Navigator screenOptions={{ headerShown: false, animation: 'none' }}>
     <Stack.Screen name="MyPage" component={MyPageScreen} />
   </Stack.Navigator>
 );
