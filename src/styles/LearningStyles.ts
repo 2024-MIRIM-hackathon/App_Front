@@ -65,11 +65,16 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.5,
         borderBottomColor: '#C8C8C8',
         lineHeight: 29,
+        backfaceVisibility: 'visible',
     },
     bookWord: {
         fontSize: 15,
         fontFamily: 'NanumMyeongjo',
         backgroundColor: '#FFF828',
+        borderRadius: 6,
+        lineHeight: 19,
+        marginBottom: -5,
+        paddingHorizontal: 3.5,
     },
     wordContainer: {
         width: 47,

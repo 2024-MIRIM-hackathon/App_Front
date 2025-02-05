@@ -9,7 +9,10 @@ import styles from '../styles/LearningStyles';
 
 function Learning() {
     const navigation = useNavigation();
-    const data = ["종개념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다. 종개념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다. 종개념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다.(類比)의 단일성’ 으로 인식하고 있었다.", '종개념은 다양한데, 이 같은 초월적', '종개념은 다양한데, 이 같은 초월적', '종개념은 다양한데, 이 같은 초월적'];
+    const data = ["종개념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다. 종개념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다. 종개념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다.(類比)의 단일성’ 으로 인식하고 있었다.", 
+        '종개념은 다양한데, 이 같은 초월적 이 같은 초월적', 
+        '종개념은 다양한데, 이 같은 초월적', 
+        '종개념은 다양한데, 이 같은 초월적'];
 
     const [isLearningCompleted, setIsLearningCompleted] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -76,13 +79,17 @@ function Learning() {
                                 >
                                     <View style={[styles.carouselItem, { backgroundColor: 'white' }]}>
                                         <ScrollView showsVerticalScrollIndicator={false}>
+                                            <View>
                                             <Text style={styles.bookText}>
                                                 {item}
-                                                <Text style={styles.bookWord}>
-                                                    ‘보편’
-                                                </Text>
+                                                <View>
+                                                    <Text style={styles.bookWord}>
+                                                        ‘보편’
+                                                    </Text>
+                                                </View>
                                                 이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다.
                                             </Text>
+                                            </View>
                                             <View style={styles.wordContainer}>
                                                 <Text style={styles.word}>보편</Text>
                                                 <View style={styles.wordShadow} />
