@@ -32,7 +32,9 @@ function Quiz() {
 
     return (
         <View style={styles.body}>
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView 
+                showsVerticalScrollIndicator={false}
+                overScrollMode='never'>
                 <StatusBar barStyle="dark-content" backgroundColor="#F6F5FA" />
                 <Text style={styles.quizText}>퀴즈</Text>
                 <Text style={styles.falseQuizText}>많은 사람들이 틀리는 단어</Text>
