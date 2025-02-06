@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   View,
   StatusBar,
@@ -7,7 +7,12 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  NativeSyntheticEvent,
+  NativeScrollEvent
 } from 'react-native';
+
+import { useFocusEffect } from '@react-navigation/native';
+
 import {disassemble} from 'es-hangul';
 
 import styles from '../styles/DictionaryStyles';
@@ -99,6 +104,13 @@ const wordData = [
 ];
 
 function Dictionary() {
+
+  useFocusEffect(
+    React.useCallback(() => {
+      StatusBar.setBackgroundColor('#F3F3F3');
+    }, [])
+  );
+
   const [searchText, setSearchText] = useState('');
   const [filteredWords, setFilteredWords] = useState(wordData);
   const [showTotal, setShowTotal] = useState(true);

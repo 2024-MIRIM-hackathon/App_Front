@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
     View,
     Text,
@@ -7,7 +7,11 @@ import {
     Image,
     TouchableOpacity,
     Dimensions,
+    NativeSyntheticEvent,
+    NativeScrollEvent,
 } from 'react-native';
+
+import { useFocusEffect } from '@react-navigation/native';
 
 import Svg, { Circle, G } from 'react-native-svg';
 
@@ -71,6 +75,25 @@ const todayText = today.toISOString().split('T')[0];
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 function Calendar() {
+
+    const [statusBarColor, setStatusBarColor] = useState('white'); 
+    const [statusBarHeight, setStatusBarHeight] = useState(374); 
+    
+    const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+        const scrollY = event.nativeEvent.contentOffset.y;
+        
+        if (scrollY < statusBarHeight) {
+            setStatusBarColor('white');
+        } else {
+            setStatusBarColor('#F6F5FA');
+        } 
+    };
+
+    useFocusEffect(
+        useCallback(() => {
+            StatusBar.setBackgroundColor(statusBarColor);
+        }, [statusBarColor])
+    );
 
     const dataObj: Record<string, { date: string; learn: boolean }> = {};
     data.forEach(item => {
@@ -169,8 +192,10 @@ function Calendar() {
     }
 
     useEffect(() => {
-        renderCalendar();
-    }, [checkDate]);
+        let matrix = generateMatrix();
+        (matrix.length === 5) ? setStatusBarHeight(374) : setStatusBarHeight(417);
+        setStatusBarColor('white');
+    }, [currentMonth]);
 
     const progress = useSharedValue(0);
 
@@ -198,8 +223,9 @@ function Calendar() {
         <ScrollView
             style={styles.body}
             showsVerticalScrollIndicator={false}
-            bounces={false}>
-            <StatusBar barStyle="dark-content" backgroundColor="#F6F5FA" />
+            bounces={false}
+            onScroll={handleScroll}>
+            <StatusBar barStyle="dark-content" backgroundColor={statusBarColor} />
             <View style={styles.calendarContainer}>
                 <View style={styles.calendarHeader}>
                     <Text style={styles.calendarMonth}>{currentMonth.getFullYear()} . {String(currentMonth.getMonth()+1).padStart(2, '0')}</Text>

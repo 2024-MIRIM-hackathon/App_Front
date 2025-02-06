@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StatusBar, TouchableOpacity, ScrollView, Dimensions, Image, Modal } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, StatusBar, TouchableOpacity, ScrollView, Dimensions, Image, Modal, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 const ItemWidth = Dimensions.get('window').width - 58;
 const ItemHeight = Dimensions.get('window').height - 254;
@@ -8,6 +8,13 @@ const ItemHeight = Dimensions.get('window').height - 254;
 import styles from '../styles/LearningStyles';
 
 function Learning() {
+
+    useFocusEffect(
+        React.useCallback(() => {
+          StatusBar.setBackgroundColor('#F6F5FA');
+        }, [])
+    );
+
     const navigation = useNavigation();
     const data = ["종개념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다. 종개념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다. 종개념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다.(類比)의 단일성’ 으로 인식하고 있었다.", 
         '종개념은 다양한데, 이 같은 초월적 이 같은 초월적', 

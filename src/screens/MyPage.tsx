@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
     View,
     Text,
     ScrollView,
     StatusBar,
     Image,
-    TouchableOpacity
+    TouchableOpacity,
+    NativeSyntheticEvent,
+    NativeScrollEvent
 } from 'react-native';
+
+import { useFocusEffect } from '@react-navigation/native';
 
 import styles from '../styles/MyPageStyles';
 import BookRead from '../assets/svg/bookRead';
@@ -14,12 +18,32 @@ import WordsLearned from '../assets/svg/wordsLearned';
 import WordsReview from '../assets/svg/wordsReview';
 
 function MyPage() {
+
+    const [statusBarColor, setStatusBarColor] = useState('#FFE400');
+
+    const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+        const scrollY = event.nativeEvent.contentOffset.y;
+        
+        if (scrollY < 216) {
+            setStatusBarColor('#FFE400');
+        } else {
+            setStatusBarColor('#F6F5FA');
+        } 
+    };
+
+    useFocusEffect(
+        useCallback(() => {
+            StatusBar.setBackgroundColor(statusBarColor);
+        }, [statusBarColor])
+    );
+
     return (
         <ScrollView
             style={styles.body}
             showsVerticalScrollIndicator={false}
-            bounces={false}>
-            <StatusBar barStyle="dark-content" backgroundColor="#F6F5FA" />
+            bounces={false}
+            onScroll={handleScroll}>
+            <StatusBar barStyle="dark-content" backgroundColor={statusBarColor} />
             <View style={styles.header}>
                 <Image style={styles.headerImg} source={require('../assets/images/headerImg.png')} />
                 <Text style={styles.mypageText}>마이페이지</Text>

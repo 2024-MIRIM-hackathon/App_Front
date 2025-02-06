@@ -8,7 +8,12 @@ import {
     TouchableWithoutFeedback,
     Linking,
     TouchableOpacity,
+    NativeSyntheticEvent,
+    NativeScrollEvent
 } from 'react-native';
+
+import { useFocusEffect } from '@react-navigation/native';
+
 import Logo from '../assets/svg/logo';
 import Book from '../assets/svg/book';
 import Write from '../assets/svg/write';
@@ -21,6 +26,12 @@ import styles from '../styles/HomeStyles';
 
 function Home() {
     const navigation = useNavigation<StackNavigationProp<any>>();
+
+    useFocusEffect(
+        React.useCallback(() => {
+          StatusBar.setBackgroundColor('#F6F5FA');
+        }, [])
+    );
 
     return (
         <View style={styles.body}>
