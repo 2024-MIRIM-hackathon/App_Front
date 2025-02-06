@@ -223,7 +223,7 @@ function Calendar() {
         <ScrollView
             style={styles.body}
             showsVerticalScrollIndicator={false}
-            bounces={false}
+            overScrollMode='never'
             onScroll={handleScroll}>
             <StatusBar barStyle="dark-content" backgroundColor={statusBarColor} />
             <View style={styles.calendarContainer}>
