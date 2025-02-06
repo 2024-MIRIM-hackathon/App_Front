@@ -5,7 +5,12 @@ import {
     Text,
     TouchableOpacity,
     ScrollView,
+    NativeSyntheticEvent,
+    NativeScrollEvent
 } from 'react-native';
+
+import { useFocusEffect } from '@react-navigation/native';
+
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
@@ -16,6 +21,12 @@ import QuizBook from '../assets/svg/quizBook';
 import QuizFalse from '../assets/svg/quizFalse';
 
 function Quiz() {
+
+    useFocusEffect(
+        React.useCallback(() => {
+          StatusBar.setBackgroundColor('#F6F5FA');
+        }, [])
+    );
 
     const navigation = useNavigation<StackNavigationProp<any>>();
 

@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, StatusBar, Text, ScrollView, Image, Dimensions, TouchableNativeFeedback, Animated } from 'react-native';
+import { View, StatusBar, Text, ScrollView, Image, Dimensions, TouchableNativeFeedback, Animated, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+
 
 import styles from '../styles/WordQuizStyles';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -46,6 +47,12 @@ const WordQuiz: React.FC<Props> = ({ route }) => {
 
     const { quizVersion } = route.params;
     const [quizStart, setQuizStart] = useState(true);
+    const [statusBarColor, setStatusBarColor] = useState('#FFE400'); 
+    useFocusEffect(
+        React.useCallback(() => {
+          setStatusBarColor(quizStart?'#FFE400':'#FFFFFF')
+        }, [quizStart])
+    );
     const [scroll, setScroll] = useState(true);
     const [answer, setAnswer] = useState<boolean | null>(null);
     const [check, setCheck] = useState<Number | null>(null);
@@ -130,7 +137,7 @@ const WordQuiz: React.FC<Props> = ({ route }) => {
 
     return (
         <View style={{ flex: 1 }}>
-            <StatusBar barStyle="dark-content" backgroundColor={quizStart ? '#FFE400' : '#FFFFFF'} />
+            <StatusBar barStyle="dark-content" backgroundColor={statusBarColor} />
             <LinearGradient
                 style={{ flex: 1 }}
                 start={{ x: 0, y: 0 }}
