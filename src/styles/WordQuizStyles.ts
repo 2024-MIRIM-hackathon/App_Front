@@ -136,7 +136,9 @@ const styles = StyleSheet.create({
     dotContainer: {
         width: 46,
         height: 7,
-        justifyContent: 'space-between',
+        justifyContent: 'center',
+        columnGap: 6,
+        alignItems: 'center',
         marginTop: 22,
         flexDirection: 'row',
         marginBottom: Dimensions.get('window').height - 669,
