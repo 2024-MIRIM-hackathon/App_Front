@@ -92,7 +92,7 @@ const WordQuiz: React.FC<Props> = ({ route }) => {
         if (scrollViewRef.current) {
             scrollViewRef.current.scrollTo({ x: offset, animated: true });
         }
-        if(currentIndex === 5){
+        if(currentIndex === (quizCount+1)){
             setQuizStart(true);
         }
 
@@ -135,6 +135,8 @@ const WordQuiz: React.FC<Props> = ({ route }) => {
         setCurrentIndex(0);
     }
 
+    const [quizCount, setQuizCount] = useState(data.length);
+
     return (
         <View style={{ flex: 1 }}>
             <StatusBar barStyle="dark-content" backgroundColor={statusBarColor} />
@@ -150,7 +152,7 @@ const WordQuiz: React.FC<Props> = ({ route }) => {
                     <ScrollView style={styles.quizScroll}
                         ref={scrollViewRef}
                         horizontal={true}
-                        contentContainerStyle={{ width: 13 * 5 + interval * 2 + 332 * 6 }}
+                        contentContainerStyle={{ width: 13 * (1+quizCount) + interval * 2 + 332 * (2+quizCount) }}
                         showsHorizontalScrollIndicator={false}
                         onScrollBeginDrag={() => {setTimeout(() => setQuizStart((pre) => !pre), 300); setCurrentIndex((pre)=>pre+1); setScroll(false)}}
                         scrollEnabled={scroll}
