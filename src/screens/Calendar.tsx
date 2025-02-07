@@ -104,7 +104,10 @@ function Calendar() {
     data.forEach(item => {
         dataObj[item.date] = item;
     });
-
+    const [wordIng, setWordIng] = useState(0.9);
+    const [writeIng, setWriteIng] = useState(0.8);
+    const [quizIng, setQuizIng] = useState(0.5);
+    
     const [currentMonth, setCurrentMonth] = useState(today);
     const [checkDate, setCheckDate] = useState(todayText);
 
@@ -202,14 +205,24 @@ function Calendar() {
         setStatusBarColor('white');
     }, [currentMonth]);
 
-    const progress = useSharedValue(0);
+    const wordProgress = useSharedValue(0);
+    const writeProgress = useSharedValue(0);
+    const quizProgress = useSharedValue(0);
 
     useEffect(() => {
-        progress.value = withTiming(0.8, { duration: 2000 })
+        wordProgress.value = withTiming(wordIng, { duration: 2000 })
+        writeProgress.value = withTiming(writeIng, { duration: 2000 })
+        quizProgress.value = withTiming(quizIng, { duration: 2000 })
     },[]);
     
-    const animatedProsess = useAnimatedProps(() => ({
-        strokeDashoffset: circle_length * (1 - progress.value),
+    const wordAnimatedProgress = useAnimatedProps(() => ({
+        strokeDashoffset: circle_length * (1 - wordProgress.value),
+    }))
+    const writeAnimatedProgress = useAnimatedProps(() => ({
+        strokeDashoffset: circle_length * (1 - writeProgress.value),
+    }))
+    const quizAnimatedProgress = useAnimatedProps(() => ({
+        strokeDashoffset: circle_length * (1 - quizProgress.value),
     }))
 
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -264,7 +277,7 @@ function Calendar() {
                                     stroke={'#FFE400'}
                                     strokeWidth={5.36}
                                     strokeDasharray={circle_length}
-                                    animatedProps={animatedProsess}
+                                    animatedProps={wordAnimatedProgress}
                                     strokeLinecap={'round'}
                                     fill='none'/>
                             </G>
@@ -278,19 +291,15 @@ function Calendar() {
                             <Text style={styles.perText}>90%</Text>
                         </View>
                         <Svg width={100} height={100}>
-                            <Circle cx={50} cy={50} r={R}
-                                stroke={'#FFE400'}
-                                strokeWidth={5.36}
-                                strokeDasharray={295.31}
-                                strokeLinecap={'round'}
-                                fill='none'/>
-                            <AnimatedCircle cx={50} cy={50} r={R}
-                                stroke={'#FFE400'}
-                                strokeWidth={5.36}
-                                strokeDasharray={295.31}
-                                animatedProps={animatedProsess}
-                                strokeLinecap={'round'}
-                                fill='none'/>
+                            <G rotation={90} origin="50,50" scaleX={-1}>
+                                <AnimatedCircle cx={50} cy={50} r={R}
+                                    stroke={'#FFE400'}
+                                    strokeWidth={5.36}
+                                    strokeDasharray={circle_length}
+                                    animatedProps={writeAnimatedProgress}
+                                    strokeLinecap={'round'}
+                                    fill='none'/>
+                            </G>
                         </Svg>
                     </View>
                 </View>
@@ -301,19 +310,15 @@ function Calendar() {
                             <Text style={styles.perText}>90%</Text>
                         </View>
                         <Svg width={100} height={100}>
-                            <Circle cx={50} cy={50} r={R}
-                                stroke={'#FFE400'}
-                                strokeWidth={5.36}
-                                strokeDasharray={295.31}
-                                strokeLinecap={'round'}
-                                fill='none'/>
-                            <AnimatedCircle cx={50} cy={50} r={R}
-                                stroke={'#FFE400'}
-                                strokeWidth={5.36}
-                                strokeDasharray={295.31}
-                                animatedProps={animatedProsess}
-                                strokeLinecap={'round'}
-                                fill='none'/>
+                            <G rotation={90} origin="50,50" scaleX={-1}>
+                                <AnimatedCircle cx={50} cy={50} r={R}
+                                    stroke={'#FFE400'}
+                                    strokeWidth={5.36}
+                                    strokeDasharray={circle_length}
+                                    animatedProps={quizAnimatedProgress}
+                                    strokeLinecap={'round'}
+                                    fill='none'/>
+                            </G>
                         </Svg>
                     </View>
                 </View>
