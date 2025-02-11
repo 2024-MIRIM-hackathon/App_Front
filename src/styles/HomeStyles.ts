@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
   newsDetail: {
     fontSize: 12,
     fontFamily: 'Pretendard-Regular',
+    lineHeight: 19, 
     marginTop: 13,
     marginBottom: 22,
   },
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'Pretendard-SemiBold',  
     marginTop: 46,
-    marginBottom: 24,
+    marginBottom: 17,
     marginLeft: 29,
   },
   learningContainer: {

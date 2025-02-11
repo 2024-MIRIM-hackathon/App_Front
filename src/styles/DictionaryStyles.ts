@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         paddingHorizontal: 1,
-        marginTop: 22,
+        marginTop: 9,
         borderBottomWidth: 1,
         borderBottomColor: '#424242',
     },
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
         top: '200%',
         fontSize: 16,
         fontFamily: 'Pretendard-Medium',
-        color: '#424242',
+        color: '#6C6C6C',
     }
 });
 

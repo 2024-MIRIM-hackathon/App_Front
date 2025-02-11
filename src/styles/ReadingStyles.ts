@@ -13,10 +13,9 @@ const styles = StyleSheet.create({
         marginLeft: 29,
     },
     ReadingScroll: {
-        width: Dimensions.get('window').width - 58,
+        width: 334,
+        marginLeft: (Dimensions.get('window').width - 334) / 2,
         marginTop: 49,
-        borderRadius: 18,
-        marginLeft: 29,
     },
     ReadingContainer: {
         height: undefined,
@@ -27,7 +26,7 @@ const styles = StyleSheet.create({
     ReadingText: {
         marginHorizontal: 24,
         marginTop: 28,
-        marginBottom: 60,
+        marginBottom: 65,
         lineHeight: 29,
         fontSize: 15,
         fontFamily: 'NanumMyeongjoBold',
@@ -52,7 +51,7 @@ const styles = StyleSheet.create({
     leave: {
         width: '100%',
         height: 60,
-        paddingHorizontal: 29,
+        paddingHorizontal: (Dimensions.get('window').width - 334)/2,
         position: 'absolute',
         bottom: 21,
     },

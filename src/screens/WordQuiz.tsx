@@ -40,7 +40,7 @@ const Answer = ({ answer }: { answer: boolean }) => {
     );
 };
 
-const interval = (Dimensions.get('window').width - 332) / 2;
+const interval = (Dimensions.get('window').width - 334) / 2;
 
 const WordQuiz: React.FC<Props> = ({ route }) => {
     const navigation = useNavigation();
@@ -77,7 +77,7 @@ const WordQuiz: React.FC<Props> = ({ route }) => {
     const [displayTime, setDisplayTime] = useState(15);
     const scrollViewRef = useRef<ScrollView | null>(null);
     const indexToOffset = (index: number) => {
-        return index * (332 + 13);
+        return index * (334 + 13);
     };
     useEffect(() => {
         const listener = timeAnimation.addListener(({ value }) => {
@@ -152,12 +152,12 @@ const WordQuiz: React.FC<Props> = ({ route }) => {
                     <ScrollView style={styles.quizScroll}
                         ref={scrollViewRef}
                         horizontal={true}
-                        contentContainerStyle={{ width: 13 * (1+quizCount) + interval * 2 + 332 * (2+quizCount) }}
+                        contentContainerStyle={{ width: 13 * (1+quizCount) + interval * 2 + 334 * (2+quizCount) }}
                         showsHorizontalScrollIndicator={false}
                         onScrollBeginDrag={() => {setTimeout(() => setQuizStart((pre) => !pre), 300); setCurrentIndex((pre)=>pre+1); setScroll(false)}}
                         scrollEnabled={scroll}
                         decelerationRate={10}
-                        snapToInterval={332 + 13}
+                        snapToInterval={334 + 13}
                     >
                         <View style={styles.quizStartImg}>
                             <Image style={styles.quizStartImg} source={require('../assets/images/quizStartImg.png')} />
@@ -185,7 +185,7 @@ const WordQuiz: React.FC<Props> = ({ route }) => {
                                 </View>
                             </View>
                         ))}
-                        <View style={{width: 332, height: 466, borderRadius: 18, backgroundColor: 'white', alignItems: 'center'}}>
+                        <View style={{width: 334, height: 466, borderRadius: 18, backgroundColor: 'white', alignItems: 'center'}}>
                             <Text style={styles.quizEndText}>모두 완료!{'\n'}수고했어요!</Text>
                             <TouchableNativeFeedback onPress={() => navigation.goBack()}><View style={[styles.endView, {backgroundColor: '#FFE400'}]}><Text style={styles.endText}>나가기</Text></View></TouchableNativeFeedback>
                             <TouchableNativeFeedback onPress={() => oneMore()}><View style={styles.endView}><Text style={styles.endText}>한 번 더 하기</Text></View></TouchableNativeFeedback>

@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     },
     header: {
         width: '100%',
-        height: 216,
+        height: 220,
         backgroundColor: '#FFE400',
         borderBottomRightRadius: 38,
         borderBottomLeftRadius: 38,
@@ -15,9 +15,9 @@ const styles = StyleSheet.create({
     },
     headerImg: {
         width: 244,
-        height: 146,
+        height: 136,
         position: 'absolute',
-        top: 32,
+        top: 51,
         right: 9,
     },
     mypageText: {
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     date: {
         fontSize: 30,
         fontFamily: 'Pretendard-SemiBold',
-        marginTop: 6,
+        marginTop: 3,
     },
     ContainerView: {
         paddingHorizontal: 29,
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
         color: '#424242',
         fontSize: 17,
         fontFamily: 'Pretendard-Medium',
-        marginBottom: 6,
+        marginBottom: 2,
     },
     activityInfo: {
         flexDirection: 'row',

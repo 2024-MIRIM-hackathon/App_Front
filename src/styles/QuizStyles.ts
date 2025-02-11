@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         color: '#424242',
         marginTop: 17,
         marginLeft: 29, 
-        marginBottom: 23,
+        marginBottom: 17,
         fontSize: 18,
         fontFamily: 'Pretendard-SemiBold',
     },
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     learningQuizText: {
       marginTop: 40,
       marginLeft: 29,
-      marginBottom: 23,
+      marginBottom: 17,
       color: '#424242',
       fontSize: 18,
       fontFamily: 'Pretendard-SemiBold',
@@ -80,8 +80,8 @@ const styles = StyleSheet.create({
     QuizText: {
         fontSize: 17,
         fontFamily: 'Pretendard-SemiBold',
-        marginTop: 9.5,
-        marginBottom: 5,
+        marginTop: 9,
+        marginBottom: 7,
     }, 
     QuizIng: {
         fontSize: 11,
