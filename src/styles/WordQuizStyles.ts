@@ -1,11 +1,11 @@
 import { StyleSheet, Dimensions } from "react-native";
-const interval = (Dimensions.get('window').width - 332) / 2;
+const interval = (Dimensions.get('window').width - 334) / 2;
 
 const styles = StyleSheet.create({
     quizText: {
         marginTop: 46,
         marginLeft: 29, 
-        marginBottom: 8,
+        marginBottom: 5,
         fontSize: 20,
         fontFamily: 'Pretendard-SemiBold',
     },
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         paddingRight: interval-13,
     },
     quizStartImg: {
-        width: 332,
+        width: 334,
         height: 466,
         marginRight: 13,
     },
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Pretendard-Bold',
     }, 
     quizContainer: {
-        width: 332,
+        width: 334,
         backgroundColor: 'white',
         borderRadius: 18,
         paddingTop: 71,
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
         color: '#424242',
         position: 'absolute',
         lineHeight: 31,
-        top: 33,
+        top: 31,
         right: 11,
     },
     answerImg: {

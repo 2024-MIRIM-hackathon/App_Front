@@ -24,7 +24,7 @@ function MyPage() {
     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         const scrollY = event.nativeEvent.contentOffset.y;
         
-        if (scrollY < 216) {
+        if (scrollY < 222) {
             setStatusBarColor('#FFE400');
         } else {
             setStatusBarColor('#F6F5FA');

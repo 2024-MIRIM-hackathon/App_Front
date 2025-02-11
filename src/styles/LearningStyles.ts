@@ -1,7 +1,6 @@
 import { StyleSheet, Dimensions } from "react-native";
-import { rgbaColor } from "react-native-reanimated/lib/typescript/Colors";
 
-const Width = Dimensions.get('window').width - (29 * 2);
+const interval = ((Dimensions.get('window').width - 334)/2) - 4.5;
 
 const styles = StyleSheet.create({
     body: {
@@ -18,7 +17,7 @@ const styles = StyleSheet.create({
     leave: {
         width: '100%',
         height: 60,
-        paddingHorizontal: 29,
+        paddingHorizontal: (Dimensions.get('window').width - 334)/2,
         position: 'absolute',
         bottom: 21,
     },
@@ -47,10 +46,10 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
-        paddingHorizontal: 24.5,
+        paddingHorizontal: interval,
     },
     carouselItemContainer: {
-        width: Width,
+        width: 334,
         marginHorizontal: 4.5,
     },
     carouselItem: {
@@ -61,11 +60,8 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontFamily: 'NanumMyeongjo',
         marginTop: 33,
-        paddingBottom: 33,
-        borderBottomWidth: 0.5,
-        borderBottomColor: '#C8C8C8',
+        paddingBottom: 20,
         lineHeight: 29,
-        backfaceVisibility: 'visible',
     },
     bookWord: {
         fontSize: 15,
@@ -76,26 +72,46 @@ const styles = StyleSheet.create({
         marginBottom: -5,
         paddingHorizontal: 3.5,
     },
+    bookInfo: {
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        paddingBottom: 15,
+        borderBottomWidth: 0.5,
+        borderBottomColor: '#C8C8C8',
+    },
+    bookTitle: {
+        color: '#676767',
+        fontSize: 11,
+        fontFamily: 'Pretendard-Regular',
+        marginRight: 6,
+    },
+    bookWrite: {
+        color: '#676767',
+        fontSize: 9,
+        fontFamily: 'Pretendard-Regular',
+        marginBottom: 1,
+    },
     wordContainer: {
-        width: 47,
         height: 24,
-        marginLeft: 7,
-        marginTop: 36,
+        marginHorizontal: 7,
+        marginTop: 35,
         marginBottom: 14,
     },
     word: {
+        width: 'auto',
         fontSize: 20,
         marginHorizontal: 6,
         fontFamily: 'Pretendard-Bold',
         position: 'absolute',
+        top: -4,
         zIndex: 2,
     },
     wordShadow: {
-        height: 13,
-        borderRadius: 10,
+        height: 17,
+        marginTop: 7,
+        borderRadius: 4,
         backgroundColor: '#FFF828',
-        position: 'static',
-        marginTop: 13,
+        position: 'absolute',
         zIndex: 1,
     },
     mean: {
@@ -151,7 +167,7 @@ const styles = StyleSheet.create({
         zIndex: 10,
     },
     warningContainer: {
-        width: Width < 322 ? Width : 322,
+        width: 334,
         height: 311,
         paddingTop: 21,
         paddingBottom: 26,
@@ -170,10 +186,12 @@ const styles = StyleSheet.create({
         marginBottom: 7,
     },
     warningText: {
+        textAlign: 'center',
         fontSize: 11,
         fontFamily: 'Pretendard-Medium',
         color: '#616161',
-        marginBottom: 26,
+        marginBottom: 30,
+        lineHeight: 15, // 1 줄일 때마다 marginBottom +2
     },
     button: {
         width: 268,

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, StatusBar, TouchableOpacity, ScrollView, Dimensions, Image, Modal, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
-const ItemWidth = Dimensions.get('window').width - 58;
+const interval = (Dimensions.get('window').width - 334)/2;
 const ItemHeight = Dimensions.get('window').height - 254;
 
 import styles from '../styles/LearningStyles';
@@ -37,15 +37,21 @@ function Learning() {
 
     const onScroll = (e: { nativeEvent: { contentOffset: { x: number } } }) => {
         const xOffset = e.nativeEvent.contentOffset.x;
-        const index = Math.round(xOffset / ItemWidth);
+        const index = Math.round(xOffset / 334);
         setCurrentIndex(index);
         if (currentIndex === 3) setIsLearningCompleted(true);
         else setIsLearningCompleted(false);
     };
 
     const indexToOffset = () => {
-        return { x: currentIndex * (ItemWidth + 9), y: 0 };
+        return { x: currentIndex * (334 + 9), y: 0 };
     };
+
+    const getWidth = (str: string) => {
+        let len = str.length;
+        let nu = str.split(' ').length - 1;
+        return (len-nu)*20 + nu*5;
+    }
 
     return (
         <View style={styles.body}>
@@ -72,17 +78,17 @@ function Learning() {
                     <ScrollView
                         onScroll={onScroll}
                         horizontal
-                        contentContainerStyle={{ width: 9 * 3 + 29 * 2 + ItemWidth * 4 }}
+                        contentContainerStyle={{ width: 9 * 3 + interval * 2 + 334 * 4 }}
                         contentOffset={indexToOffset()}
                         showsHorizontalScrollIndicator={false}
                         decelerationRate={10}
-                        snapToInterval={ItemWidth + 9}
+                        snapToInterval={334 + 9}
                     >
                         <View style={styles.row}>
                             {data.map((item, index) => (
                                 <View
                                     key={index}
-                                    style={[styles.carouselItemContainer, { width: ItemWidth }]}
+                                    style={[styles.carouselItemContainer, { width: 334 }]}
                                 >
                                     <View style={[styles.carouselItem, { backgroundColor: 'white' }]}>
                                         <ScrollView showsVerticalScrollIndicator={false}>
@@ -91,15 +97,19 @@ function Learning() {
                                                 {item}
                                                 <View>
                                                     <Text style={styles.bookWord}>
-                                                        ‘보편’
+                                                        보편
                                                     </Text>
                                                 </View>
-                                                이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다.
+                                                않으려고 해서 조직 운영이 효과적이지 않다는 평가를 받는 리더들의 흔히 하는 질문은 "위임하는 것이 내가 직접 관리하는 것보다 더 나을까요?"라는 것입니다. 아직 해보지도 않았다면 어떤 결과가 있을지 알 수 없습니다. 않으려고 해서 조직 운영이 효과적이지 않다는 평가를 받는 리더들의 흔히 하는 질문은 "위임하는 것이 내가 직접 관리하는 것보다 더 나을까요?"라는 것입니다. 아직 해보지도 않았다면 어떤 결과가 있을지 알 수 없습니다.
                                             </Text>
+                                            <View style={styles.bookInfo}>
+                                                <Text style={styles.bookTitle}>채식주의자</Text>
+                                                <Text style={styles.bookWrite}>한강</Text>
+                                            </View>
                                             </View>
                                             <View style={styles.wordContainer}>
                                                 <Text style={styles.word}>보편</Text>
-                                                <View style={styles.wordShadow} />
+                                                <View style={[styles.wordShadow, {width: getWidth('보편')+6}]} />
                                             </View>
                                             <Text style={styles.mean}>모든 것에 두루 미치거나 통함. 또는 그런 것.</Text>
                                             <Text style={styles.example}>예문</Text>
@@ -135,7 +145,6 @@ function Learning() {
             >
                 <View style={styles.leaveContainer}>
                     <Text style={styles.leaveText}>
-                        {/* {currentIndex === data.length - 1 ? "단어 학습 완료" : "학습 중에 나가기"} */}
                         {isLearningCompleted ? "단어 학습 완료" : "학습 중에 나가기"}
                     </Text>
                 </View>
