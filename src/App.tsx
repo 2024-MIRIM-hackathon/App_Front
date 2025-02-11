@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import 'react-native-gesture-handler';
-import { View, Text, TouchableOpacity, Image, Dimensions, StyleSheet, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Dimensions, StyleSheet, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, StatusBar } from 'react-native';
 import { getFocusedRouteNameFromRoute, NavigationContainer, Route, RouteProp } from '@react-navigation/native';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import SplashScreen from "react-native-splash-screen";
 
 import QuizScreen from './screens/Quiz';
 import DictionaryScreen from './screens/Dictionary';
@@ -79,6 +80,35 @@ const CustomTabBar = ({
   navigation: any;
 }) => {
   return (
+    <View style={{ position: 'relative' }}>
+    <View style={{
+      position: 'absolute',
+      top: -95, left: 12.5, right: 12.5, bottom: 20.5,
+      backgroundColor: '#F1F0F4',
+      borderRadius: 100,
+      opacity: 0.2,
+    }} />
+    <View style={{
+      position: 'absolute',
+      top: -98, left: 10, right: 10, bottom: 18,
+      backgroundColor: '#EFEEF2',
+      borderRadius: 100,
+      opacity: 0.1,
+    }} />
+    <View style={{
+      position: 'absolute',
+      top: -101, left: 7, right: 7, bottom: 15,
+      backgroundColor: '#F0EFF4',
+      borderRadius: 100,
+      opacity: 0.1,
+    }} />
+    <View style={{
+      position: 'absolute',
+      top: -104.5, left: 3.5, right: 3.5, bottom: 11.5,
+      backgroundColor: '#F1F0F5',
+      borderRadius: 100,
+      opacity: 0.1,
+    }} />
     <View style={styles.tabBarContainer}>
       {state.routes.map((route: Route<string>, index: number) => {
         const { options } = descriptors[route.key];
@@ -120,6 +150,7 @@ const CustomTabBar = ({
         );
       })}
     </View>
+    </View>
   );
 };
 
@@ -129,7 +160,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: Dimensions.get('window').width - 26,
     height: 74,
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     borderRadius: 100,
     position: 'absolute',
     bottom: 21,
@@ -139,7 +170,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 45,
     justifyContent: 'space-between',
     alignItems: 'center',
-    elevation: 1,
+    elevation: 5,
+    shadowColor: '#EEEEEE',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05,
     shadowRadius: 35.8,
@@ -170,6 +202,11 @@ const AppTabNavigator = () => (
 );
 
 const App = () => {
+  useEffect(() => {
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 1000); //스플래시 활성화 시간
+  });
   return (
     <NavigationContainer>
       <KeyboardAvoidingView
