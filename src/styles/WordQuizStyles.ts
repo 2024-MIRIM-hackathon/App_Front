@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         columnGap: 11,
+        minHeight: 72,
     },
     wordView: {
         width: '10%',

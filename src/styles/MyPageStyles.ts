@@ -45,7 +45,8 @@ const styles = StyleSheet.create({
         fontFamily: 'Pretendard-SemiBold',
     },
     accountContainer: {
-        width: Dimensions.get('window').width - 58,
+        width: Dimensions.get('screen').width - 58,
+        alignSelf: 'center',
         height: 192,
         marginTop: 58,
         marginBottom: 60,

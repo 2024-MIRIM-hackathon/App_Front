@@ -58,7 +58,17 @@ const data = [
     { "date": "2025-02-06", "learn": true },
     { "date": "2025-02-07", "learn": true },
     { "date": "2025-02-08", "learn": true },
-    { "date": "2025-02-09", "learn": true }
+    { "date": "2025-02-09", "learn": true },
+    { "date": "2025-02-10", "learn": true },
+    { "date": "2025-02-11", "learn": true },
+    { "date": "2025-02-12", "learn": true },
+    { "date": "2025-02-13", "learn": true },
+    { "date": "2025-02-14", "learn": true },
+    { "date": "2025-02-15", "learn": true },
+    { "date": "2025-02-16", "learn": true },
+    { "date": "2025-02-17", "learn": true },
+    { "date": "2025-02-18", "learn": true },
+    { "date": "2025-02-19", "learn": true }
 ];
 
 const wordData = ["념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다.(類比)의 단일성’ 으로 인식하고 있었다.", 

@@ -11,6 +11,9 @@ function Learning() {
     useFocusEffect(
         React.useCallback(() => {
           StatusBar.setBackgroundColor('#F6F5FA');
+          return () => {
+            StatusBar.setBackgroundColor('#F6F5FA');
+          }
         }, [])
     );
 

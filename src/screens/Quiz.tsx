@@ -18,7 +18,7 @@ import styles from '../styles/QuizStyles';
 import CustomScrollView from '../components/CustomScrollView';
 
 import QuizBook from '../assets/svg/quizBook';
-import QuizFalse from '../assets/svg/quizFalse';
+import TodayQuiz from '../assets/svg/TodayQuiz';
 
 function Quiz() {
 
@@ -61,15 +61,15 @@ function Quiz() {
                 <Text style={styles.learningQuizText}>학습 퀴즈</Text>
                 <TouchableOpacity style={styles.quizContainer} activeOpacity={1} onPress={() => navigation.navigate('WordQuiz', {quizVersion : true})}>
                     <View style={styles.quizItem}>
-                        <QuizBook />
-                        <Text style={styles.QuizText}>지금까지 나온 단어 퀴즈 풀기</Text>
+                        <TodayQuiz />
+                        <Text style={styles.QuizText}>오늘 나온 퀴즈 풀기</Text>
                         <Text style={styles.QuizIng}>미완료</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.quizContainer, { marginBottom: 121 }]} activeOpacity={1} onPress={() => navigation.navigate('WordQuiz', {quizVersion : false})}>
                     <View style={styles.quizItem}>
-                        <QuizFalse />
-                        <Text style={styles.QuizText}>틀린문제 다시풀기</Text>
+                        <QuizBook />
+                        <Text style={styles.QuizText}>지금까지 나온 단어 퀴즈 풀기</Text>
                         <Text style={styles.QuizIng}>미완료</Text>
                     </View>
                 </TouchableOpacity>

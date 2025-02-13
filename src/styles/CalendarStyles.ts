@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
         width: wordContainerWidth,
         backgroundColor: 'white',
         borderRadius: 18,
-        paddingTop: 24,
+        paddingTop: 20,
         paddingRight: 24, 
         paddingBottom: 29,
         paddingLeft: 23,
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: 'Pretendard-Medium',
         color: '#202020',
-        marginBottom: 8,
+        marginBottom: 4,
         paddingHorizontal: 1,
     }, 
     mean: {
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
         marginLeft: 29,
         backgroundColor: 'white',
         borderRadius: 18,
-        paddingTop: 24,
+        paddingTop: 18,
         paddingRight: 24,
         paddingBottom: 26,
         paddingLeft: 23
