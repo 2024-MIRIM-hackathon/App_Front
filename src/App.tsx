@@ -32,8 +32,16 @@ const Tab = createBottomTabNavigator();
 export type RootStackParamList = {
   WordQuiz: { quizVersion: boolean };
 };
-const WordQuizStack = createStackNavigator<RootStackParamList>();
+// export type MyStackParamList = {
+//   My: { quizVersion: boolean };
+// };
 
+interface AppProps {
+  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>;
+}
+
+const WordQuizStack = createStackNavigator<RootStackParamList>();
+const MyStack = createStackNavigator<RootStackParamList>();
 
 // 각 화면에서 열 수 있는 페이지
 const QuizStack = () => (
@@ -63,9 +71,16 @@ const CalendarStack = () => (
   </Stack.Navigator>
 );
 
-const MyPageStack = () => (
+// const MyPageStack: React.FC<AppProps> = ({ setIsLoggedIn }) => (
+//   <Stack.Navigator screenOptions={{ headerShown: false, animation: 'none' }}>
+//     <Stack.Screen name="MyPage" component={MyPageScreen} setIsLoggedIn={setIsLoggedIn}/>
+//   </Stack.Navigator>
+// );
+const MyPageStack: React.FC<AppProps> = ({ setIsLoggedIn }) => (
   <Stack.Navigator screenOptions={{ headerShown: false, animation: 'none' }}>
-    <Stack.Screen name="MyPage" component={MyPageScreen} />
+    <Stack.Screen name="MyPage">
+      {() => <MyPageScreen setIsLoggedIn={setIsLoggedIn} />}
+    </Stack.Screen>
   </Stack.Navigator>
 );
 
@@ -158,7 +173,7 @@ const CustomTabBar = ({
 const styles = StyleSheet.create({
   tabBarContainer: {
     flexDirection: 'row',
-    width: Dimensions.get('window').width - 26,
+    // width: Dimensions.get('window').width - 26,
     height: 74,
     backgroundColor: 'white',
     borderRadius: 100,
@@ -167,6 +182,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.1,
     borderColor: 'white',
     left: 13,
+    right: 13,
     paddingHorizontal: 45,
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -178,7 +194,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const AppTabNavigator = () => (
+const AppTabNavigator: React.FC<AppProps> = ({ setIsLoggedIn }) => (
   <Tab.Navigator
     initialRouteName="홈"
     tabBar={(props) => {
@@ -197,28 +213,31 @@ const AppTabNavigator = () => (
     <Tab.Screen name="사전" component={DictionaryStack} />
     <Tab.Screen name="홈" component={HomeStack} />
     <Tab.Screen name="달력" component={CalendarStack} />
-    <Tab.Screen name="My" component={MyPageStack} />
+    {/* <Tab.Screen name="My" component={MyPageStack} setIsLoggedIn={setIsLoggedIn} /> */}
+    <Tab.Screen name="My">
+      {() => <MyPageStack setIsLoggedIn={setIsLoggedIn} />}
+    </Tab.Screen>
   </Tab.Navigator>
 );
 
-const App = () => {
-  useEffect(() => {
-    setTimeout(() => {
-      SplashScreen.hide();
-    }, 1000); //스플래시 활성화 시간
-  });
+const App: React.FC<AppProps> = ({ setIsLoggedIn }) => {
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     SplashScreen.hide();
+  //   }, 1000); //스플래시 활성화 시간
+  // });
   return (
-    <NavigationContainer>
+    // <NavigationContainer>
       <KeyboardAvoidingView
         keyboardVerticalOffset={-65}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <AppTabNavigator />
+          <AppTabNavigator setIsLoggedIn={setIsLoggedIn} />
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-    </NavigationContainer>
+    // </NavigationContainer>
   );
 };
 

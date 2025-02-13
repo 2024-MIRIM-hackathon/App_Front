@@ -11,13 +11,18 @@ import {
 } from 'react-native';
 
 import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import styles from '../styles/MyPageStyles';
 import BookRead from '../assets/svg/bookRead';
 import WordsLearned from '../assets/svg/wordsLearned';
 import WordsReview from '../assets/svg/wordsReview';
 
-function MyPage() {
+interface MyPageProps {
+  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>;
+}
+
+const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
 
     const [statusBarColor, setStatusBarColor] = useState('#FFE400');
 
@@ -36,6 +41,15 @@ function MyPage() {
             StatusBar.setBackgroundColor(statusBarColor);
         }, [statusBarColor])
     );
+
+    const handleLogout = async () => {
+        try {
+            await AsyncStorage.removeItem("userToken"); // 저장된 로그인 정보 삭제
+            setIsLoggedIn(false); // 로그인 상태 해제
+        } catch (error) {
+            console.error("로그아웃 실패:", error);
+        }
+    };
 
     return (
         <ScrollView
@@ -108,7 +122,7 @@ function MyPage() {
                     </View>
                 </View>
             </View>
-            <TouchableOpacity style={{marginTop: 62, marginBottom: 162, alignSelf: 'center'}}>
+            <TouchableOpacity style={{marginTop: 62, marginBottom: 162, alignSelf: 'center'}} onPress={handleLogout}>
                 <Text style={styles.logout}>로그아웃</Text>
             </TouchableOpacity>
         </ScrollView>
