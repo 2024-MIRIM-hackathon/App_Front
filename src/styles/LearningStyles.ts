@@ -190,11 +190,11 @@ const styles = StyleSheet.create({
         fontSize: 11,
         fontFamily: 'Pretendard-Medium',
         color: '#616161',
-        marginBottom: 30,
-        lineHeight: 15, // 1 줄일 때마다 marginBottom +2
+        marginBottom: 28,
+        lineHeight: 16, 
     },
     button: {
-        width: 268,
+        width: 265,
         height: 47,
         justifyContent: 'center',
         alignItems: 'center',

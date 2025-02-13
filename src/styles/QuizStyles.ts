@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     QuizText: {
         fontSize: 17,
         fontFamily: 'Pretendard-SemiBold',
-        marginTop: 9,
+        marginTop: 11.5,
         marginBottom: 7,
     }, 
     QuizIng: {

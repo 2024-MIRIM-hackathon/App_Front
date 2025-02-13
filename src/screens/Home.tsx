@@ -23,6 +23,7 @@ import Write from '../assets/svg/write';
 import CustomScrollView from '../components/CustomScrollView';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import he from 'he';
 
 import styles from '../styles/HomeStyles';
 
@@ -39,10 +40,9 @@ function Home() {
   const getSourceName = (link: string) => {
     try {
       // 정규식으로 URL에서 도메인 추출
-      const regex = /^(?:https?:\/\/)?(?:www\.)?([^\/]+)/;
-      const matches = link.match(regex);
-      if (matches && matches[1]) {
-        return matches[1].split('.')[0]; // 도메인 추출
+      const matches = link.replace(/^(https?:\/\/)?(?:www\.)?([^\/]+)\..*$/, '$2');
+      if (matches) {
+        return matches; // 도메인 추출
       } else {
         return '알 수 없음'; // 도메인이 없으면 "알 수 없음"
       }
@@ -72,9 +72,9 @@ function Home() {
         );
 
         const newsList: NewsItem[] = response.data.items.map(item => ({
-          title: item.title.replaceAll('&quot;', '"'),
+          title: he.decode(item.title).replace(/<b>|<\/b>/g, ''),
           link: item.link,
-          description: item.description.replaceAll(/<b>|<\/b>/g, ''),
+          description: he.decode(item.description).replace(/<b>|<\/b>/g, ''),
           source: getSourceName(item.link),
         }));
 

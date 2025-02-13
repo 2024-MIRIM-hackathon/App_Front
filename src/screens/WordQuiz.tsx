@@ -6,7 +6,7 @@ import {
   ScrollView,
   Image,
   Dimensions,
-  TouchableNativeFeedback,
+  TouchableOpacity,
   Animated,
   NativeSyntheticEvent,
   NativeScrollEvent,
@@ -85,6 +85,9 @@ const WordQuiz: React.FC<Props> = ({route}) => {
   useFocusEffect(
     React.useCallback(() => {
       setStatusBarColor(quizStart ? '#FFE400' : '#FFFFFF');
+      return () => {
+        StatusBar.setBackgroundColor('#F6F5FA');
+      }
     }, [quizStart]),
   );
   const [scroll, setScroll] = useState(true);
@@ -204,7 +207,7 @@ const WordQuiz: React.FC<Props> = ({route}) => {
         }>
         <Text style={styles.quizText}>퀴즈</Text>
         <Text style={styles.quizVersionText}>
-          {quizVersion ? '지금까지 나온 단어 퀴즈 풀기' : '틀린 문제 다시풀기'}
+          {quizVersion ? '오늘 나온 퀴즈 풀기':'지금까지 나온 단어 퀴즈 풀기'}
         </Text>
         <View style={styles.quizScrollContainer}>
           <ScrollView
@@ -240,7 +243,8 @@ const WordQuiz: React.FC<Props> = ({route}) => {
                   <Text style={styles.quizQ}>{item.mean}</Text>
                   <View style={styles.wordContainer}>
                     <View style={styles.row}>
-                      <TouchableNativeFeedback
+                      <TouchableOpacity
+                        style={{borderRadius: 10}}
                         onPress={() => {
                           setAnswer(item.words[0].answer);
                           answerPress(0);
@@ -262,8 +266,9 @@ const WordQuiz: React.FC<Props> = ({route}) => {
                             {item.words[0].word}
                           </Text>
                         </View>
-                      </TouchableNativeFeedback>
-                      <TouchableNativeFeedback
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={{borderRadius: 10}}
                         onPress={() => {
                           setAnswer(item.words[1].answer);
                           answerPress(1);
@@ -285,10 +290,11 @@ const WordQuiz: React.FC<Props> = ({route}) => {
                             {item.words[1].word}
                           </Text>
                         </View>
-                      </TouchableNativeFeedback>
+                      </TouchableOpacity>
                     </View>
                     <View style={styles.row}>
-                      <TouchableNativeFeedback
+                      <TouchableOpacity
+                        style={{borderRadius: 10}}
                         onPress={() => {
                           setAnswer(item.words[2].answer);
                           answerPress(2);
@@ -310,8 +316,9 @@ const WordQuiz: React.FC<Props> = ({route}) => {
                             {item.words[2].word}
                           </Text>
                         </View>
-                      </TouchableNativeFeedback>
-                      <TouchableNativeFeedback
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={{borderRadius: 10}}
                         onPress={() => {
                           setAnswer(item.words[3].answer);
                           answerPress(3);
@@ -333,7 +340,7 @@ const WordQuiz: React.FC<Props> = ({route}) => {
                             {item.words[3].word}
                           </Text>
                         </View>
-                      </TouchableNativeFeedback>
+                      </TouchableOpacity>
                     </View>
                   </View>
                   {answer === null && (
@@ -382,12 +389,12 @@ const WordQuiz: React.FC<Props> = ({route}) => {
                   style={styles.quizEndImg}
                 />
                 <Text style={styles.quizEndText2}>수고했어요!</Text>
-                <TouchableNativeFeedback onPress={() => oneMore()}>
+                <TouchableOpacity onPress={() => oneMore()} activeOpacity={1}>
                   <View style={[styles.endView, {backgroundColor: '#FFE400'}]}>
                     <Text style={styles.endText}>한 번 더 하기</Text>
                   </View>
-                </TouchableNativeFeedback>
-                <TouchableNativeFeedback onPress={() => navigation.goBack()}>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.goBack()} activeOpacity={1}>
                   <View
                     style={[
                       styles.endView,
@@ -395,7 +402,7 @@ const WordQuiz: React.FC<Props> = ({route}) => {
                     ]}>
                     <Text style={styles.endText}>나가기</Text>
                   </View>
-                </TouchableNativeFeedback>
+                </TouchableOpacity>
               </View>
             </ScrollView>
           </ScrollView>
