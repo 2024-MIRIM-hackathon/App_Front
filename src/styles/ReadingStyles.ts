@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
         width: 334,
         marginLeft: (Dimensions.get('window').width - 334) / 2,
         marginTop: 49,
+        borderRadius: 18,
     },
     ReadingContainer: {
         height: undefined,

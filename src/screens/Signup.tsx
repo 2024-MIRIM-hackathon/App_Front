@@ -14,6 +14,7 @@ import Logo from "../assets/svg/logo";
 import No from "../assets/svg/no";
 import Yes from "../assets/svg/yes"
 import Eye from "../assets/svg/eye";
+import CloseEye from "../assets/svg/closeEye";
 
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -35,15 +36,18 @@ const Signup:React.FC<SignupProps> = ({ setIsLoggedIn }) => {
       }
     };
 
+    const [eye1, setEye1] = useState(true);
+    const [eye2, setEye2] = useState(true);
+
     return (
       <ScrollView showsVerticalScrollIndicator={false} overScrollMode='never' style={styles.body}>
         <StatusBar backgroundColor={'white'} barStyle={"dark-content"} />
         <View style={styles.LoginHeader}>
-          <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => navigate.goBack()}>
+          <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginTop: -6 }} onPress={() => navigate.goBack()}>
             <Left style={{ width: 7, height: 14, marginRight: 10 }} />
             <Text style={styles.back}>나가기</Text>
           </TouchableOpacity>
-          <Logo style={{ width: 36, height: 21 }} />
+          <Logo width={42} height={25} style={{marginTop: -3}}/>
         </View>
         <Text style={styles.LoginText}>회원가입</Text>
         <View style={styles.inputContainer}>
@@ -74,8 +78,11 @@ const Signup:React.FC<SignupProps> = ({ setIsLoggedIn }) => {
                 style={styles.text}
                 placeholder="비밀번호를 입력해주세요"
                 placeholderTextColor={'#ACACAC'}
-                selectionColor={'#FFE400'}/>
-              <Eye style={{width: 16, height: 10, marginTop: 1, marginRight: 1}}/>
+                selectionColor={'#FFE400'}
+                secureTextEntry={eye1}/>
+              <TouchableOpacity activeOpacity={1} style={{width: 16, height: 10, marginTop: 1, marginRight: 1}} onPress={()=>{setEye1((pre) => !pre)}}>
+                {eye1?<CloseEye/>:<Eye />}
+              </TouchableOpacity>
             </View>
           </View>
           <View style={styles.input}>
@@ -85,8 +92,11 @@ const Signup:React.FC<SignupProps> = ({ setIsLoggedIn }) => {
                 style={styles.text}
                 placeholder="다시 한 번 비밀번호를 입력해주세요"
                 placeholderTextColor={'#ACACAC'}
-                selectionColor={'#FFE400'}/>
-              <Eye style={{width: 16, height: 10, marginTop: 1, marginRight: 1}}/>
+                selectionColor={'#FFE400'}
+                secureTextEntry={eye2}/>
+              <TouchableOpacity activeOpacity={1} style={{width: 16, height: 10, marginTop: 1, marginRight: 1}} onPress={()=>{setEye2((pre) => !pre)}}>
+                {eye2?<CloseEye/>:<Eye />}
+              </TouchableOpacity>
             </View>
           </View>
           <View style={styles.input}>

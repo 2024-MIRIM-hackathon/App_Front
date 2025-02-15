@@ -113,10 +113,18 @@ const styles = StyleSheet.create({
     },
     quizEndText: {
         textAlign: 'center',
-        marginTop: 29,
-        marginBottom: 22,
+        marginTop: 26,
+        marginBottom: 21,
         fontSize: 18,
         fontFamily: 'Pretendard-SemiBold',
+    },
+    quizEndTextN: {
+        fontSize: 20,
+        fontFamily: 'Pretendard-Bold',
+        lineHeight: 32,
+        letterSpacing: 0.3,
+        textAlign: 'center',
+        marginTop: 66,
     },
     falseWordContainer: {
         width: 258,
@@ -126,7 +134,9 @@ const styles = StyleSheet.create({
     },
     falseWordItem: {
         paddingLeft: 1,
-        paddingVertical: 23,
+        // paddingTop: 23,
+        paddingTop: 17,
+        paddingBottom: 23,
         flexDirection: 'row',
         columnGap: 23,
         borderBottomWidth: 0.5,
@@ -148,7 +158,7 @@ const styles = StyleSheet.create({
     },
     quizEndText2: {
         textAlign: 'center',
-        marginTop: 49,
+        marginTop: 47,
         marginBottom: 48,
         fontSize: 18,
         fontFamily: 'Pretendard-SemiBold',

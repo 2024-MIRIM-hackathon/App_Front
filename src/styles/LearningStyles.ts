@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
         lineHeight: 16, 
     },
     button: {
-        width: 265,
+        width: 266,
         height: 47,
         justifyContent: 'center',
         alignItems: 'center',

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { 
   View, 
   Text, 
@@ -12,6 +12,7 @@ import styles from "../styles/LoginStyles";
 import Left from "../assets/svg/Left";
 import Logo from "../assets/svg/logo";
 import Eye from "../assets/svg/eye";
+import CloseEye from "../assets/svg/closeEye";
 
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -31,6 +32,8 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
     }
   };
 
+  const [eye, setEye] = useState(true);
+
   const navigate = useNavigation();
   return (
     <View style={styles.body}>
@@ -47,11 +50,13 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
         <TextInput style={styles.inputInfo} placeholder="이메일" placeholderTextColor={'#ACACAC'} selectionColor={'#FFE400'} />
       </View>
       <View style={styles.inputView}>
-        <TextInput style={styles.inputInfo} placeholder="비밀번호" placeholderTextColor={'#ACACAC'} selectionColor={'#FFE400'} />
-        <Eye style={{width: 16, height: 10, marginTop: 1, marginRight: 1}}/>
+        <TextInput style={styles.inputInfo} placeholder="비밀번호" placeholderTextColor={'#ACACAC'} selectionColor={'#FFE400'} secureTextEntry={eye} />
+        <TouchableOpacity activeOpacity={1} style={{width: 16, height: 10, marginTop: 1, marginRight: 1}} onPress={()=>{setEye((pre) => !pre)}}>
+          {eye?<CloseEye/>:<Eye />}
+        </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.LoginBtn} onPress={handleLogin}><Text style={styles.LoginBtnText}>로그인</Text></TouchableOpacity>
-      <View style={{marginHorizontal: 29, height: 13, flexDirection: 'row', marginTop: 65, marginBottom: 12, alignItems: 'center', justifyContent: 'center', overflow: 'hidden'}}>
+      <View style={{marginHorizontal: 29, height: 13, flexDirection: 'row', marginTop: 62, marginBottom: 12, alignItems: 'center', justifyContent: 'center', overflow: 'hidden'}}>
           <View style={{borderTopWidth: 0.7, borderTopColor: '#ACACAC', width: '100%', marginTop: 4}}/>
           <Text style={{marginHorizontal: 11.5, fontSize: 11, fontFamily: 'Pretendard-Medium', color: '#ACACAC'}}>또는</Text>
           <View style={{borderTopWidth: 0.7, borderTopColor: '#ACACAC', width: '100%', marginTop: 4}}/>

@@ -71,10 +71,43 @@ const data = [
     { "date": "2025-02-19", "learn": true }
 ];
 
-const wordData = ["념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다.(類比)의 단일성’ 으로 인식하고 있었다.", 
-    '종개념은 다양한데, 이 같은 초월적 이 같은 초월적', 
-    '종개념은 다양한데, 이 같은 초월적', 
-    '종개념은 다양한데, 이 같은 초월적'
+const wordData = [
+    {
+        'word': '보편',
+        'mean': '모든 것에 두루 미치거나 통함. 또는 그런 것.',
+        'book1': '꿈을 꿨어 그렇게 생생할 수 ',
+        'book2': '보편',
+        'book3': ', 이빨에 씹히던 날고기의 감촉이, 내얼굴이, 눈빛이. 처음보는 얼굴 같은데, 분명 내 얼굴이었어. 아니야, 거꾸로, 수없이 봤던 얼굴 같은데, 내 얼굴이 아니었어. 설명할 수 없어. 익숙하면서도 낯선..... 그 생생하고 이상한, 끔찍하게 이상한 느낌을.',
+        'title': '채식주의자',
+        'author': '한강',
+    },
+    {
+        'word': '보편',
+        'mean': '모든 것에 두루 미치거나 통함. 또는 그런 것.',
+        'book1': '꿈을 꿨어 그렇게 생생할 수 ',
+        'book2': '보편',
+        'book3': ', 이빨에 씹히던 날고기의 감촉이, 내얼굴이, 눈빛이. 처음보는 얼굴 같은데, 분명 내 얼굴이었어. 아니야, 거꾸로, 수없이 봤던 얼굴 같은데, 내 얼굴이 아니었어. 설명할 수 없어. 익숙하면서도 낯선..... 그 생생하고 이상한, 끔찍하게 이상한 느낌을.',
+        'title': '채식주의자',
+        'author': '한강',
+    },
+    {
+        'word': '보편',
+        'mean': '모든 것에 두루 미치거나 통함. 또는 그런 것.',
+        'book1': '꿈을 꿨어 그렇게 생생할 수 ',
+        'book2': '보편',
+        'book3': ', 이빨에 씹히던 날고기의 감촉이, 내얼굴이, 눈빛이. 처음보는 얼굴 같은데, 분명 내 얼굴이었어. 아니야, 거꾸로, 수없이 봤던 얼굴 같은데, 내 얼굴이 아니었어. 설명할 수 없어. 익숙하면서도 낯선..... 그 생생하고 이상한, 끔찍하게 이상한 느낌을.',
+        'title': '채식주의자',
+        'author': '한강',
+    },
+    {
+        'word': '보편',
+        'mean': '모든 것에 두루 미치거나 통함. 또는 그런 것.',
+        'book1': '꿈을 꿨어 그렇게 생생할 수 ',
+        'book2': '보편',
+        'book3': ', 이빨에 씹히던 날고기의 감촉이, 내얼굴이, 눈빛이. 처음보는 얼굴 같은데, 분명 내 얼굴이었어. 아니야, 거꾸로, 수없이 봤던 얼굴 같은데, 내 얼굴이 아니었어. 설명할 수 없어. 익숙하면서도 낯선..... 그 생생하고 이상한, 끔찍하게 이상한 느낌을.',
+        'title': '채식주의자',
+        'author': '한강',
+    },
 ];
 
 const wordContainerWidth = Dimensions.get('window').width - 58;
@@ -247,6 +280,12 @@ function Calendar() {
         return { x: currentIndex * (wordContainerWidth + 9), y: 0 };
     };
 
+    const getWidth = (str: string) => {
+        let len = str.length;
+        let nu = str.split(' ').length - 1;
+        return (len-nu)*16 + nu*4;
+    }
+
     return (
         <ScrollView
             style={styles.body}
@@ -346,11 +385,23 @@ function Calendar() {
                     contentContainerStyle={{ width: 7 * 3 + 29 * 2 + wordContainerWidth * 4 }}>
                     {wordData.map((word, index) => 
                         <View key={index}>
-                            <View style={styles.wordContainer} key={index}>
-                                <Text style={styles.word}>보편</Text>
-                                <Text style={styles.mean}>{word}</Text>
-                                <Text style={styles.example}>예문</Text>
-                                <Text style={styles.exampleSentence}>사람들은 보편적으로 사랑하는 사람을 행복하게 하고싶어 해</Text>
+                            <View style={styles.wordContainer}>
+                                <View style={styles.wordBox}>
+                                    <Text style={styles.word}>{word.word}</Text>
+                                    <View style={[styles.wordHighlight, {width: getWidth(word.word)+4}]}/>
+                                </View>
+                                <Text style={styles.mean}>{word.mean}</Text>
+                                <Text style={styles.bookText}>
+                                    {word.book1}
+                                    <View>
+                                        <Text style={styles.bookWord}>{word.book2}</Text>
+                                    </View>
+                                    {word.book3}
+                                </Text>
+                                <View style={{marginHorizontal: 1, flexDirection: 'row'}}>
+                                    <Text style={styles.title}>{word.title}</Text>
+                                    <Text style={styles.author}>{word.author}</Text>
+                                </View>
                             </View>
                         </View>
                     )}

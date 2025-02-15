@@ -32,7 +32,7 @@ const LoginScreen: React.FC<StartProps> = ({ setIsLoggedIn }) => {
         <View style={{position: 'absolute', bottom: 39, paddingHorizontal: 29, width: '100%'}}>
             <TouchableOpacity onPress={() => navigation.navigate('Signup')}><View style={[styles.Signup, styles.LoginBtn]}><Text style={styles.logintext}>회원가입</Text></View></TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('Login')}><View style={[styles.Login, styles.LoginBtn]}><Text style={styles.logintext}>로그인</Text></View></TouchableOpacity>
-            <View style={{width: '100%', height: 13, flexDirection: 'row', marginTop: 19, marginBottom: 12, alignItems: 'center', justifyContent: 'center', overflow: 'hidden'}}>
+            <View style={{width: '100%', height: 13, flexDirection: 'row', marginTop: 17, marginBottom: 14, alignItems: 'center', justifyContent: 'center', overflow: 'hidden'}}>
                 <View style={{borderTopWidth: 1, borderTopColor: '#ACACAC', width: '100%', marginTop: 4}}/>
                 <Text style={{marginHorizontal: 11.5, fontSize: 11, fontFamily: 'Pretendard-Medium', color: '#ACACAC'}}>또는</Text>
                 <View style={{borderTopWidth: 1, borderTopColor: '#ACACAC', width: '100%', marginTop: 4}}/>

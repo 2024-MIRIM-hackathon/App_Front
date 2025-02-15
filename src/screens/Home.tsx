@@ -95,7 +95,7 @@ function Home() {
 
   return (
     <View style={styles.body}>
-      <StatusBar barStyle="dark-content" backgroundColor="#F6F5FA" />
+      <StatusBar barStyle="dark-content" backgroundColor="#F6F5FA" />      
       <ScrollView showsVerticalScrollIndicator={false} overScrollMode="never">
         <Logo style={styles.logo} />
         <Text style={styles.issuesText}>요즘 문학이슈</Text>
