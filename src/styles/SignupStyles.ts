@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
         height: 21,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        overflow: 'visible',
     },
     back: {
         fontSize: 14,
@@ -70,16 +70,14 @@ const styles = StyleSheet.create({
         marginBottom: 18,
         height: 18,
         flexDirection: 'row',
+        alignItems: 'center'
     },
     checkbox: {
         marginRight: 12,
-        width: 18,
-        height: 18,
     },
     consentText: {
         fontSize: 11,
         fontFamily: 'Pretendard-Regular',
-        marginTop: 3,
     },
     SignupBtn: {
         height: 53,

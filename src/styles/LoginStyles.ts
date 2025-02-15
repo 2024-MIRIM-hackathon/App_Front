@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 18,
+        marginTop: 9,
     },
     otherLoginImg: {
         width: 48,

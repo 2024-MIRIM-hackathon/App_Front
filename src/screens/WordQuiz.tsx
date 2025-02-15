@@ -362,9 +362,11 @@ const WordQuiz: React.FC<Props> = ({route}) => {
                 </View>
               </View>
             ))}
-            <ScrollView
-              style={{marginBottom: 40}}
-              showsVerticalScrollIndicator={false}>
+            {falseWords.length !== 0
+            ? <ScrollView
+              style={{marginBottom: 40, borderRadius: 18}}
+              showsVerticalScrollIndicator={false}
+              overScrollMode='never'>
               <View
                 style={{
                   width: 334,
@@ -405,6 +407,40 @@ const WordQuiz: React.FC<Props> = ({route}) => {
                 </TouchableOpacity>
               </View>
             </ScrollView>
+            : <ScrollView
+              style={{marginBottom: 40}}
+              showsVerticalScrollIndicator={false}>
+              <View
+                style={{
+                  width: 334,
+                  minHeight: 466,
+                  borderRadius: 18,
+                  backgroundColor: 'white',
+                  alignItems: 'center',
+                }}>
+                <Image source={require('../assets/images/quizEndImg2.png')} style={{width: 75, height: 61, alignSelf: 'center'}}/>
+                <Text style={styles.quizEndTextN}>모두 정답!{'\n'}수고했어요!</Text>
+                <ScrollView/>
+                <Image
+                  source={require('../assets/images/quizEndImg.png')}
+                  style={styles.quizEndImg}
+                />
+                <TouchableOpacity onPress={() => oneMore()} activeOpacity={1}>
+                  <View style={[styles.endView, {backgroundColor: '#FFE400'}]}>
+                    <Text style={styles.endText}>한 번 더 하기</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.goBack()} activeOpacity={1}>
+                  <View
+                    style={[
+                      styles.endView,
+                      {marginBottom: 39, backgroundColor: 'white'},
+                    ]}>
+                    <Text style={styles.endText}>나가기</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </ScrollView>}
           </ScrollView>
           {!quizStart && (
             <View style={styles.dotContainer}>

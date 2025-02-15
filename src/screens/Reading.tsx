@@ -26,6 +26,7 @@ function Learning() {
             <ScrollView
                 style={styles.ReadingScroll}
                 showsVerticalScrollIndicator={false}
+                overScrollMode='never'
             >
                 <View style={styles.ReadingContainer}>
                     <Text style={styles.ReadingText}>{data[0]}</Text>
