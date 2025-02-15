@@ -37,8 +37,8 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
   const navigate = useNavigation();
   return (
     <View style={styles.body}>
-      <StatusBar backgroundColor={'white'} barStyle={"dark-content"} />
-      <View style={styles.LoginHeader}>
+      <View style={{ width: '100%', height: StatusBar.currentHeight, backgroundColor: 'white', position: 'absolute', top: 0 }}/>
+      <View style={[styles.LoginHeader, {marginTop: StatusBar.currentHeight}]}>
         <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => navigate.goBack()}>
           <Left style={{ width: 7, height: 14, marginRight: 10 }} />
           <Text style={styles.back}>나가기</Text>
@@ -65,7 +65,7 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
         <TouchableOpacity><Image source={require('../assets/images/Google.png')} style={styles.otherLoginImg}/></TouchableOpacity>
         <TouchableOpacity><Image source={require('../assets/images/Naver.png')} style={styles.otherLoginImg}/></TouchableOpacity>
       </View>
-      <Image source={require('../assets/images/LoginImg.png')} style={styles.LoginImg} />
+      <Image source={require('../assets/images/LoginImg.png')} style={[styles.LoginImg, {marginTop: StatusBar.currentHeight}]} />
     </View>      
   );
 };

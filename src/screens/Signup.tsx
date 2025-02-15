@@ -41,8 +41,9 @@ const Signup:React.FC<SignupProps> = ({ setIsLoggedIn }) => {
 
     return (
       <ScrollView showsVerticalScrollIndicator={false} overScrollMode='never' style={styles.body}>
-        <StatusBar backgroundColor={'white'} barStyle={"dark-content"} />
-        <View style={styles.LoginHeader}>
+        <StatusBar barStyle={'dark-content'} backgroundColor='transparent' translucent={true} />
+        <View style={{ width: '100%', height: StatusBar.currentHeight, backgroundColor: 'white', position: 'absolute', top: 0 }}/>
+        <View style={[styles.LoginHeader, {marginTop: StatusBar.currentHeight}]}>
           <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginTop: -6 }} onPress={() => navigate.goBack()}>
             <Left style={{ width: 7, height: 14, marginRight: 10 }} />
             <Text style={styles.back}>나가기</Text>

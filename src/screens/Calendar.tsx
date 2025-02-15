@@ -1,17 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     View,
+    StatusBar,
     Text,
     ScrollView,
-    StatusBar,
     Image,
     TouchableOpacity,
     Dimensions,
     NativeSyntheticEvent,
     NativeScrollEvent,
 } from 'react-native';
-
-import { useFocusEffect } from '@react-navigation/native';
 
 import Svg, { Circle, G } from 'react-native-svg';
 
@@ -136,12 +134,6 @@ function Calendar() {
             setStatusBarColor('#F6F5FA');
         } 
     };
-
-    useFocusEffect(
-        useCallback(() => {
-            StatusBar.setBackgroundColor(statusBarColor);
-        }, [statusBarColor])
-    );
 
     const dataObj: Record<string, { date: string; learn: boolean }> = {};
     data.forEach(item => {
@@ -287,12 +279,13 @@ function Calendar() {
     }
 
     return (
+        <View style={styles.body}>
+        <View style={{ width: '100%', height: StatusBar.currentHeight, backgroundColor: statusBarColor, position: 'absolute', top: 0, zIndex: 10 }}/>
         <ScrollView
-            style={styles.body}
+            style={{paddingTop: StatusBar.currentHeight}}
             showsVerticalScrollIndicator={false}
             overScrollMode='never'
             onScroll={handleScroll}>
-            <StatusBar barStyle="dark-content" backgroundColor={statusBarColor} />
             <View style={styles.calendarContainer}>
                 <View style={styles.calendarHeader}>
                     <Text style={styles.calendarMonth}>{currentMonth.getFullYear()} . {String(currentMonth.getMonth()+1).padStart(2, '0')}</Text>
@@ -419,7 +412,7 @@ function Calendar() {
                 </View>
             </View>
             <Text style={styles.IngThat}>그날의 읽기 학습</Text>
-            <View style={styles.writeContainer}>
+            <View style={[styles.writeContainer, {marginBottom: StatusBar.currentHeight}]}>
                 <View style={styles.bookInfo}>
                     <Text style={styles.bookTitle}>채식주의자</Text>
                     <Text style={styles.bookWriter}>한강</Text>
@@ -432,6 +425,7 @@ function Calendar() {
             </View>
             <View style={{height: 131}}/>
         </ScrollView>
+        </View>
     );
 }
 

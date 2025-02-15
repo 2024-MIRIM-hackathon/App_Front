@@ -6,10 +6,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     LoginHeader: {
-        marginTop: 44,
+        paddingTop: 44,
         marginLeft: 29, 
         marginRight: 29,
-        height: 21,
+        height: 65,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',

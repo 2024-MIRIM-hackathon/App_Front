@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     learningActivity: {
         fontSize: 20,
         fontFamily: 'Pretendard-SemiBold',
-        marginTop: 46,
+        paddingTop: 46,
         marginLeft: 29,
     },
     ReadingScroll: {
