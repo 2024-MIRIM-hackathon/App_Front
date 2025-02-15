@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, { useState} from 'react';
 import {
   View,
   StatusBar,
@@ -7,11 +7,7 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
-  NativeSyntheticEvent,
-  NativeScrollEvent
 } from 'react-native';
-
-import { useFocusEffect } from '@react-navigation/native';
 
 import {disassemble} from 'es-hangul';
 
@@ -105,12 +101,6 @@ const wordData = [
 
 function Dictionary() {
 
-  useFocusEffect(
-    React.useCallback(() => {
-      StatusBar.setBackgroundColor('#F3F3F3');
-    }, [])
-  );
-
   const [searchText, setSearchText] = useState('');
   const [filteredWords, setFilteredWords] = useState(wordData);
   const [showTotal, setShowTotal] = useState(true);
@@ -183,8 +173,7 @@ function Dictionary() {
   };
 
   return (
-    <View style={styles.body}>
-      <StatusBar barStyle="dark-content" backgroundColor="#F3F3F3" />
+    <View style={[styles.body, {paddingTop: StatusBar.currentHeight}]}>
       <Text style={styles.dictionaryText}>사전</Text>
       <View style={styles.searchContainer}>
         <Image

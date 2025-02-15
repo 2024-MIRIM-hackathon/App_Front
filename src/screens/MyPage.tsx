@@ -10,7 +10,6 @@ import {
     NativeScrollEvent
 } from 'react-native';
 
-import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import styles from '../styles/MyPageStyles';
@@ -36,12 +35,6 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
         } 
     };
 
-    useFocusEffect(
-        useCallback(() => {
-            StatusBar.setBackgroundColor(statusBarColor);
-        }, [statusBarColor])
-    );
-
     const handleLogout = async () => {
         try {
             await AsyncStorage.removeItem("userToken"); // 저장된 로그인 정보 삭제
@@ -52,13 +45,13 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
     };
 
     return (
+        <View style={styles.body}>
+        <View style={{ width: '100%', height: StatusBar.currentHeight, backgroundColor: statusBarColor, position: 'absolute', top: 0, zIndex: 10 }}/>
         <ScrollView
-            style={styles.body}
             showsVerticalScrollIndicator={false}
             overScrollMode='never'
             onScroll={handleScroll}>
-            <StatusBar barStyle="dark-content" backgroundColor={statusBarColor} />
-            <View style={styles.header}>
+            <View style={[styles.header, {marginTop: StatusBar.currentHeight}]}>
                 <Image style={styles.headerImg} source={require('../assets/images/headerImg.png')} />
                 <Text style={styles.mypageText}>마이페이지</Text>
                 <Text style={styles.dateText}>GUILAP과 함께한지</Text>
@@ -126,6 +119,7 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
                 <Text style={styles.logout}>로그아웃</Text>
             </TouchableOpacity>
         </ScrollView>
+        </View>
     );
 }
 

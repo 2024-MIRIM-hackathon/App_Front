@@ -1,20 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {
   Text,
-  View,
   StatusBar,
+  View,
   ScrollView,
   Image,
   TouchableWithoutFeedback,
   Linking,
   TouchableOpacity,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
 } from 'react-native';
 import axios from 'axios';
 import {NewsItem} from './types';
-
-import {useFocusEffect} from '@react-navigation/native';
 
 import Logo from '../assets/svg/logo';
 import Book from '../assets/svg/book';
@@ -29,12 +25,6 @@ import styles from '../styles/HomeStyles';
 
 function Home() {
   const navigation = useNavigation<StackNavigationProp<any>>();
-
-  useFocusEffect(
-    React.useCallback(() => {
-      StatusBar.setBackgroundColor('#F6F5FA');
-    }, []),
-  );
 
   const [news, setNews] = useState<NewsItem[]>([]);
   const getSourceName = (link: string) => {
@@ -95,8 +85,10 @@ function Home() {
 
   return (
     <View style={styles.body}>
-      <StatusBar barStyle="dark-content" backgroundColor="#F6F5FA" />      
+      <StatusBar barStyle={'dark-content'} backgroundColor='transparent' translucent={true} />
+      <View style={{ width: '100%', height: StatusBar.currentHeight, backgroundColor: '#F6F5FA', position: 'absolute', top: 0, zIndex: 10 }}/>
       <ScrollView showsVerticalScrollIndicator={false} overScrollMode="never">
+        <View style={{ width: '100%', height: StatusBar.currentHeight, backgroundColor: '#F6F5FA' }}/>
         <Logo style={styles.logo} />
         <Text style={styles.issuesText}>요즘 문학이슈</Text>
         <CustomScrollView>

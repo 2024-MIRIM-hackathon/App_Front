@@ -229,7 +229,7 @@ const App: React.FC<AppProps> = ({ setIsLoggedIn }) => {
   return (
     // <NavigationContainer>
       <KeyboardAvoidingView
-        keyboardVerticalOffset={-65}
+        keyboardVerticalOffset={-95}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
       >

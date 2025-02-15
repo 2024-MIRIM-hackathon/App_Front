@@ -3,7 +3,7 @@ const interval = (Dimensions.get('window').width - 334) / 2;
 
 const styles = StyleSheet.create({
     quizText: {
-        marginTop: 46,
+        paddingTop: 46,
         marginLeft: 29, 
         marginBottom: 5,
         fontSize: 20,

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StatusBar, TouchableOpacity, ScrollView, Dimensions, Image, Modal, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { View, Text, TouchableOpacity, ScrollView, Dimensions, Image, Modal, StatusBar } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const interval = (Dimensions.get('window').width - 334)/2;
 const ItemHeight = Dimensions.get('window').height - 254;
@@ -8,15 +8,6 @@ const ItemHeight = Dimensions.get('window').height - 254;
 import styles from '../styles/LearningStyles';
 
 function Learning() {
-
-    useFocusEffect(
-        React.useCallback(() => {
-          StatusBar.setBackgroundColor('#F6F5FA');
-          return () => {
-            StatusBar.setBackgroundColor('#F6F5FA');
-          }
-        }, [])
-    );
 
     const navigation = useNavigation();
     const data = ["종개념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다. 종개념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다. 종개념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다.(類比)의 단일성’ 으로 인식하고 있었다.", 
@@ -58,7 +49,6 @@ function Learning() {
 
     return (
         <View style={styles.body}>
-            <StatusBar barStyle="dark-content" backgroundColor="#F6F5FA" />
             <Modal
                 visible={isModalVisible}
                 animationType="fade" // 팝업 애니메이션 설정
@@ -75,7 +65,7 @@ function Learning() {
                     </View>
                 </View>
             </Modal>
-            <Text style={styles.learningActivity}>책 문장 단어학습</Text>
+            <Text style={[styles.learningActivity, {marginTop: StatusBar.currentHeight}]}>책 문장 단어학습</Text>
             <View style={styles.appBackground}>
                 <View style={{ maxHeight: ItemHeight }}>
                     <ScrollView

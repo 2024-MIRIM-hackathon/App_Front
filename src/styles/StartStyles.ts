@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, StatusBar } from "react-native";
 
 const styles = StyleSheet.create({
     body: {
@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').width * 1.156,
         position: 'absolute',
-        top: 0,
+        top: StatusBar.currentHeight,
         left: 0,
         right: 0,
         zIndex: 0,

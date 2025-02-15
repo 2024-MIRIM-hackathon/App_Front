@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F6F5FA',
     },
     quizText: {
-        marginTop: 46,
+        paddingTop: 46,
         marginLeft: 29, 
         fontSize: 20,
         fontFamily: 'Pretendard-SemiBold',

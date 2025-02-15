@@ -1,18 +1,16 @@
 import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
-  StatusBar,
   Text,
   ScrollView,
+  StatusBar,
   Image,
   Dimensions,
   TouchableOpacity,
   Animated,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {useNavigation, useFocusEffect} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 import styles from '../styles/WordQuizStyles';
 import {StackScreenProps} from '@react-navigation/stack';
@@ -82,14 +80,6 @@ const WordQuiz: React.FC<Props> = ({route}) => {
   const {quizVersion} = route.params;
   const [quizStart, setQuizStart] = useState(true);
   const [statusBarColor, setStatusBarColor] = useState('#FFE400');
-  useFocusEffect(
-    React.useCallback(() => {
-      setStatusBarColor(quizStart ? '#FFE400' : '#FFFFFF');
-      return () => {
-        StatusBar.setBackgroundColor('#F6F5FA');
-      }
-    }, [quizStart]),
-  );
   const [scroll, setScroll] = useState(true);
   const [answer, setAnswer] = useState<boolean | null>(null);
   const [check, setCheck] = useState<Number | null>(null);
@@ -197,7 +187,6 @@ const WordQuiz: React.FC<Props> = ({route}) => {
 
   return (
     <View style={{flex: 1}}>
-      <StatusBar barStyle="dark-content" backgroundColor={statusBarColor} />
       <LinearGradient
         style={{flex: 1}}
         start={{x: 0, y: 0}}
@@ -205,7 +194,7 @@ const WordQuiz: React.FC<Props> = ({route}) => {
         colors={
           quizStart ? ['#FFE400', '#FFE400'] : ['#FFFFFF', '#EBEBEB', '#EBEBEB']
         }>
-        <Text style={styles.quizText}>퀴즈</Text>
+        <Text style={[styles.quizText, {marginTop: StatusBar.currentHeight}]}>퀴즈</Text>
         <Text style={styles.quizVersionText}>
           {quizVersion ? '오늘 나온 퀴즈 풀기':'지금까지 나온 단어 퀴즈 풀기'}
         </Text>
@@ -363,7 +352,7 @@ const WordQuiz: React.FC<Props> = ({route}) => {
               </View>
             ))}
             {falseWords.length !== 0
-            ? <ScrollView
+            ? <View><ScrollView
               style={{marginBottom: 40, borderRadius: 18}}
               showsVerticalScrollIndicator={false}
               overScrollMode='never'>
@@ -371,7 +360,6 @@ const WordQuiz: React.FC<Props> = ({route}) => {
                 style={{
                   width: 334,
                   minHeight: 466,
-                  borderRadius: 18,
                   backgroundColor: 'white',
                   alignItems: 'center',
                 }}>
@@ -406,7 +394,7 @@ const WordQuiz: React.FC<Props> = ({route}) => {
                   </View>
                 </TouchableOpacity>
               </View>
-            </ScrollView>
+            </ScrollView></View>
             : <ScrollView
               style={{marginBottom: 40}}
               showsVerticalScrollIndicator={false}>

@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     },
     IngThat: {
         marginLeft: 29,
-        marginBottom: 23,
+        marginBottom: 17,
         fontSize: 18,
         fontFamily: 'Pretendard-SemiBold',
     },

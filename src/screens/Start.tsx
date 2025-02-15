@@ -25,7 +25,8 @@ const LoginScreen: React.FC<StartProps> = ({ setIsLoggedIn }) => {
 
   return (
     <View style={styles.body}>
-        <StatusBar backgroundColor={'rgba(255, 255, 255, 0.95)'} barStyle={'dark-content'}/>
+        <StatusBar barStyle={'dark-content'} backgroundColor='transparent' translucent={true} />
+        <View style={{ width: '100%', height: StatusBar.currentHeight, backgroundColor: 'rgba(255, 255, 255, 0.95)', position: 'absolute', top: 0 }}/>
         <Image source={require('../assets/images/StartImg.png')} style={styles.LoginImg} />
         <Image source={require('../assets/images/StartLogo.png')} style={styles.Logo} />
         <Text style={styles.LoginText}>누구보다 쉽고{'\n'}누구든지 즐겁게</Text>

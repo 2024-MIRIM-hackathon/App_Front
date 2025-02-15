@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
 import {
     View,
-    StatusBar,
     Text,
     TouchableOpacity,
+    StatusBar,
     ScrollView,
-    NativeSyntheticEvent,
-    NativeScrollEvent
 } from 'react-native';
-
-import { useFocusEffect } from '@react-navigation/native';
 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -22,21 +18,15 @@ import TodayQuiz from '../assets/svg/TodayQuiz';
 
 function Quiz() {
 
-    useFocusEffect(
-        React.useCallback(() => {
-          StatusBar.setBackgroundColor('#F6F5FA');
-        }, [])
-    );
-
     const navigation = useNavigation<StackNavigationProp<any>>();
 
     return (
         <View style={styles.body}>
+            <View style={{ width: '100%', height: StatusBar.currentHeight, backgroundColor: '#F6F5FA', position: 'absolute', top: 0, zIndex: 10 }}/>
             <ScrollView 
                 showsVerticalScrollIndicator={false}
                 overScrollMode='never'>
-                <StatusBar barStyle="dark-content" backgroundColor="#F6F5FA" />
-                <Text style={styles.quizText}>퀴즈</Text>
+                <Text style={[styles.quizText, {marginTop: StatusBar.currentHeight}]}>퀴즈</Text>
                 <Text style={styles.falseQuizText}>많은 사람들이 틀리는 단어</Text>
                 <CustomScrollView>
                     <View style={styles.falseQuizContainer}>
