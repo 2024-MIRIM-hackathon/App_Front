@@ -15,7 +15,7 @@ const Navigation = () => {
     useEffect(() => {
       setTimeout(() => {
         SplashScreen.hide();
-      }, 1000); //스플래시 활성화 시간
+      }, 500); //스플래시 활성화 시간
     });
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null); // 로그인 상태 (null이면 로딩 중)
 
