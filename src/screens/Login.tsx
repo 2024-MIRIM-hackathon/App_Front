@@ -39,11 +39,11 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
     <View style={styles.body}>
       <View style={{ width: '100%', height: StatusBar.currentHeight, backgroundColor: 'white', position: 'absolute', top: 0 }}/>
       <View style={[styles.LoginHeader, {marginTop: StatusBar.currentHeight}]}>
-        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => navigate.goBack()}>
-          <Left style={{ width: 7, height: 14, marginRight: 10 }} />
-          <Text style={styles.back}>나가기</Text>
-        </TouchableOpacity>
-        <Logo style={{ width: 36, height: 21 }} />
+          <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginTop: -6 }} onPress={() => navigate.goBack()}>
+            <Left style={{ width: 7, height: 14, marginRight: 10 }} />
+            <Text style={styles.back}>나가기</Text>
+          </TouchableOpacity>
+          <Logo width={42} height={25} style={{marginTop: -3}}/>
       </View>
       <Text style={styles.LoginText}>로그인</Text>
       <View style={styles.inputView}>

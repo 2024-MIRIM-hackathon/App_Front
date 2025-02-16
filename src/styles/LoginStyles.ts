@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
         height: 65,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        overflow: 'visible',
     },
     back: {
         fontSize: 14,
