@@ -1,3 +1,4 @@
+import { CLIENT_ID, CLIENT_SECRET } from '@env';
 import React, {useEffect, useState} from 'react';
 import {
   Text,
@@ -44,8 +45,6 @@ function Home() {
 
   useEffect(() => {
     const fetchNews = async () => {
-      const client_id = 'HFC2r3LOsWteIzkYgRQ1';
-      const client_secret = '4FHtyOFoEC';
       const searchKeyword = '우리나라문학도서';
 
       try {
@@ -55,8 +54,8 @@ function Home() {
           )}&start=1&display=3`,
           {
             headers: {
-              'X-Naver-Client-Id': client_id,
-              'X-Naver-Client-Secret': client_secret,
+              'X-Naver-Client-Id': CLIENT_ID,
+              'X-Naver-Client-Secret': CLIENT_SECRET,
             },
           },
         );
