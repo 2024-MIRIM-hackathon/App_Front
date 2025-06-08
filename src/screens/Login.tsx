@@ -6,6 +6,7 @@ import {
   Image, 
   TouchableOpacity, 
   TextInput, 
+  Alert,
 } from "react-native";
 
 import styles from "../styles/LoginStyles";
@@ -17,18 +18,28 @@ import CloseEye from "../assets/svg/closeEye";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { postLoginUser } from "../api/userApi";
+
 interface LoginProps {
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
+  const [nickname, setNickname] = useState('')
+  const [password, setPassword] = useState('')
 
   const handleLogin = async () => {
     try {
-      await AsyncStorage.setItem("userToken", "your_token_here"); // 로그인 정보 저장
+      const response = await postLoginUser({
+        nickname,
+        password
+      })
+      await AsyncStorage.setItem("userId", String(response.user_id)); // 로그인 정보 저장
       setIsLoggedIn(true); // 로그인 상태 업데이트
     } catch (error) {
-      console.error("로그인 저장 실패:", error);
+      if (error instanceof Error) {
+        Alert.alert('에러', error.message);
+      }
     }
   };
 
@@ -47,10 +58,25 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
       </View>
       <Text style={styles.LoginText}>로그인</Text>
       <View style={styles.inputView}>
-        <TextInput style={styles.inputInfo} placeholder="이메일" placeholderTextColor={'#ACACAC'} selectionColor={'#FFE400'} />
+        <TextInput 
+          style={styles.inputInfo} 
+          placeholder="아이디" 
+          placeholderTextColor={'#ACACAC'} 
+          selectionColor={'#FFE400'} 
+          value={nickname}
+          onChangeText={setNickname}
+        />
       </View>
       <View style={styles.inputView}>
-        <TextInput style={styles.inputInfo} placeholder="비밀번호" placeholderTextColor={'#ACACAC'} selectionColor={'#FFE400'} secureTextEntry={eye} />
+        <TextInput 
+          style={styles.inputInfo} 
+          placeholder="비밀번호" 
+          placeholderTextColor={'#ACACAC'} 
+          selectionColor={'#FFE400'} 
+          secureTextEntry={eye} 
+          value={password}
+          onChangeText={setPassword}
+        />
         <TouchableOpacity activeOpacity={1} style={{width: 16, height: 10, marginTop: 1, marginRight: 1}} onPress={()=>{setEye((pre) => !pre)}}>
           {eye?<CloseEye/>:<Eye />}
         </TouchableOpacity>

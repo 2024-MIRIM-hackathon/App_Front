@@ -8,3 +8,8 @@ export interface Join {
 export interface JoinRes {
     err?: string
 }
+
+export interface LoginData {
+    nickname : string;
+    password : string;
+}
