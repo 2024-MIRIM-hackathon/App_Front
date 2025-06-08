@@ -26,15 +26,21 @@ import CalendarInactive from './assets/svg/CalendarInactive';
 import MyPageActive from './assets/svg/MyPageActive';
 import MyPageInactive from './assets/svg/MyPageInactive';
 
+import { QuizProvider } from './context/QuizProgressContext';
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+type QuizData = {
+  question: string,
+  options: {
+    word: string
+  }[],
+  correct_answer: string
+}
 export type RootStackParamList = {
-  WordQuiz: { quizVersion: boolean };
+  WordQuiz: { quizVersion: boolean, data: QuizData[] };
 };
-// export type MyStackParamList = {
-//   My: { quizVersion: boolean };
-// };
 
 interface AppProps {
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -227,7 +233,7 @@ const App: React.FC<AppProps> = ({ setIsLoggedIn }) => {
   //   }, 1000); //스플래시 활성화 시간
   // });
   return (
-    // <NavigationContainer>
+    <QuizProvider>
       <KeyboardAvoidingView
         keyboardVerticalOffset={-95}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -237,7 +243,7 @@ const App: React.FC<AppProps> = ({ setIsLoggedIn }) => {
           <AppTabNavigator setIsLoggedIn={setIsLoggedIn} />
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-    // </NavigationContainer>
+    </QuizProvider>
   );
 };
 
