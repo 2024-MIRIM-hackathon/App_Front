@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         height: 192,
         marginTop: 58,
-        marginBottom: 60,
+        marginBottom: 16,
         borderRadius: 18,
         backgroundColor: 'white',
         alignItems: 'center',
@@ -129,6 +129,60 @@ const styles = StyleSheet.create({
         fontFamily: 'Pretendard-Light',
         color: '#BCBCBC',
         textDecorationLine: 'underline',
+    },
+    levelContainer: {
+        width: Dimensions.get('screen').width - 58,
+        alignSelf: 'center',
+        height: 'auto',
+        minHeight: 113,
+        alignItems: 'center',
+        backgroundColor: '#FFF',
+        shadowColor: '#DDDDDD',
+        borderRadius: 18,
+        marginBottom: 60,
+        padding: 24,
+    },
+    level: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 18,
+    },
+    levelText: {
+        fontSize: 17,
+        fontFamily: 'Pretendard-Bold',
+        color: '#FFD000'
+    },
+    lack: {
+        fontSize: 12,
+        fontFamily: 'Pretendard-Medium',
+        color: '#565656'
+    },
+    levelBox: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 8,
+    },
+    levelSmall: {
+        fontSize: 12,
+        fontFamily: 'Pretendard-Regular'
+    },
+    levelTrack: {
+        width: '100%',
+        height: 10,
+        borderRadius: 100,
+        backgroundColor: '#F0EFF4',
+        overflow: 'hidden'
+    },
+    levelPercent: {
+        width: '50%',
+        height: 10,
+        backgroundColor: '#FFE400'
     }
 });
 
