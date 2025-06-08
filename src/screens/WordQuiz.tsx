@@ -18,46 +18,18 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParamList} from '../App';
 import {Easing} from 'react-native-reanimated';
 
+import { getTodayQuiz, getRandomQuiz } from '../api/quizApi';
+import { useQuizProgress } from '../context/QuizProgressContext';
+
 type Props = StackScreenProps<RootStackParamList, 'WordQuiz'>;
 
-const data = [
-  {
-    mean: '모든 것에 두루 미치거나 통함.또는 그런 것.',
-    words: [
-      {word: '보편1', answer: true},
-      {word: '이름', answer: false},
-      {word: '이름', answer: false},
-      {word: '이름', answer: false},
-    ],
-  },
-  {
-    mean: '모든 것에 두루 미치거나 통함.또는 그런 것.',
-    words: [
-      {word: '이름', answer: false},
-      {word: '보편2', answer: true},
-      {word: '이름', answer: false},
-      {word: '이름', answer: false},
-    ],
-  },
-  {
-    mean: '모든 것에 두루 미치거나 통함.또는 그런 것.',
-    words: [
-      {word: '이름', answer: false},
-      {word: '이름', answer: false},
-      {word: '보편3', answer: true},
-      {word: '이름', answer: false},
-    ],
-  },
-  {
-    mean: '모든 것에 두루 미치거나 통함.또는 그런 것.',
-    words: [
-      {word: '이름', answer: false},
-      {word: '이름', answer: false},
-      {word: '이름', answer: false},
-      {word: '보편4', answer: true},
-    ],
-  },
-];
+type QuizData = {
+  question: string,
+  options: {
+    word: string
+  }[],
+  correct_answer: string
+}
 
 const Answer = ({answer}: {answer: boolean}) => {
   return (
@@ -76,36 +48,36 @@ const interval = (Dimensions.get('window').width - 334) / 2;
 
 const WordQuiz: React.FC<Props> = ({route}) => {
   const navigation = useNavigation();
-
-  const {quizVersion} = route.params;
+  const { setTodayDone, setRandomDone } = useQuizProgress();
+  const {quizVersion, data} = route.params;
   const [quizStart, setQuizStart] = useState(true);
   const [statusBarColor, setStatusBarColor] = useState('#FFE400');
   const [scroll, setScroll] = useState(true);
   const [answer, setAnswer] = useState<boolean | null>(null);
   const [check, setCheck] = useState<Number | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const [falseWords, setFalseWords] = useState<{word: string; mean: string}[]>(
     [],
   );
 
   useEffect(() => {
+    console.log(currentIndex);
     if (currentIndex === 1){
-        setFalseWords([]);
+      setFalseWords([]);
     }
     if (answer !== null && currentIndex < 5 && !answer) {
-      const incorrectWord = data[currentIndex-1].words.find(
-        w => w.answer === true,
+      const incorrectWord = data[currentIndex-1].options.find(
+        w => w.word === data[currentIndex-1].correct_answer,
       );
       if (incorrectWord) {
         setFalseWords(prev => [
           ...prev,
-          {word: incorrectWord.word, mean: data[currentIndex-1].mean},
+          {word: incorrectWord.word, mean: data[currentIndex-1].question},
         ]);
       }
     }
   }, [answer]);
-
-  const [currentIndex, setCurrentIndex] = useState(0);
 
   const getStyle = (index: number, answer: boolean) => {
     if (answer === true) {
@@ -135,6 +107,7 @@ const WordQuiz: React.FC<Props> = ({route}) => {
       timeAnimation.removeListener(listener);
     };
   }, [timeAnimation]);
+
   useEffect(() => {
     const offset = indexToOffset(currentIndex);
     if (scrollViewRef.current) {
@@ -172,6 +145,7 @@ const WordQuiz: React.FC<Props> = ({route}) => {
       setCheck(null);
       setAnswer(null);
       setCurrentIndex(pre => pre + 1);
+      console.log('넘김');
     }, 2000);
   };
 
@@ -182,6 +156,16 @@ const WordQuiz: React.FC<Props> = ({route}) => {
     setAnswer(null);
     setCurrentIndex(0);
   };
+
+  const done = () => {
+    if(quizVersion) {
+      setTodayDone(true)
+      console.log('today');
+    } else {
+      setRandomDone(true)
+      console.log('random');
+    }
+  }
 
   const [quizCount, setQuizCount] = useState(data.length);
 
@@ -229,13 +213,13 @@ const WordQuiz: React.FC<Props> = ({route}) => {
               <View key={index}>
                 <View style={styles.quizContainer}>
                   {answer !== null && <Answer answer={answer} />}
-                  <Text style={styles.quizQ}>{item.mean}</Text>
+                  <Text style={styles.quizQ}>{item.question}</Text>
                   <View style={styles.wordContainer}>
                     <View style={styles.row}>
                       <TouchableOpacity
                         style={{borderRadius: 10}}
                         onPress={() => {
-                          setAnswer(item.words[0].answer);
+                          setAnswer(item.options[0].word === item.correct_answer);
                           answerPress(0);
                           next();
                         }}
@@ -244,22 +228,22 @@ const WordQuiz: React.FC<Props> = ({route}) => {
                           style={[
                             styles.wordView,
                             answer !== null &&
-                              getStyle(0, item.words[0].answer),
+                              getStyle(0, item.options[0].word === item.correct_answer),
                           ]}>
                           <Text
                             style={[
                               styles.wordText,
                               answer !== null &&
-                                getStyle(0, item.words[0].answer),
+                                getStyle(0, item.options[0].word === item.correct_answer),
                             ]}>
-                            {item.words[0].word}
+                            {item.options[0].word}
                           </Text>
                         </View>
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={{borderRadius: 10}}
                         onPress={() => {
-                          setAnswer(item.words[1].answer);
+                          setAnswer(item.options[1].word === item.correct_answer);
                           answerPress(1);
                           next();
                         }}
@@ -268,15 +252,15 @@ const WordQuiz: React.FC<Props> = ({route}) => {
                           style={[
                             styles.wordView,
                             answer !== null &&
-                              getStyle(1, item.words[1].answer),
+                              getStyle(1, item.options[1].word === item.correct_answer),
                           ]}>
                           <Text
                             style={[
                               styles.wordText,
                               answer !== null &&
-                                getStyle(1, item.words[1].answer),
+                                getStyle(1, item.options[1].word === item.correct_answer),
                             ]}>
-                            {item.words[1].word}
+                            {item.options[1].word}
                           </Text>
                         </View>
                       </TouchableOpacity>
@@ -285,7 +269,7 @@ const WordQuiz: React.FC<Props> = ({route}) => {
                       <TouchableOpacity
                         style={{borderRadius: 10}}
                         onPress={() => {
-                          setAnswer(item.words[2].answer);
+                          setAnswer(item.options[2].word === item.correct_answer);
                           answerPress(2);
                           next();
                         }}
@@ -294,22 +278,22 @@ const WordQuiz: React.FC<Props> = ({route}) => {
                           style={[
                             styles.wordView,
                             answer !== null &&
-                              getStyle(2, item.words[2].answer),
+                              getStyle(2, item.options[2].word === item.correct_answer),
                           ]}>
                           <Text
                             style={[
                               styles.wordText,
                               answer !== null &&
-                                getStyle(2, item.words[2].answer),
+                                getStyle(2, item.options[2].word === item.correct_answer),
                             ]}>
-                            {item.words[2].word}
+                            {item.options[2].word}
                           </Text>
                         </View>
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={{borderRadius: 10}}
                         onPress={() => {
-                          setAnswer(item.words[3].answer);
+                          setAnswer(item.options[3].word === item.correct_answer);
                           answerPress(3);
                           next();
                         }}
@@ -318,15 +302,15 @@ const WordQuiz: React.FC<Props> = ({route}) => {
                           style={[
                             styles.wordView,
                             answer !== null &&
-                              getStyle(3, item.words[3].answer),
+                              getStyle(3, item.options[3].word === item.correct_answer),
                           ]}>
                           <Text
                             style={[
                               styles.wordText,
                               answer !== null &&
-                                getStyle(3, item.words[3].answer),
+                                getStyle(3, item.options[3].word === item.correct_answer),
                             ]}>
-                            {item.words[3].word}
+                            {item.options[3].word}
                           </Text>
                         </View>
                       </TouchableOpacity>
@@ -351,15 +335,16 @@ const WordQuiz: React.FC<Props> = ({route}) => {
                 </View>
               </View>
             ))}
-            {falseWords.length !== 0
+            {falseWords.length > 0
             ? <View><ScrollView
-              style={{marginBottom: 40, borderRadius: 18}}
+              style={{height: '100%', marginBottom: 40, borderRadius: 18}}
               showsVerticalScrollIndicator={false}
               overScrollMode='never'>
               <View
                 style={{
                   width: 334,
-                  minHeight: 466,
+                  minHeight: 'auto',
+                  borderRadius: 18,
                   backgroundColor: 'white',
                   alignItems: 'center',
                 }}>
@@ -379,12 +364,12 @@ const WordQuiz: React.FC<Props> = ({route}) => {
                   style={styles.quizEndImg}
                 />
                 <Text style={styles.quizEndText2}>수고했어요!</Text>
-                <TouchableOpacity onPress={() => oneMore()} activeOpacity={1}>
+                <TouchableOpacity onPress={() => {done(); oneMore()}} activeOpacity={1}>
                   <View style={[styles.endView, {backgroundColor: '#FFE400'}]}>
                     <Text style={styles.endText}>한 번 더 하기</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.goBack()} activeOpacity={1}>
+                <TouchableOpacity onPress={() => {done(); navigation.goBack()}} activeOpacity={1}>
                   <View
                     style={[
                       styles.endView,

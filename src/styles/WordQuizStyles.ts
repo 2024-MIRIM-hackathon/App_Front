@@ -190,9 +190,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         columnGap: 6,
         alignItems: 'center',
-        marginTop: 22,
         flexDirection: 'row',
-        marginBottom: Dimensions.get('window').height - 669,
+        marginBottom: Dimensions.get('window').height - 700,
     }, 
     dot: {
         width: 7,
