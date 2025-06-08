@@ -11,13 +11,18 @@ import { ReactNode } from 'react';
 interface CustomScrollViewProps {
   children: ReactNode[];
   contentWidth?: number;
+  count?: number;
 }
 
 const windowWidth = Dimensions.get('window').width;
 const scrollBarContainerWidth = windowWidth - 29 * 2;
 
 
-const CustomScrollView = ({ children, contentWidth = scrollBarContainerWidth*3+76 }: CustomScrollViewProps) => {
+const CustomScrollView = ({ children, contentWidth = scrollBarContainerWidth*3+76, count }: CustomScrollViewProps) => {
+  if(count){
+    contentWidth = scrollBarContainerWidth*count+76
+  }
+
   const scrollX = useSharedValue(0);
 
   const scrollHandler = useAnimatedScrollHandler((event) => {

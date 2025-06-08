@@ -18,7 +18,7 @@ import TodayQuiz from '../assets/svg/TodayQuiz';
 
 import { useQuizProgress } from '../context/QuizProgressContext';
 
-import { getTodayQuiz, getRandomQuiz } from '../api/quizApi';
+import { getTodayQuiz, getRandomQuiz, getPeopleWrong } from '../api/quizApi';
 
 type QuizData = {
   question: string,
@@ -27,12 +27,19 @@ type QuizData = {
   }[],
   correct_answer: string
 }
+type People = {
+    word: string,
+    meaning: string,
+    first_example: string,
+    last_example: string
+}
 
 function Quiz() {
     const { todayDone, randomDone } = useQuizProgress();
     const navigation = useNavigation<StackNavigationProp<any>>();
     const [today, setToday] = useState<QuizData[]>([])
     const [random, setRandom] = useState<QuizData[]>([])
+    const [people, setPeople] = useState<People[]>([])
 
     const fetch = async() => {
       let res: QuizData
@@ -57,6 +64,14 @@ function Quiz() {
         }, [])
     );
 
+    useEffect(() => {
+        const fetchPeople = async() => {
+            const res = await getPeopleWrong()
+            setPeople(res)
+        }
+        fetchPeople()
+    }, [])
+
     return (
         <View style={styles.body}>
             <View style={{ width: '100%', height: StatusBar.currentHeight, backgroundColor: '#F6F5FA', position: 'absolute', top: 0, zIndex: 10 }}/>
@@ -65,25 +80,15 @@ function Quiz() {
                 overScrollMode='never'>
                 <Text style={[styles.quizText, {marginTop: StatusBar.currentHeight}]}>퀴즈</Text>
                 <Text style={styles.falseQuizText}>많은 사람들이 틀리는 단어</Text>
-                <CustomScrollView>
-                    <View style={styles.falseQuizContainer}>
-                        <Text style={styles.word}>보편</Text>
-                        <Text style={styles.mean}>모든 것에 두루 미치거나 통함. 또는 그런 것.</Text>
-                        <Text style={styles.example}>예문</Text>
-                        <Text style={styles.exampleSentence}>사람들은 보편적으로 사랑하는 사람을 행복하게 하고싶어 해</Text>
-                    </View>
-                    <View style={styles.falseQuizContainer}>
-                        <Text style={styles.word}>보편</Text>
-                        <Text style={styles.mean}>모든 것에 두루 미치거나 통함. 또는 그런 것.</Text>
-                        <Text style={styles.example}>예문</Text>
-                        <Text style={styles.exampleSentence}>사람들은 보편적으로 사랑하는 사람을 행복하게 하고싶어 해사람들은 보편적으로 사랑하는 사람을 행복하게 하고싶어 해</Text>
-                    </View>
-                    <View style={styles.falseQuizContainer}>
-                        <Text style={styles.word}>보편</Text>
-                        <Text style={styles.mean}>모든 것에 두루 미치거나 통함. 또는 그런 것. 모든 것에 두루 미치거나 통함. 또는 그런 것.</Text>
-                        <Text style={styles.example}>예문</Text>
-                        <Text style={styles.exampleSentence}>사람들은 보편적으로 사랑하는 사람을 행복하게 하고싶어 해 사람들은 보편적으로 사랑하는 사람을 행복하게 하고싶어 해</Text>
-                    </View>
+                <CustomScrollView count={5}>
+                    {people.map((item, i) => (
+                        <View style={styles.falseQuizContainer} key={i}>
+                            <Text style={styles.word}>{item.word}</Text>
+                            <Text style={styles.mean}>{item.meaning}</Text>
+                            <Text style={styles.example}>예문</Text>
+                            <Text style={styles.exampleSentence}>{item.first_example}{item.word}{item.last_example}</Text>
+                        </View>
+                    ))}
                 </CustomScrollView>
                 <Text style={styles.learningQuizText}>학습 퀴즈</Text>
                 <TouchableOpacity style={styles.quizContainer} activeOpacity={1} onPress={() => navigation.navigate('WordQuiz', {quizVersion : true, data: today})}>

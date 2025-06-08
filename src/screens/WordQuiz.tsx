@@ -18,7 +18,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParamList} from '../App';
 import {Easing} from 'react-native-reanimated';
 
-import { getTodayQuiz, getRandomQuiz } from '../api/quizApi';
+import { postWrongWord } from '../api/quizApi';
 import { useQuizProgress } from '../context/QuizProgressContext';
 
 type Props = StackScreenProps<RootStackParamList, 'WordQuiz'>;
