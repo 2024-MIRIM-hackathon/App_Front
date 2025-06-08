@@ -6,22 +6,14 @@ import {StackNavigationProp} from '@react-navigation/stack';
 
 import styles from '../styles/StartStyles';
 
+import { postLoginUser } from '../api/userApi';
+
 interface StartProps {
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 const LoginScreen: React.FC<StartProps> = ({ setIsLoggedIn }) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
-
-  const handleLogin = async () => {
-    try {
-      // 로그인 성공 후, AsyncStorage에 userToken 저장
-      await AsyncStorage.setItem('userToken', 'your_token_here');
-      setIsLoggedIn(true); // 로그인 상태 업데이트
-    } catch (error) {
-      console.error('로그인 저장 실패:', error);
-    }
-  };
 
   return (
     <View style={styles.body}>

@@ -22,8 +22,8 @@ const Navigation = () => {
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
-        const userToken = await AsyncStorage.getItem("userToken");
-        setIsLoggedIn(userToken !== null); // userToken이 있으면 로그인 상태 유지
+        const userId = await AsyncStorage.getItem("userId");
+        setIsLoggedIn(userId !== null); // userToken이 있으면 로그인 상태 유지
       } catch (error) {
         console.error("로그인 상태 확인 실패:", error);
       }

@@ -60,6 +60,7 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
         const fetchInfo = async() => {
             try {
                 const response = await getInfo()
+                console.log(response);
                 setName(response.data.nickname)
                 setEmail(response.data.email)
                 setAge(response.data.age)
@@ -79,20 +80,22 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
             }
         }
         const fetchRecord = async() => {
+            let res;
             try {
-                const res = await getRecord()
+                res = await getRecord()
                 setLearnedWord(res.learned_word_num)
                 setLearnedText(res.learned_text_num)
-                setWrongWord(res.wrong_word_num)
+                setWrongWord(res.wong_word_num)
                 setRightWord(res.right_word_num)
             } catch (error) {
                 if (error instanceof Error) {
                     Alert.alert('에러', error.message);
+                    console.log(res);
                 }
             }
         }
         fetchInfo()
-        // fetchRecord()
+        fetchRecord()
     }, [])
 
     return (
@@ -125,6 +128,19 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
                             <Text style={styles.infoText}>이메일</Text>
                             <Text style={styles.info}>{email}</Text>
                         </View>
+                    </View>
+                </View>
+                <View style={styles.levelContainer}>
+                    <View style={styles.level}>
+                        <Text style={styles.levelText}>1레벨</Text>
+                        <Text style={styles.lack}>2레벨까지 단어 12개가 남았어요!</Text>
+                    </View>
+                    <View style={styles.levelBox}>
+                        <Text style={styles.levelSmall}>1레벨</Text>
+                        <Text style={styles.levelSmall}>2레벨</Text>
+                    </View>
+                    <View style={styles.levelTrack}>
+                        <View style={styles.levelPercent}/>
                     </View>
                 </View>
                 <Text style={styles.containerText}>활동 기록</Text>
