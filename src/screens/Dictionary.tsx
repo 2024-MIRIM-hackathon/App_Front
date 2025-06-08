@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import {
   View,
   StatusBar,
@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import {disassemble} from 'es-hangul';
 
@@ -17,6 +18,8 @@ import BookmarkedIcon from '../assets/svg/bookmarkedIcon';
 import UnbookmarkedIcon from '../assets/svg/unbookmarkedIcon';
 import Spread from '../assets/svg/spread';
 import Fold from '../assets/svg/fold';
+
+import { getAllWords, postBookmark } from '../api/wordDictionaryApi';
 
 const wordData = [
   {
@@ -99,14 +102,42 @@ const wordData = [
   },
 ];
 
-function Dictionary() {
+type WordData = {
+  id: number,
+  word: string,
+  meaning: string,
+  example: string,
+  bookmarked: boolean
+}
 
+function Dictionary() {
+  const [wordData, setWordData] = useState<WordData[]>([])
+  const [userId, setUserId] = useState('')
   const [searchText, setSearchText] = useState('');
-  const [filteredWords, setFilteredWords] = useState(wordData);
+  const [filteredWords, setFilteredWords] = useState<WordData[]>([]);
   const [showTotal, setShowTotal] = useState(true);
   const [expandedItems, setExpandedItems] = useState<{[key: number]: boolean}>(
     {},
   );
+
+  useEffect(() => {
+    const fetch = async() => {
+      try {
+        const userId = await AsyncStorage.getItem('userId');
+        if(userId === null) throw new Error('userId가 존재하지 않음')
+        setUserId(userId)
+        const res = await getAllWords(userId!)
+        console.log(res);
+        setWordData(res??[])
+      } catch (error) {
+        console.log('에러');
+      }
+    }
+    fetch();
+  }, [])
+  useEffect(() => {
+    setFilteredWords(wordData)
+  }, [wordData])
 
   const handleSearch = (text: string) => {
     setSearchText(text);
@@ -156,7 +187,15 @@ function Dictionary() {
     }));
   };
 
-  const toggleBookmark = (index: number) => {
+  const toggleBookmark = async(index: number, id: number) => {
+    try {
+      await postBookmark({
+        userId: Number(userId),
+        wordId: id
+      })
+    } catch (error) {
+      console.log(error);
+    }
     const updatedWords = [...filteredWords];
     updatedWords[index].bookmarked = !updatedWords[index].bookmarked;
     setFilteredWords(updatedWords);
@@ -221,7 +260,7 @@ function Dictionary() {
               ]}>
               <View style={styles.topContainer}>
                 <TouchableOpacity
-                  onPress={() => toggleBookmark(index)}
+                  onPress={() => toggleBookmark(index, item.id)}
                   activeOpacity={1}>
                   {item.bookmarked ? (
                     <BookmarkedIcon style={{marginTop: 4}} />
