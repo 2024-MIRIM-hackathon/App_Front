@@ -20,8 +20,7 @@ import CloseEye from "../assets/svg/closeEye";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { postUserJoin } from "../api/userApi";
-import axios from "axios";
+import { postUserJoin, postLoginUser } from "../api/userApi";
 
 interface SignupProps {
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -47,7 +46,8 @@ const Signup:React.FC<SignupProps> = ({ setIsLoggedIn }) => {
         age
       }
       await postUserJoin(joinData)
-      await AsyncStorage.setItem("userToken", "your_token_here");
+      const response = await postLoginUser({nickname, password: password_1})
+      await AsyncStorage.setItem("userId", String(response.user_id));
       setIsLoggedIn(true);
     } catch (error) {
       if (error instanceof Error) {
@@ -79,7 +79,7 @@ const Signup:React.FC<SignupProps> = ({ setIsLoggedIn }) => {
               value={nickname}
               onChangeText={setNickname}
               style={styles.text}
-              placeholder="닉네임을 입력해주세요"
+              placeholder="아이디를 입력해주세요"
               placeholderTextColor={'#ACACAC'}
               selectionColor={'#FFE400'}/>
           </View>

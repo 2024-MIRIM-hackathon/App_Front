@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
     View,
     Text,
@@ -7,7 +7,8 @@ import {
     Image,
     TouchableOpacity,
     NativeSyntheticEvent,
-    NativeScrollEvent
+    NativeScrollEvent,
+    Alert
 } from 'react-native';
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -17,6 +18,8 @@ import BookRead from '../assets/svg/bookRead';
 import WordsLearned from '../assets/svg/wordsLearned';
 import WordsReview from '../assets/svg/wordsReview';
 
+import { postLogout, getInfo, getRecord } from '../api/userApi';
+
 interface MyPageProps {
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
@@ -24,6 +27,14 @@ interface MyPageProps {
 const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
 
     const [statusBarColor, setStatusBarColor] = useState('#FFE400');
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [age, setAge] = useState('')
+    const [date, setDate] = useState(0)
+    const [learnedWord, setLearnedWord] = useState(-1)
+    const [learnedText, setLearnedText] = useState(-1)
+    const [wrongWord, setWrongWord] = useState(-1)
+    const [rightWord, setRightWord] = useState(-1)
 
     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         const scrollY = event.nativeEvent.contentOffset.y;
@@ -37,12 +48,52 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
 
     const handleLogout = async () => {
         try {
-            await AsyncStorage.removeItem("userToken"); // 저장된 로그인 정보 삭제
+            await postLogout();
+            await AsyncStorage.removeItem("userId"); // 저장된 로그인 정보 삭제
             setIsLoggedIn(false); // 로그인 상태 해제
         } catch (error) {
             console.error("로그아웃 실패:", error);
         }
     };
+
+    useEffect(() => {
+        const fetchInfo = async() => {
+            try {
+                const response = await getInfo()
+                setName(response.data.nickname)
+                setEmail(response.data.email)
+                setAge(response.data.age)
+                const joinDate = response.data['join_date'] ? new Date(response.data['join_date']) : new Date();
+                const today = new Date();
+                const joinDateStr = joinDate.toISOString().split('T')[0];
+                const todayStr = today.toISOString().split('T')[0];
+                const join = new Date(joinDateStr);
+                const now = new Date(todayStr);
+                const diffInMs = now.getTime() - join.getTime();
+                const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+                setDate(diffInDays);
+            } catch (error) {
+                if (error instanceof Error) {
+                    Alert.alert('에러', error.message);
+                }
+            }
+        }
+        const fetchRecord = async() => {
+            try {
+                const res = await getRecord()
+                setLearnedWord(res.learned_word_num)
+                setLearnedText(res.learned_text_num)
+                setWrongWord(res.wrong_word_num)
+                setRightWord(res.right_word_num)
+            } catch (error) {
+                if (error instanceof Error) {
+                    Alert.alert('에러', error.message);
+                }
+            }
+        }
+        fetchInfo()
+        // fetchRecord()
+    }, [])
 
     return (
         <View style={styles.body}>
@@ -55,7 +106,7 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
                 <Image style={styles.headerImg} source={require('../assets/images/headerImg.png')} />
                 <Text style={styles.mypageText}>마이페이지</Text>
                 <Text style={styles.dateText}>GUILAP과 함께한지</Text>
-                <Text style={styles.date}>50일</Text>
+                <Text style={styles.date}>{date}일</Text>
             </View>
             <View style={styles.ContainerView}>
                 <Text style={styles.containerText}>계정</Text>
@@ -63,16 +114,16 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
                     <View style={styles.profileView}>
                         <Image style={{width: 20, height: 30}} source={require('../assets/images/profileImg.png')}/>
                     </View>
-                    <Text style={styles.name}>이희진</Text>
+                    <Text style={styles.name}>{name}</Text>
                     <View style={styles.accountInfoContainer}>
                         <View style={{width: '20%'}}>
                             <Text style={styles.infoText}>나이</Text>
-                            <Text style={styles.info}>20세</Text>
+                            <Text style={styles.info}>{age}세</Text>
                         </View>
                         <View style={{height: '90%', width: 1, borderRadius: 5, backgroundColor: '#DDDDDD', marginRight: 34}} />
                         <View>
                             <Text style={styles.infoText}>이메일</Text>
-                            <Text style={styles.info}>d2329@e-mirim.hs.kr</Text>
+                            <Text style={styles.info}>{email}</Text>
                         </View>
                     </View>
                 </View>
@@ -82,7 +133,7 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
                         <View style={styles.activityContainer}>
                             <Text style={styles.activityText}>배운 단어</Text>
                             <View style={styles.activityInfo}>
-                                <Text style={styles.activityNumber}>190</Text>
+                                <Text style={styles.activityNumber}>{learnedWord}</Text>
                                 <Text style={styles.activityNumberText}>개</Text>
                             </View>
                             <WordsLearned style={{width: 36, height: 52, marginTop: 27}}/>
@@ -90,7 +141,7 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
                         <View style={styles.activityContainer}>
                             <Text style={[styles.activityText, {lineHeight: 27, marginTop: -4}]}>복습해야 하는{'\n'}단어</Text>
                             <View style={styles.activityInfo}>
-                                <Text style={styles.activityNumber}>10</Text>
+                                <Text style={styles.activityNumber}>{wrongWord}</Text>
                                 <Text style={styles.activityNumberText}>개</Text>
                             </View>
                             <WordsReview style={{width: 16, height: 29, marginTop: 20, marginLeft: 2, marginBottom: 6}}/>
@@ -100,14 +151,14 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
                         <View style={styles.activityContainer}>
                             <Text style={styles.activityText}>맞은 단어</Text>
                             <View style={styles.activityInfo}>
-                                <Text style={styles.activityNumber}>170</Text>
+                                <Text style={styles.activityNumber}>{rightWord}</Text>
                                 <Text style={styles.activityNumberText}>개</Text>
                             </View>
                         </View>
                         <View style={styles.activityContainer}>
                             <Text style={styles.activityText}>읽은 책</Text>
                             <View style={styles.activityInfo}>
-                                <Text style={styles.activityNumber}>49</Text>
+                                <Text style={styles.activityNumber}>{learnedText}</Text>
                                 <Text style={styles.activityNumberText}>개</Text>
                             </View>
                             <BookRead style={{width: 61, height: 47, marginTop: 31, marginBottom: 17}}/>
