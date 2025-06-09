@@ -1,19 +1,25 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Dimensions, Image, Modal, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import {StackScreenProps} from '@react-navigation/stack';
+import { LearningStackParam } from '../App';
+type Props = StackScreenProps<LearningStackParam, 'Learning'>;
 
 const interval = (Dimensions.get('window').width - 334)/2;
 const ItemHeight = Dimensions.get('window').height - 254;
 
 import styles from '../styles/LearningStyles';
+import { Words } from '../types/learnType';
 
-function Learning() {
+const Learning: React.FC<Props> = ({route}) => {
 
     const navigation = useNavigation();
-    const data = ["종개념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다. 종개념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다. 종개념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다.(類比)의 단일성’ 으로 인식하고 있었다.", 
-        '종개념은 다양한데, 이 같은 초월적 이 같은 초월적', 
-        '종개념은 다양한데, 이 같은 초월적', 
-        '종개념은 다양한데, 이 같은 초월적'];
+    // const data = ["종개념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다. 종개념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다. 종개념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다.(類比)의 단일성’ 으로 인식하고 있었다.", 
+    //     '종개념은 다양한데, 이 같은 초월적 이 같은 초월적', 
+    //     '종개념은 다양한데, 이 같은 초월적', 
+    //     '종개념은 다양한데, 이 같은 초월적'];
+    const [data, setData] = useState<Words[]>([])
+    const {words} = route.params;
 
     const [isLearningCompleted, setIsLearningCompleted] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -46,6 +52,11 @@ function Learning() {
         let nu = str.split(' ').length - 1;
         return (len-nu)*20 + nu*5;
     }
+
+    useEffect(() => {
+        setData(words)
+        console.log(words);
+    }, words)
 
     return (
         <View style={styles.body}>
@@ -87,26 +98,26 @@ function Learning() {
                                         <ScrollView showsVerticalScrollIndicator={false}>
                                             <View>
                                             <Text style={styles.bookText}>
-                                                {item}
+                                                {item.first_example}
                                                 <View>
                                                     <Text style={styles.bookWord}>
-                                                        보편
+                                                        {item.word}
                                                     </Text>
                                                 </View>
-                                                않으려고 해서 조직 운영이 효과적이지 않다는 평가를 받는 리더들의 흔히 하는 질문은 "위임하는 것이 내가 직접 관리하는 것보다 더 나을까요?"라는 것입니다. 아직 해보지도 않았다면 어떤 결과가 있을지 알 수 없습니다. 않으려고 해서 조직 운영이 효과적이지 않다는 평가를 받는 리더들의 흔히 하는 질문은 "위임하는 것이 내가 직접 관리하는 것보다 더 나을까요?"라는 것입니다. 아직 해보지도 않았다면 어떤 결과가 있을지 알 수 없습니다.
+                                                {item.last_example}
                                             </Text>
                                             <View style={styles.bookInfo}>
-                                                <Text style={styles.bookTitle}>채식주의자</Text>
-                                                <Text style={styles.bookWrite}>한강</Text>
+                                                <Text style={styles.bookTitle}>{item.title}</Text>
+                                                <Text style={styles.bookWrite}>{item.writer}</Text>
                                             </View>
                                             </View>
                                             <View style={styles.wordContainer}>
-                                                <Text style={styles.word}>보편</Text>
-                                                <View style={[styles.wordShadow, {width: getWidth('보편')+6}]} />
+                                                <Text style={styles.word}>{item.word}</Text>
+                                                <View style={[styles.wordShadow, {width: getWidth(item.word)+6}]} />
                                             </View>
-                                            <Text style={styles.mean}>모든 것에 두루 미치거나 통함. 또는 그런 것.</Text>
+                                            <Text style={styles.mean}>{item.meaning}</Text>
                                             <Text style={styles.example}>예문</Text>
-                                            <Text style={styles.exampleSentence}>사람들은 보편적으로 사랑하는 사람을 행복하게 하고싶어 해</Text>
+                                            <Text style={styles.exampleSentence}>{item.example}</Text>
                                         </ScrollView>
                                     </View>
                                 </View>

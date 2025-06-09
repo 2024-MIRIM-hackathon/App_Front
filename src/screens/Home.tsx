@@ -24,9 +24,14 @@ import he from 'he';
 
 import styles from '../styles/HomeStyles';
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getDailyLearn } from '../api/learnApi';
+import { Words, TextType, LearnRes } from '../types/learnType';
+
 function Home() {
   const navigation = useNavigation<StackNavigationProp<any>>();
-
+  const [words, setWords] = useState<Words[]>([])
+  const [text, setText] = useState<TextType>()
   const [news, setNews] = useState<NewsItem[]>([]);
   const getSourceName = (link: string) => {
     try {
@@ -76,6 +81,26 @@ function Home() {
     fetchNews();
   }, []);
 
+  useEffect(() => {
+    const fetch = async() => {
+      try {
+        const userId = await AsyncStorage.getItem('userId')
+        if(userId===null) throw new Error('userId가 존재하지 않음')
+        const today = new Date()
+        console.log(userId, today.toISOString().split('T')[0]);
+        const res:LearnRes = await getDailyLearn({
+          userId: userId,
+          date: today.toISOString().split('T')[0]
+        })
+        setWords(res.words)
+        setText(res.text)
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetch();
+  }, [])
+
   const linkPress = (url: string) => {
     setTimeout(() => {
       Linking.openURL(url);
@@ -122,17 +147,17 @@ function Home() {
         <TouchableOpacity
           style={styles.learningContainer}
           activeOpacity={1}
-          onPress={() => navigation.navigate('Learning')}>
+          onPress={() => navigation.navigate('Learning', {words})}>
           <View style={styles.learningItem}>
             <Book />
             <Text style={styles.learningActivity}>책 문장 단어학습</Text>
-            <Text style={styles.learningIng}>4/2 진행 중</Text>
+            <Text style={styles.learningIng}>{2}/4 진행 중</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.learningContainer, {marginBottom: 107}]}
           activeOpacity={1}
-          onPress={() => navigation.navigate('Reading')}>
+          onPress={() => navigation.navigate('Reading', {text})}>
           <View style={styles.learningItem}>
             <Write />
             <Text style={styles.learningActivity}>글 읽기 연습</Text>
