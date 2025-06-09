@@ -20,6 +20,7 @@ import WordsReview from '../assets/svg/wordsReview';
 
 import { postLogout, getInfo, getRecord, getLevel } from '../api/userApi';
 import { Level } from '../types/userType';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface MyPageProps {
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -61,60 +62,70 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
         }
     };
 
-    useEffect(() => {
-        const fetchInfo = async() => {
-            try {
-                const response = await getInfo()
-                console.log(response);
-                setName(response.data.nickname)
-                setEmail(response.data.email)
-                setAge(response.data.age)
-                const joinDate = response.data['join_date'] ? new Date(response.data['join_date']) : new Date();
-                const today = new Date();
-                const joinDateStr = joinDate.toISOString().split('T')[0];
-                const todayStr = today.toISOString().split('T')[0];
-                const join = new Date(joinDateStr);
-                const now = new Date(todayStr);
-                const diffInMs = now.getTime() - join.getTime();
-                const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
-                setDate(diffInDays);
-            } catch (error) {
-                if (error instanceof Error) {
-                    Alert.alert('에러', error.message);
-                }
+    const fetchInfo = async() => {
+        try {
+            const response = await getInfo()
+            console.log(response);
+            setName(response.data.nickname)
+            setEmail(response.data.email)
+            setAge(response.data.age)
+            const joinDate = response.data['join_date'] ? new Date(response.data['join_date']) : new Date();
+            const today = new Date();
+            const joinDateStr = joinDate.toISOString().split('T')[0];
+            const todayStr = today.toISOString().split('T')[0];
+            const join = new Date(joinDateStr);
+            const now = new Date(todayStr);
+            const diffInMs = now.getTime() - join.getTime();
+            const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+            setDate(diffInDays);
+        } catch (error) {
+            if (error instanceof Error) {
+                Alert.alert('에러', error.message);
             }
         }
-        const fetchRecord = async() => {
-            let res;
-            try {
-                res = await getRecord()
-                setLearnedWord(res.learned_word_num)
-                setLearnedText(res.learned_text_num)
-                setWrongWord(res.wong_word_num)
-                setRightWord(res.right_word_num)
-            } catch (error) {
-                if (error instanceof Error) {
-                    Alert.alert('에러', error.message);
-                    console.log(res);
-                }
+    }
+    const fetchRecord = async() => {
+        let res;
+        try {
+            res = await getRecord()
+            setLearnedWord(res.learned_word_num)
+            setLearnedText(res.learned_text_num)
+            setWrongWord(res.wong_word_num)
+            setRightWord(res.right_word_num)
+        } catch (error) {
+            if (error instanceof Error) {
+                Alert.alert('에러', error.message);
+                console.log(res);
             }
         }
-        const fetchLevel = async() => {
-            try {
-                const res:Level = await getLevel();
-                setNowLevel(res.now_level)
-                setNextLevel(res.next_level)
-                setNeedNum(res.need_study_num)
-                setStudied(res.studied_num)
-            } catch (error) {
-                console.log(error);
-            }
+    }
+    const fetchLevel = async() => {
+        try {
+            const res:Level = await getLevel();
+            setNowLevel(res.now_level)
+            setNextLevel(res.next_level)
+            setNeedNum(res.need_study_num)
+            setStudied(res.studied_num)
+            console.log('지금');
+            console.log(
+                res.now_level,
+                res.next_level,
+                res.need_study_num,
+                res.studied_num
+            );
+        } catch (error) {
+            console.log(error);
         }
-        fetchInfo()
-        fetchRecord()
-        fetchLevel()
-    }, [])
-
+    }
+    useFocusEffect(
+        useCallback(() => {
+            fetchInfo()
+            fetchRecord()
+            fetchLevel()
+            return;
+        }, [])
+    )
+    
     return (
         <View style={styles.body}>
         <View style={{ width: '100%', height: StatusBar.currentHeight, backgroundColor: statusBarColor, position: 'absolute', top: 0, zIndex: 10 }}/>
@@ -157,7 +168,7 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
                         <Text style={styles.levelSmall}>{nextLevel}레벨</Text>
                     </View>
                     <View style={styles.levelTrack}>
-                        <View style={[styles.levelPercent, {width: 100/needNum*studied}]}/>
+                        <View style={[styles.levelPercent, {width: `${(studied / needNum) * 100}%`}]}/>
                     </View>
                 </View>
                 <Text style={styles.containerText}>활동 기록</Text>

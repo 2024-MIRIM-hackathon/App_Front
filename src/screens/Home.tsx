@@ -24,12 +24,14 @@ import he from 'he';
 
 import styles from '../styles/HomeStyles';
 
+import { useLearnProgress } from '../context/LearnProgressContext';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getDailyLearn } from '../api/learnApi';
 import { Words, TextType, LearnRes } from '../types/learnType';
 
 function Home() {
   const navigation = useNavigation<StackNavigationProp<any>>();
+  const { learnWord, reading } = useLearnProgress()
   const [words, setWords] = useState<Words[]>([])
   const [text, setText] = useState<TextType>()
   const [news, setNews] = useState<NewsItem[]>([]);
@@ -148,20 +150,25 @@ function Home() {
           style={styles.learningContainer}
           activeOpacity={1}
           onPress={() => navigation.navigate('Learning', {words})}>
-          <View style={styles.learningItem}>
+          <View style={[styles.learningItem, learnWord === 4 && {backgroundColor: '#FFE400'}]}>
             <Book />
             <Text style={styles.learningActivity}>책 문장 단어학습</Text>
-            <Text style={styles.learningIng}>{2}/4 진행 중</Text>
+            <Text style={styles.learningIng}>
+              {learnWord !== 4
+                ?`${learnWord}/4 진행 중` 
+                :'완료!'
+              }
+            </Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.learningContainer, {marginBottom: 107}]}
           activeOpacity={1}
           onPress={() => navigation.navigate('Reading', {text})}>
-          <View style={styles.learningItem}>
+          <View style={[styles.learningItem, reading&&{backgroundColor: '#FFE400'}]}>
             <Write />
             <Text style={styles.learningActivity}>글 읽기 연습</Text>
-            <Text style={styles.learningIng}>미완료</Text>
+            <Text style={styles.learningIng}>{reading?'완료!':'미완료'}</Text>
           </View>
         </TouchableOpacity>
       </ScrollView>
