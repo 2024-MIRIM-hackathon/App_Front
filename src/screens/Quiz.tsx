@@ -117,7 +117,7 @@ const fetchRandom = async () => {
                 overScrollMode='never'>
                 <Text style={[styles.quizText, {marginTop: StatusBar.currentHeight}]}>퀴즈</Text>
                 <Text style={styles.falseQuizText}>많은 사람들이 틀리는 단어</Text>
-                <CustomScrollView count={5}>
+                <CustomScrollView count={people.length}>
                     {people.map((item, i) => (
                         <View style={styles.falseQuizContainer} key={i}>
                             <Text style={styles.word}>{item.word}</Text>
