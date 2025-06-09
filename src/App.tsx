@@ -27,12 +27,14 @@ import MyPageActive from './assets/svg/MyPageActive';
 import MyPageInactive from './assets/svg/MyPageInactive';
 
 import { QuizProvider } from './context/QuizProgressContext';
+import { LearnProvider } from './context/LearnProgressContext';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 import { Words, TextType } from './types/learnType';
 
 type QuizData = {
+  word_id: number,
   question: string,
   options: {
     word: string
@@ -86,11 +88,6 @@ const CalendarStack = () => (
   </Stack.Navigator>
 );
 
-// const MyPageStack: React.FC<AppProps> = ({ setIsLoggedIn }) => (
-//   <Stack.Navigator screenOptions={{ headerShown: false, animation: 'none' }}>
-//     <Stack.Screen name="MyPage" component={MyPageScreen} setIsLoggedIn={setIsLoggedIn}/>
-//   </Stack.Navigator>
-// );
 const MyPageStack: React.FC<AppProps> = ({ setIsLoggedIn }) => (
   <Stack.Navigator screenOptions={{ headerShown: false, animation: 'none' }}>
     <Stack.Screen name="MyPage">
@@ -242,17 +239,19 @@ const App: React.FC<AppProps> = ({ setIsLoggedIn }) => {
   //   }, 1000); //스플래시 활성화 시간
   // });
   return (
-    <QuizProvider>
-      <KeyboardAvoidingView
-        keyboardVerticalOffset={-95}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <AppTabNavigator setIsLoggedIn={setIsLoggedIn} />
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </QuizProvider>
+    <LearnProvider>
+      <QuizProvider>
+        <KeyboardAvoidingView
+          keyboardVerticalOffset={-95}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{ flex: 1 }}
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <AppTabNavigator setIsLoggedIn={setIsLoggedIn} />
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      </QuizProvider>
+    </LearnProvider>
   );
 };
 

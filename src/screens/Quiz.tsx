@@ -21,15 +21,14 @@ import { useQuizProgress } from '../context/QuizProgressContext';
 import { getTodayQuiz, getRandomQuiz, getPeopleWrong } from '../api/quizApi';
 
 type QuizData = {
+  word_id: number,
   question: string,
   options: {
-    word_id: number,
     word: string
   }[],
   correct_answer: string
 }
 type People = {
-    word_id: number,
     word: string,
     meaning: string,
     first_example: string,
@@ -95,6 +94,7 @@ const fetchRandom = async () => {
     const goTodayQuiz = () => {
       const checkInterval = setInterval(() => {
         if (today.length === 4) {
+          console.log(today);
           clearInterval(checkInterval);
           navigation.navigate('WordQuiz', { quizVersion: true, data: today })
         }
