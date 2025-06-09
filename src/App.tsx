@@ -30,6 +30,7 @@ import { QuizProvider } from './context/QuizProgressContext';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+import { Words, TextType } from './types/learnType';
 
 type QuizData = {
   question: string,
@@ -41,12 +42,20 @@ type QuizData = {
 export type RootStackParamList = {
   WordQuiz: { quizVersion: boolean, data: QuizData[] };
 };
+export type LearningStackParam = {
+  Learning: { words: Words[] }
+}
+export type ReadingStackParam = {
+  Reading: { text: TextType }
+}
 
 interface AppProps {
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 const WordQuizStack = createStackNavigator<RootStackParamList>();
+const LearningStack = createStackNavigator<LearningStackParam>()
+const ReadingStack = createStackNavigator<ReadingStackParam>()
 const MyStack = createStackNavigator<RootStackParamList>();
 
 // 각 화면에서 열 수 있는 페이지
@@ -66,8 +75,8 @@ const DictionaryStack = () => (
 const HomeStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false, animation: 'none' }}>
     <Stack.Screen name="Home" component={HomeScreen} />
-    <Stack.Screen name="Learning" component={LearningScreen} />
-    <Stack.Screen name="Reading" component={ReadingScreen} />
+    <LearningStack.Screen name="Learning" component={LearningScreen} />
+    <ReadingStack.Screen name="Reading" component={ReadingScreen} />
   </Stack.Navigator>
 );
 
