@@ -63,6 +63,16 @@ const WordQuiz: React.FC<Props> = ({route}) => {
 
   useEffect(() => {
     console.log(currentIndex);
+    const fetch = async(word_id: number, wong_word: string) => {
+      try {
+        await postWrongWord({
+          word_id,
+          wong_word
+        })
+      } catch (error) {
+        console.log(error);
+      }
+    }
     if (currentIndex === 1){
       setFalseWords([]);
     }
@@ -75,6 +85,7 @@ const WordQuiz: React.FC<Props> = ({route}) => {
           ...prev,
           {word: incorrectWord.word, mean: data[currentIndex-1].question},
         ]);
+        fetch(data[currentIndex-1].word_id, incorrectWord.word)
       }
     }
   }, [answer]);
