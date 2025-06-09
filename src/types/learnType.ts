@@ -24,3 +24,10 @@ export interface LearnRes {
     words: Words[],
     text: TextType,
 }
+
+export type Done = {
+    user_id: number;
+    t_type: string;
+    thing: string;
+    learn_date: string;
+};

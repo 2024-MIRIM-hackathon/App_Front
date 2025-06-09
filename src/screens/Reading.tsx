@@ -2,24 +2,60 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Dimensions, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
+import { useLearnProgress } from '../context/LearnProgressContext';
 import { ReadingStackParam } from '../App';
 type Props = StackScreenProps<ReadingStackParam, 'Reading'>;
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ItemWidth = Dimensions.get('window').width - 58;
 
 import styles from '../styles/ReadingStyles';
 import { TextType } from '../types/learnType';
+import { postLearn } from '../api/learnApi';
 
 const Learning: React.FC<Props> = ({route}) => {
 
     const navigation = useNavigation();
-    // const data = ["꿈을 꿨어 그렇게 생생할 수 없어, 이빨에 씹히던 날고기의 감촉이, 내얼굴이, 눈빛이. 처음보는 얼굴 같은데, 분명 내 얼굴이었어. 아니야, 거꾸로, 수없이 봤던 얼굴 같은데, 내 얼굴이 아니었어. 설명할 수 없어. 익숙하면서도 낯선..... 그 생생하고 이상한, 끔찍하게 이상한 느낌을. 꿈을 꿨어 그렇게 생생할 수 없어, 이빨에 씹히던 날고기의 감촉이, 내얼굴이, 눈빛이. 처음보는 얼굴 같은데, 분명 내 얼굴이었어. 아니야, 거꾸로, 수없이 봤던 얼굴 같은데, 내 얼굴이 아니었어. 설명할 수 없어. 익숙하면서도 낯선..... 그 생생하고 이상한, 끔찍하게 이상한 느낌을. 꿈을 꿨어 그렇게 생생할 수 없어, 이빨에 씹히던 날고기의 감촉이, 내얼굴이, 눈빛이. 처음보는 얼굴 같은데, 분명 내 얼굴이었어. 아니야, 거꾸로, 수없이 봤던 얼굴 같은데, 꿈을 꿨어 그렇게 생생할 수 없어, 이빨에 씹히던 날고기의 감촉이, 내얼굴이, 눈빛이. 처음보는 얼굴 같은데, 분명 내 얼굴이었어. 아니야, 거꾸로, 수없이 봤던 얼굴 같은데, 내 얼굴이 아니었어. 설명할 수 없어. 익숙하면서도 낯선..... 그 생생하고 이상한, 끔찍하게 이상한 느낌을. 익숙하면서도 낯선..... 그 생생하고 이상한, 끔찍하게 이상한 느낌을. ", "채식주의자", "한강"];
     const [data, setData] = useState<TextType>()
+    const [userId, setUserId] = useState<string>('');
     const {text} = route.params;
+    const { setReading } = useLearnProgress()
+
+    const done = async() => {
+        setReading(true)
+        console.log('클릭');
+        try {
+            console.log({
+                user_id: userId,
+                t_type: 'text',
+                thing: data!.text,
+                learn_date: (new Date()).toISOString().split('T')[0]
+            });
+            const res = await postLearn({
+                user_id: Number(userId),
+                t_type: 'text',
+                thing: data!.text,
+                learn_date: (new Date()).toISOString().split('T')[0]
+            })
+            console.log(res);
+        } catch (error) {
+            console.log(error);
+        }
+        navigation.goBack();
+    }
 
     useEffect(() => {
         setData(text)
     }, [text])
+
+    useEffect(() => {
+        const loadUserId = async () => {
+            const id = await AsyncStorage.getItem('userId');
+            setUserId(id??'');
+            console.log(id);
+        };
+        loadUserId();
+    }, [])
 
     return (
         <View style={styles.body}>
@@ -38,9 +74,7 @@ const Learning: React.FC<Props> = ({route}) => {
                 </View>
             </ScrollView>
             <TouchableOpacity style={styles.leave} activeOpacity={1}
-                onPress={() => {
-                    navigation.goBack();
-                }}
+                onPress={done}
             >
                 <View style={styles.leaveContainer}>
                     <Text style={styles.leaveText}>학습 완료</Text>

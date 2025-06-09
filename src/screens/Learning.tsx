@@ -2,8 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Dimensions, Image, Modal, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
+import { useLearnProgress } from '../context/LearnProgressContext';
 import { LearningStackParam } from '../App';
 type Props = StackScreenProps<LearningStackParam, 'Learning'>;
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { postLearn } from '../api/learnApi';
 
 const interval = (Dimensions.get('window').width - 334)/2;
 const ItemHeight = Dimensions.get('window').height - 254;
@@ -14,13 +18,10 @@ import { Words } from '../types/learnType';
 const Learning: React.FC<Props> = ({route}) => {
 
     const navigation = useNavigation();
-    // const data = ["종개념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다. 종개념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다. 종개념은 다양한데, 이 같은 초월적 ‘보편’이 같다는 것은 아리스토텔레스가 이미 ‘유비(類比)의 단일성’ 으로 인식하고 있었다.(類比)의 단일성’ 으로 인식하고 있었다.", 
-    //     '종개념은 다양한데, 이 같은 초월적 이 같은 초월적', 
-    //     '종개념은 다양한데, 이 같은 초월적', 
-    //     '종개념은 다양한데, 이 같은 초월적'];
     const [data, setData] = useState<Words[]>([])
+    const [userId, setUserId] = useState<string>('');
     const {words} = route.params;
-
+    const {learnWord, setLearnWord} = useLearnProgress()
     const [isLearningCompleted, setIsLearningCompleted] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isModalVisible, setIsModalVisible] = useState(false); // 팝업 상태 관리
@@ -39,9 +40,25 @@ const Learning: React.FC<Props> = ({route}) => {
         const xOffset = e.nativeEvent.contentOffset.x;
         const index = Math.round(xOffset / 334);
         setCurrentIndex(index);
+    };
+    
+    useEffect(() => {
+        const fetch = async() => {
+            const res = await postLearn({
+                user_id: Number(userId),
+                t_type: 'word',
+                thing: data[currentIndex].word,
+                learn_date: (new Date()).toISOString().split('T')[0]
+            })
+            console.log(res);
+            if(currentIndex+1 > learnWord){
+                setLearnWord(currentIndex+1)
+            }
+        }
         if (currentIndex === 3) setIsLearningCompleted(true);
         else setIsLearningCompleted(false);
-    };
+        fetch();
+    }, [currentIndex])
 
     const indexToOffset = () => {
         return { x: currentIndex * (334 + 9), y: 0 };
@@ -57,6 +74,14 @@ const Learning: React.FC<Props> = ({route}) => {
         setData(words)
         console.log(words);
     }, words)
+
+    useEffect(() => {
+        const loadUserId = async () => {
+            const id = await AsyncStorage.getItem('userId');
+            setUserId(id??'');
+        };
+        loadUserId();
+    }, [])
 
     return (
         <View style={styles.body}>
