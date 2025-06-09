@@ -18,7 +18,8 @@ import BookRead from '../assets/svg/bookRead';
 import WordsLearned from '../assets/svg/wordsLearned';
 import WordsReview from '../assets/svg/wordsReview';
 
-import { postLogout, getInfo, getRecord } from '../api/userApi';
+import { postLogout, getInfo, getRecord, getLevel } from '../api/userApi';
+import { Level } from '../types/userType';
 
 interface MyPageProps {
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -35,6 +36,10 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
     const [learnedText, setLearnedText] = useState(-1)
     const [wrongWord, setWrongWord] = useState(-1)
     const [rightWord, setRightWord] = useState(-1)
+    const [nowLevel, setNowLevel] = useState(-1)
+    const [nextLevel, setNextLevel] = useState(-1)
+    const [needNum, setNeedNum] = useState(-1)
+    const [studied, setStudied] = useState(-1)
 
     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         const scrollY = event.nativeEvent.contentOffset.y;
@@ -94,8 +99,20 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
                 }
             }
         }
+        const fetchLevel = async() => {
+            try {
+                const res:Level = await getLevel();
+                setNowLevel(res.now_level)
+                setNextLevel(res.next_level)
+                setNeedNum(res.need_study_num)
+                setStudied(res.studied_num)
+            } catch (error) {
+                console.log(error);
+            }
+        }
         fetchInfo()
         fetchRecord()
+        fetchLevel()
     }, [])
 
     return (
@@ -132,15 +149,15 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
                 </View>
                 <View style={styles.levelContainer}>
                     <View style={styles.level}>
-                        <Text style={styles.levelText}>1레벨</Text>
-                        <Text style={styles.lack}>2레벨까지 단어 12개가 남았어요!</Text>
+                        <Text style={styles.levelText}>{nowLevel}레벨</Text>
+                        <Text style={styles.lack}>{nextLevel}레벨까지 단어 {needNum-studied}개가 남았어요!</Text>
                     </View>
                     <View style={styles.levelBox}>
-                        <Text style={styles.levelSmall}>1레벨</Text>
-                        <Text style={styles.levelSmall}>2레벨</Text>
+                        <Text style={styles.levelSmall}>{nowLevel}레벨</Text>
+                        <Text style={styles.levelSmall}>{nextLevel}레벨</Text>
                     </View>
                     <View style={styles.levelTrack}>
-                        <View style={styles.levelPercent}/>
+                        <View style={[styles.levelPercent, {width: 100/needNum*studied}]}/>
                     </View>
                 </View>
                 <Text style={styles.containerText}>활동 기록</Text>
@@ -149,7 +166,7 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
                         <View style={styles.activityContainer}>
                             <Text style={styles.activityText}>배운 단어</Text>
                             <View style={styles.activityInfo}>
-                                <Text style={styles.activityNumber}>{learnedWord}</Text>
+                                <Text style={styles.activityNumber}>{learnedWord>0?learnedWord:0}</Text>
                                 <Text style={styles.activityNumberText}>개</Text>
                             </View>
                             <WordsLearned style={{width: 36, height: 52, marginTop: 27}}/>
@@ -157,7 +174,7 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
                         <View style={styles.activityContainer}>
                             <Text style={[styles.activityText, {lineHeight: 27, marginTop: -4}]}>복습해야 하는{'\n'}단어</Text>
                             <View style={styles.activityInfo}>
-                                <Text style={styles.activityNumber}>{wrongWord}</Text>
+                                <Text style={styles.activityNumber}>{wrongWord>0?wrongWord:0}</Text>
                                 <Text style={styles.activityNumberText}>개</Text>
                             </View>
                             <WordsReview style={{width: 16, height: 29, marginTop: 20, marginLeft: 2, marginBottom: 6}}/>
@@ -167,14 +184,14 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
                         <View style={styles.activityContainer}>
                             <Text style={styles.activityText}>맞은 단어</Text>
                             <View style={styles.activityInfo}>
-                                <Text style={styles.activityNumber}>{rightWord}</Text>
+                                <Text style={styles.activityNumber}>{rightWord>0?rightWord:0}</Text>
                                 <Text style={styles.activityNumberText}>개</Text>
                             </View>
                         </View>
                         <View style={styles.activityContainer}>
                             <Text style={styles.activityText}>읽은 책</Text>
                             <View style={styles.activityInfo}>
-                                <Text style={styles.activityNumber}>{learnedText}</Text>
+                                <Text style={styles.activityNumber}>{learnedText>0?learnedText:0}</Text>
                                 <Text style={styles.activityNumberText}>개</Text>
                             </View>
                             <BookRead style={{width: 61, height: 47, marginTop: 31, marginBottom: 17}}/>

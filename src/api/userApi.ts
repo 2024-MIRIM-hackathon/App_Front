@@ -48,3 +48,8 @@ export const getRecord = async() => {
   const res = await baseApi.get('/mypage/record')
   return res.data
 }
+
+export const getLevel = async() => {
+  const res = await baseApi.get('/user/level')
+  return res.data
+}
