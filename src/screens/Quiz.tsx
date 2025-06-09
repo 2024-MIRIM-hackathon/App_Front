@@ -23,11 +23,13 @@ import { getTodayQuiz, getRandomQuiz, getPeopleWrong } from '../api/quizApi';
 type QuizData = {
   question: string,
   options: {
+    word_id: number,
     word: string
   }[],
   correct_answer: string
 }
 type People = {
+    word_id: number,
     word: string,
     meaning: string,
     first_example: string,
@@ -41,22 +43,40 @@ function Quiz() {
     const [random, setRandom] = useState<QuizData[]>([])
     const [people, setPeople] = useState<People[]>([])
 
-    const fetch = async() => {
-      let res: QuizData
-      try {
-        for(let i=0; i<4; i++){
-          res = await getTodayQuiz()
-          setToday(pre => [...pre, res])
-          res = await getRandomQuiz()
-          setRandom(pre => [...pre, res])
-        }
-      } catch (error) {
-        console.log(error);
+const fetchToday = async () => {
+  const arr: QuizData[] = [];
+  try {
+    while (arr.length < 4) {
+      const res = await getTodayQuiz();
+      if (arr.some(item => item.correct_answer === res.correct_answer)) {
+        continue;
       }
+      arr.push(res);
     }
+    setToday(arr);
+  } catch (error) {
+    console.log(error);
+  }
+};
+const fetchRandom = async () => {
+  const arr: QuizData[] = [];
+  try {
+    while (arr.length < 4) {
+      const res = await getRandomQuiz();
+      if (arr.some(item => item.correct_answer === res.correct_answer)) {
+        continue;
+      }
+      arr.push(res);
+    }
+    setRandom(arr);
+  } catch (error) {
+    console.log(error);
+  }
+};
     useFocusEffect(
         useCallback(() => {
-            fetch();
+            fetchToday();
+            fetchRandom();
             return () => {
                 setToday([])
                 setRandom([])
@@ -71,6 +91,23 @@ function Quiz() {
         }
         fetchPeople()
     }, [])
+
+    const goTodayQuiz = () => {
+      const checkInterval = setInterval(() => {
+        if (today.length === 4) {
+          clearInterval(checkInterval);
+          navigation.navigate('WordQuiz', { quizVersion: true, data: today })
+        }
+      }, 500);
+    };
+    const goRandomQuiz = () => {
+        const checkInterval = setInterval(() => {
+          if (random.length === 4) {
+            clearInterval(checkInterval);
+            navigation.navigate('WordQuiz', {quizVersion : false, data: random})
+          }
+        }, 500);
+    }
 
     return (
         <View style={styles.body}>
@@ -91,14 +128,14 @@ function Quiz() {
                     ))}
                 </CustomScrollView>
                 <Text style={styles.learningQuizText}>학습 퀴즈</Text>
-                <TouchableOpacity style={styles.quizContainer} activeOpacity={1} onPress={() => navigation.navigate('WordQuiz', {quizVersion : true, data: today})}>
+                <TouchableOpacity style={styles.quizContainer} activeOpacity={1} onPress={goTodayQuiz}>
                     <View style={styles.quizItem}>
                         <TodayQuiz />
                         <Text style={styles.QuizText}>오늘 나온 퀴즈 풀기</Text>
                         <Text style={styles.QuizIng}>{todayDone?'완료':'미완료'}</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.quizContainer, { marginBottom: 121 }]} activeOpacity={1} onPress={() => navigation.navigate('WordQuiz', {quizVersion : false, data: random})}>
+                <TouchableOpacity style={[styles.quizContainer, { marginBottom: 121 }]} activeOpacity={1} onPress={goRandomQuiz}>
                     <View style={styles.quizItem}>
                         <QuizBook />
                         <Text style={styles.QuizText}>지금까지 나온 단어 퀴즈 풀기</Text>
