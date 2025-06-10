@@ -14,6 +14,7 @@ const ItemHeight = Dimensions.get('window').height - 254;
 
 import styles from '../styles/LearningStyles';
 import { Words } from '../types/learnType';
+import axios from 'axios';
 
 const Learning: React.FC<Props> = ({route}) => {
 
@@ -44,10 +45,10 @@ const Learning: React.FC<Props> = ({route}) => {
     
     useEffect(() => {
         const fetch = async() => {
-            const res = await postLearn({
-                user_id: Number(userId),
+            const res = await axios.post(`http://172.30.4.64:3000/api/learned`, {
+                user_id: userId,
                 t_type: 'word',
-                thing: data[currentIndex].word,
+                thing: words[currentIndex-1].word,
                 learn_date: (new Date()).toISOString().split('T')[0]
             })
             console.log(res);
@@ -69,11 +70,6 @@ const Learning: React.FC<Props> = ({route}) => {
         let nu = str.split(' ').length - 1;
         return (len-nu)*20 + nu*5;
     }
-
-    useEffect(() => {
-        setData(words)
-        console.log(words);
-    }, words)
 
     useEffect(() => {
         const loadUserId = async () => {
@@ -114,7 +110,7 @@ const Learning: React.FC<Props> = ({route}) => {
                         snapToInterval={334 + 9}
                     >
                         <View style={styles.row}>
-                            {data.map((item, index) => (
+                            {words.map((item, index) => (
                                 <View
                                     key={index}
                                     style={[styles.carouselItemContainer, { width: 334 }]}
@@ -151,7 +147,7 @@ const Learning: React.FC<Props> = ({route}) => {
                     </ScrollView>
 
                     <View style={styles.dotContainer}>
-                        {data.map((_, index) => {
+                        {words.map((_, index) => {
                             const isFocused = currentIndex >= index;
                             return (
                                 <View

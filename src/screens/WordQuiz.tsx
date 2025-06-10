@@ -18,8 +18,9 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParamList} from '../App';
 import {Easing} from 'react-native-reanimated';
 
-import { postWrongWord } from '../api/quizApi';
+import { postWrongWord, postRightWord } from '../api/quizApi';
 import { useQuizProgress } from '../context/QuizProgressContext';
+import axios from 'axios';
 
 type Props = StackScreenProps<RootStackParamList, 'WordQuiz'>;
 
@@ -63,11 +64,11 @@ const WordQuiz: React.FC<Props> = ({route}) => {
 
   useEffect(() => {
     console.log(currentIndex);
-    const fetch = async(word_id: number, wong_word: string) => {
+    const fetch = async(word_id: number, wrong_word: string) => {
       try {
         await postWrongWord({
           word_id,
-          wong_word
+          wrong_word
         })
       } catch (error) {
         console.log(error);
@@ -88,6 +89,22 @@ const WordQuiz: React.FC<Props> = ({route}) => {
         fetch(data[currentIndex-1].word_id, incorrectWord.word)
       }
     }
+    else {
+      const fetch = async() => {
+        try {
+          const word_id = data[currentIndex-1].word_id
+          const right_word = data[currentIndex-1].correct_answer
+          console.log(word_id, right_word);
+          await postRightWord({
+            word_id,
+            right_word
+          })
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      fetch()
+    }
   }, [answer]);
 
   const getStyle = (index: number, answer: boolean) => {
@@ -102,6 +119,15 @@ const WordQuiz: React.FC<Props> = ({route}) => {
   const answerPress = (index: number) => {
     setCheck(index);
   };
+
+  const fetchComplete = async() => {
+    try {
+      const res = await axios.post('http://172.30.4.64:3000/api/quiz/complete')
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const refAnimation = useRef(new Animated.Value(0)).current;
   const timeAnimation = useRef(new Animated.Value(15)).current;
@@ -126,6 +152,7 @@ const WordQuiz: React.FC<Props> = ({route}) => {
     }
     if (currentIndex === quizCount + 1) {
       setQuizStart(true);
+      fetchComplete();
     }
 
     timeAnimation.setValue(15);

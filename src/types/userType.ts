@@ -14,6 +14,13 @@ export interface LoginData {
     password : string;
 }
 
+export interface InfoData {
+    nickname: string;
+    email: string;
+    age: string;
+    join_date: string;
+}
+
 export interface Level {
     now_level: number;
     next_level: number;

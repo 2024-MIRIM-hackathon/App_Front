@@ -1,7 +1,7 @@
 import baseApi   from './index'
 import axios from 'axios';
 
-import {Join, JoinRes, LoginData} from '../types/userType'
+import {Join, JoinRes, InfoData, LoginData} from '../types/userType'
 
 const userApi = axios.create({
   ...baseApi.defaults,
@@ -35,10 +35,10 @@ export const postLogout = async () => {
   }
 }
 
-export const getInfo = async () => {
+export const getInfo = async (): Promise<InfoData> => {
   try {
     const res = await userApi.get('/info')
-    return res
+    return res.data
   } catch (error) {
     throw error
   }

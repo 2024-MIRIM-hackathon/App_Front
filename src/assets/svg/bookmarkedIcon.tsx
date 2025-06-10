@@ -2,7 +2,7 @@ import React from 'react';
 import Svg, { Rect, Path, Mask, SvgProps } from 'react-native-svg';
 
 const unbookmarkedIcon: React.FC<SvgProps> = (props) => (
-  <Svg width="12" height="15" viewBox="0 0 12 15" fill="none" {...props}>
+  <Svg width="14" height="18" viewBox="0 0 12 15" fill="none" {...props}>
     <Mask id="path-1-inside-1_393_660" fill="white">
       <Path fill-rule="evenodd" clip-rule="evenodd" d="M0.5 1.69952C0.5 1.14724 0.947715 0.699524 1.5 0.699524H10.5C11.0523 0.699524 11.5 1.14724 11.5 1.69952V10.2212C11.5 10.2213 11.5 10.2213 11.5 10.2213C11.4999 10.2213 11.4999 10.2213 11.4999 10.2213L11.4999 13.6248C11.4999 14.1537 10.8768 14.4362 10.479 14.0876L6.82634 10.8875C6.45887 10.5656 5.91257 10.5563 5.53436 10.8656L1.50501 14.1603C1.10317 14.4889 0.500076 14.203 0.500076 13.6839L0.500076 10.2213C0.500076 10.2213 0.500059 10.2213 0.500038 10.2213C0.500017 10.2213 0.5 10.2213 0.5 10.2212V1.69952Z" />
     </Mask>

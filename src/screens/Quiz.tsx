@@ -19,6 +19,7 @@ import TodayQuiz from '../assets/svg/TodayQuiz';
 import { useQuizProgress } from '../context/QuizProgressContext';
 
 import { getTodayQuiz, getRandomQuiz, getPeopleWrong } from '../api/quizApi';
+import axios from 'axios';
 
 type QuizData = {
   word_id: number,
@@ -46,11 +47,12 @@ const fetchToday = async () => {
   const arr: QuizData[] = [];
   try {
     while (arr.length < 4) {
-      const res = await getTodayQuiz();
-      if (arr.some(item => item.correct_answer === res.correct_answer)) {
+      const res = await axios.get('http://172.30.4.64:3000/api/quiz/today/21');
+      const data = res.data
+      if (arr.some(item => item.correct_answer === data.correct_answer)) {
         continue;
       }
-      arr.push(res);
+      arr.push(data);
     }
     setToday(arr);
   } catch (error) {
@@ -61,11 +63,12 @@ const fetchRandom = async () => {
   const arr: QuizData[] = [];
   try {
     while (arr.length < 4) {
-      const res = await getRandomQuiz();
-      if (arr.some(item => item.correct_answer === res.correct_answer)) {
+      const res = await axios.get('http://172.30.4.64:3000/api/quiz/random');
+      const data = res.data
+      if (arr.some(item => item.correct_answer === data.correct_answer)) {
         continue;
       }
-      arr.push(res);
+      arr.push(data);
     }
     setRandom(arr);
   } catch (error) {

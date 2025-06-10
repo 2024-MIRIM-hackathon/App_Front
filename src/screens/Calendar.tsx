@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
     View,
     StatusBar,
@@ -12,116 +12,45 @@ import {
 } from 'react-native';
 
 import Svg, { Circle, G } from 'react-native-svg';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../styles/CalendarStyles';
 import Animated, { useAnimatedProps, useSharedValue, withTiming } from 'react-native-reanimated';
+import { getDate } from '../api/calendarApi';
+import { getInfo } from '../api/userApi';
+import { LearnRes, Words, TextType } from '../types/learnType';
+import { InfoData } from '../types/userType';
+import { useFocusEffect } from '@react-navigation/native';
+interface DateRes extends LearnRes {
+    status: {
+        word_count: number;
+        read_done: number;
+        quiz_done: number;
+    }
+}
 
-const data = [
-    { "date": "2025-01-01", "learn": true },
-    { "date": "2025-01-02", "learn": false },
-    { "date": "2025-01-03", "learn": true },
-    { "date": "2025-01-04", "learn": false },
-    { "date": "2025-01-05", "learn": true },
-    { "date": "2025-01-06", "learn": false },
-    { "date": "2025-01-07", "learn": true },
-    { "date": "2025-01-08", "learn": false },
-    { "date": "2025-01-09", "learn": true },
-    { "date": "2025-01-10", "learn": false },
-    { "date": "2025-01-11", "learn": true },
-    { "date": "2025-01-12", "learn": true },
-    { "date": "2025-01-13", "learn": false },
-    { "date": "2025-01-14", "learn": false },
-    { "date": "2025-01-15", "learn": true },
-    { "date": "2025-01-16", "learn": false },
-    { "date": "2025-01-17", "learn": true },
-    { "date": "2025-01-18", "learn": false },
-    { "date": "2025-01-19", "learn": true },
-    { "date": "2025-01-20", "learn": false },
-    { "date": "2025-01-21", "learn": true },
-    { "date": "2025-01-22", "learn": false },
-    { "date": "2025-01-23", "learn": true },
-    { "date": "2025-01-24", "learn": false },
-    { "date": "2025-01-25", "learn": true },
-    { "date": "2025-01-26", "learn": false },
-    { "date": "2025-01-27", "learn": true },
-    { "date": "2025-01-28", "learn": true },
-    { "date": "2025-01-29", "learn": false },
-    { "date": "2025-01-30", "learn": true },
-    { "date": "2025-01-31", "learn": false },
-    { "date": "2025-02-01", "learn": false },
-    { "date": "2025-02-02", "learn": true },
-    { "date": "2025-02-03", "learn": false },
-    { "date": "2025-02-04", "learn": true },
-    { "date": "2025-02-05", "learn": true },
-    { "date": "2025-02-06", "learn": true },
-    { "date": "2025-02-07", "learn": true },
-    { "date": "2025-02-08", "learn": true },
-    { "date": "2025-02-09", "learn": true },
-    { "date": "2025-02-10", "learn": true },
-    { "date": "2025-02-11", "learn": true },
-    { "date": "2025-02-12", "learn": true },
-    { "date": "2025-02-13", "learn": true },
-    { "date": "2025-02-14", "learn": true },
-    { "date": "2025-02-15", "learn": true },
-    { "date": "2025-02-16", "learn": true },
-    { "date": "2025-02-17", "learn": true },
-    { "date": "2025-02-18", "learn": true },
-    { "date": "2025-02-19", "learn": true }
-];
-
-const wordData = [
-    {
-        'word': '보편',
-        'mean': '모든 것에 두루 미치거나 통함. 또는 그런 것.',
-        'book1': '꿈을 꿨어 그렇게 생생할 수 ',
-        'book2': '보편',
-        'book3': ', 이빨에 씹히던 날고기의 감촉이, 내얼굴이, 눈빛이. 처음보는 얼굴 같은데, 분명 내 얼굴이었어. 아니야, 거꾸로, 수없이 봤던 얼굴 같은데, 내 얼굴이 아니었어. 설명할 수 없어. 익숙하면서도 낯선..... 그 생생하고 이상한, 끔찍하게 이상한 느낌을.',
-        'title': '채식주의자',
-        'author': '한강',
-    },
-    {
-        'word': '보편',
-        'mean': '모든 것에 두루 미치거나 통함. 또는 그런 것.',
-        'book1': '꿈을 꿨어 그렇게 생생할 수 ',
-        'book2': '보편',
-        'book3': ', 이빨에 씹히던 날고기의 감촉이, 내얼굴이, 눈빛이. 처음보는 얼굴 같은데, 분명 내 얼굴이었어. 아니야, 거꾸로, 수없이 봤던 얼굴 같은데, 내 얼굴이 아니었어. 설명할 수 없어. 익숙하면서도 낯선..... 그 생생하고 이상한, 끔찍하게 이상한 느낌을.',
-        'title': '채식주의자',
-        'author': '한강',
-    },
-    {
-        'word': '보편',
-        'mean': '모든 것에 두루 미치거나 통함. 또는 그런 것.',
-        'book1': '꿈을 꿨어 그렇게 생생할 수 ',
-        'book2': '보편',
-        'book3': ', 이빨에 씹히던 날고기의 감촉이, 내얼굴이, 눈빛이. 처음보는 얼굴 같은데, 분명 내 얼굴이었어. 아니야, 거꾸로, 수없이 봤던 얼굴 같은데, 내 얼굴이 아니었어. 설명할 수 없어. 익숙하면서도 낯선..... 그 생생하고 이상한, 끔찍하게 이상한 느낌을.',
-        'title': '채식주의자',
-        'author': '한강',
-    },
-    {
-        'word': '보편',
-        'mean': '모든 것에 두루 미치거나 통함. 또는 그런 것.',
-        'book1': '꿈을 꿨어 그렇게 생생할 수 ',
-        'book2': '보편',
-        'book3': ', 이빨에 씹히던 날고기의 감촉이, 내얼굴이, 눈빛이. 처음보는 얼굴 같은데, 분명 내 얼굴이었어. 아니야, 거꾸로, 수없이 봤던 얼굴 같은데, 내 얼굴이 아니었어. 설명할 수 없어. 익숙하면서도 낯선..... 그 생생하고 이상한, 끔찍하게 이상한 느낌을.',
-        'title': '채식주의자',
-        'author': '한강',
-    },
-];
+const date = new Date();
+const offset = 9 * 60;
+const today = new Date(date.getTime() + offset * 60 * 1000);
 
 const wordContainerWidth = Dimensions.get('window').width - 58;
 const circle_length = 295.31;
 const R = circle_length / (2*Math.PI);
 
-const firstDay = new Date(data[0].date);
-const date = new Date();
-const offset = 9 * 60;
-const today = new Date(date.getTime() + offset * 60 * 1000);
-const todayText = today.toISOString().split('T')[0];
-
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 function Calendar() {
+    const [todayText, setTodayText] = useState(() => {
+        return today.toISOString().split('T')[0];
+    })
+    const [userId, setUserId] = useState<string|null>(null)
+    useEffect(() => {
+      const fetchUserId = async () => {
+        const id = await AsyncStorage.getItem('userId');
+        setUserId(id);
+      };
 
+      fetchUserId();
+    }, []);
     const [statusBarColor, setStatusBarColor] = useState('white'); 
     const [statusBarHeight, setStatusBarHeight] = useState(374); 
     
@@ -135,16 +64,83 @@ function Calendar() {
         } 
     };
 
-    const dataObj: Record<string, { date: string; learn: boolean }> = {};
-    data.forEach(item => {
-        dataObj[item.date] = item;
-    });
-    const [wordIng, setWordIng] = useState(0.9);
-    const [writeIng, setWriteIng] = useState(0.8);
-    const [quizIng, setQuizIng] = useState(0.5);
+    const [wordIng, setWordIng] = useState(0);
+    const [writeIng, setWriteIng] = useState(0);
+    const [quizIng, setQuizIng] = useState(0);
     
     const [currentMonth, setCurrentMonth] = useState(today);
     const [checkDate, setCheckDate] = useState(todayText);
+
+    const [words, setWords] = useState<Words[]>([])
+    const [text, setText] = useState<TextType>()
+    const [joinText, setJoinText] = useState('')
+    const [name, setName] = useState('')
+
+    const fetchDay = async(date: string) => {
+        try {
+            if (!userId) throw new Error('userId가 존재하지 않음')
+            const res:DateRes = await getDate({
+                userId,
+                date
+            })
+            setWords(res.words)
+            setText(res.text)
+            setWordIng(res.status.word_count * 0.25)
+            setWriteIng(res.status.read_done * 1)
+            setQuizIng(res.status.quiz_done * 1)
+        } catch (error) {
+            setWords([])
+            setText(undefined)
+            setWordIng(0)
+            setWriteIng(0)
+            setQuizIng(0)
+            console.log(userId);
+        }
+    }
+
+    useEffect(() => {
+        console.log('dddddddddddddddddddddddddd');
+        console.log(writeIng);
+    }, [writeIng])
+
+    const fetchInfo = async() => {
+        try {
+            if (!userId) throw new Error('userId가 존재하지 않음')
+                console.log('sdfasdfasdfasdfasdfa');
+                // console.log(res);
+            const res:InfoData = await getInfo()
+            setJoinText((res.join_date).split('T')[0])
+            setName(res.nickname)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        if (!userId) return;
+        fetchDay(todayText)
+        fetchInfo()
+    }, [userId])
+
+    useEffect(() => {
+        fetchDay(checkDate)
+    }, [checkDate])
+
+    useEffect(() => {
+        console.log('아아아아ㅏ');
+        console.log(joinText);
+    }, [joinText])
+
+    useFocusEffect(
+        useCallback(() => {
+            const today = new Date()
+            const offset = today.getTimezoneOffset()
+            const koreaTime = new Date(today.getTime() - offset * 60 * 1000)
+            const day = koreaTime.toISOString().split('T')[0]
+            setCheckDate(day)
+            return;
+        }, [])
+    )
 
     const nextMonth = () => {
         setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth()+1, 1));
@@ -153,31 +149,23 @@ function Calendar() {
         setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth()-1, 1));
     }
 
-    const getTextStyle = (item: { day: string | number, done: boolean, date: string}) => {
+    const getTextStyle = (date: string) => {
         let backgroundStyle = {};
         let isDisabled = 0;
         let textStyle = '#424242';
-
-        if(item.date == todayText) {
+        if(date <= joinText || date > todayText){
+            textStyle = '#9E9E9E'
+            isDisabled = 1
+            return [backgroundStyle, isDisabled, textStyle]
+        } else if(date == todayText) {
             backgroundStyle = {backgroundColor: '#FFF828'};
             textStyle = '#424242';
         }
-        else if(!item.done || new Date(item.date) < firstDay){
-            textStyle = '#424242';
-            isDisabled = 1;
-        }
-        else if(dataObj[item.date].learn){
-            textStyle = '#424242';
-        }
-        else {
-            textStyle = 'rgba(255, 137, 137, 0.79)';
-        }
-
         return [backgroundStyle, isDisabled, textStyle];
     }
 
     const generateMatrix = () => {
-        let matrix: { day: string | number, done: boolean, date: string }[][] = [];
+        let matrix: { date: string, day: string }[][] = [];
         let year = currentMonth.getFullYear();
         let month = currentMonth.getMonth();
         let firstDay = new Date(year, month, 1).getDay();  
@@ -187,20 +175,16 @@ function Calendar() {
         for (let row = 0; row < 6; row++) {
             matrix[row] = [];
             for (let col = 0; col < 7; col++) {
-                let isDone = false;
                 let dateText = '';
                 let cellValue = counter > 0 && counter <= maxDays ? counter : ''; 
                 if(cellValue !== ''){
                     dateText = `${year}-${String(month + 1).padStart(2, '0')}-${String(cellValue).padStart(2, '0')}`;
-                    if(new Date(dateText) <= today){
-                        isDone = true;
-                    }
                 }
-                matrix[row][col] = { day: cellValue, done: isDone, date: dateText };
+                matrix[row][col] = { date: dateText, day: cellValue.toString() };
                 counter++;
             }
         }
-        if (matrix[5].every(cell => cell.day === '')) {
+        if (matrix[5].every(cell => cell.date === '')) {
             matrix.pop();
         }
         return matrix;
@@ -212,7 +196,7 @@ function Calendar() {
         let rows = matrix.map((row) => {
             let rowItems = row.map((item, colIndex) => {
                 let textStyle = '#FFFFFF';
-                const [backgroundStyle, isDisabled, textColor] = getTextStyle(item);
+                const [backgroundStyle, isDisabled, textColor] = getTextStyle(item.date);
                 if (typeof textColor === 'string') {
                     textStyle = textColor;
                 }
@@ -248,7 +232,7 @@ function Calendar() {
         wordProgress.value = withTiming(wordIng, { duration: 2000 })
         writeProgress.value = withTiming(writeIng, { duration: 2000 })
         quizProgress.value = withTiming(quizIng, { duration: 2000 })
-    },[]);
+    },[quizIng]);
     
     const wordAnimatedProgress = useAnimatedProps(() => ({
         strokeDashoffset: circle_length * (1 - wordProgress.value),
@@ -305,13 +289,13 @@ function Calendar() {
                 </View>
                 {renderCalendar()}
             </View>
-            <Text style={styles.greeting}>이희진님!{'\n'}정말 열심히 한 날이네요!</Text>
+            <Text style={styles.greeting}>{name}님!{'\n'}정말 열심히 한 날이네요!</Text>
             <View style={styles.IngContainer}>
                 <View style={styles.IngItemContainer}>
                     <Text style={styles.IngText}>단어 학습</Text>
                     <View style={styles.perContainer}>
                         <View style={styles.perTextContainer}>
-                            <Text style={styles.perText}>90%</Text>
+                            <Text style={styles.perText}>{wordIng*100}%</Text>
                         </View>
                         <Svg width={100} height={100}>
                             <G rotation={90} origin="50,50" scaleX={-1}>
@@ -319,7 +303,7 @@ function Calendar() {
                                     stroke={'#FFE400'}
                                     strokeWidth={5.36}
                                     strokeDasharray={circle_length}
-                                    animatedProps={wordAnimatedProgress}
+                                    strokeDashoffset={circle_length * (1-wordIng)}
                                     strokeLinecap={'round'}
                                     fill='none'/>
                             </G>
@@ -327,10 +311,10 @@ function Calendar() {
                     </View>
                 </View>
                 <View style={styles.IngItemContainer}>
-                    <Text style={styles.IngText}>단어 학습</Text>
+                    <Text style={styles.IngText}>읽기 학습</Text>
                     <View style={styles.perContainer}>
                         <View style={styles.perTextContainer}>
-                            <Text style={styles.perText}>90%</Text>
+                            <Text style={styles.perText}>{writeIng*100}%</Text>
                         </View>
                         <Svg width={100} height={100}>
                             <G rotation={90} origin="50,50" scaleX={-1}>
@@ -338,7 +322,7 @@ function Calendar() {
                                     stroke={'#FFE400'}
                                     strokeWidth={5.36}
                                     strokeDasharray={circle_length}
-                                    animatedProps={writeAnimatedProgress}
+                                    strokeDashoffset={circle_length * (1-writeIng)}
                                     strokeLinecap={'round'}
                                     fill='none'/>
                             </G>
@@ -346,10 +330,10 @@ function Calendar() {
                     </View>
                 </View>
                 <View style={styles.IngItemContainer}>
-                    <Text style={styles.IngText}>단어 학습</Text>
+                    <Text style={styles.IngText}>퀴즈</Text>
                     <View style={styles.perContainer}>
                         <View style={styles.perTextContainer}>
-                            <Text style={styles.perText}>90%</Text>
+                            <Text style={styles.perText}>{quizIng}%</Text>
                         </View>
                         <Svg width={100} height={100}>
                             <G rotation={90} origin="50,50" scaleX={-1}>
@@ -357,7 +341,7 @@ function Calendar() {
                                     stroke={'#FFE400'}
                                     strokeWidth={5.36}
                                     strokeDasharray={circle_length}
-                                    animatedProps={quizAnimatedProgress}
+                                    strokeDashoffset={circle_length * (1-quizIng)}
                                     strokeLinecap={'round'}
                                     fill='none'/>
                             </G>
@@ -376,31 +360,31 @@ function Calendar() {
                     decelerationRate={10}
                     snapToInterval={wordContainerWidth + 9}
                     contentContainerStyle={{ width: 7 * 3 + 29 * 2 + wordContainerWidth * 4 }}>
-                    {wordData.map((word, index) => 
+                    {words.map((word, index) => 
                         <View key={index}>
                             <View style={styles.wordContainer}>
                                 <View style={styles.wordBox}>
                                     <Text style={styles.word}>{word.word}</Text>
                                     <View style={[styles.wordHighlight, {width: getWidth(word.word)+4}]}/>
                                 </View>
-                                <Text style={styles.mean}>{word.mean}</Text>
+                                <Text style={styles.mean}>{word.meaning}</Text>
                                 <Text style={styles.bookText}>
-                                    {word.book1}
+                                    {word.first_example}
                                     <View>
-                                        <Text style={styles.bookWord}>{word.book2}</Text>
+                                        <Text style={styles.bookWord}>{word.word}</Text>
                                     </View>
-                                    {word.book3}
+                                    {word.last_example}
                                 </Text>
                                 <View style={{marginHorizontal: 1, flexDirection: 'row'}}>
                                     <Text style={styles.title}>{word.title}</Text>
-                                    <Text style={styles.author}>{word.author}</Text>
+                                    <Text style={styles.author}>{word.writer}</Text>
                                 </View>
                             </View>
                         </View>
                     )}
                 </ScrollView>
                 <View style={styles.dotContainer}>
-                    {wordData.map((_, index) => {
+                    {words.map((_, index) => {
                         const isFocused = currentIndex === index;
                         return (
                             <View
@@ -414,14 +398,10 @@ function Calendar() {
             <Text style={styles.IngThat}>그날의 읽기 학습</Text>
             <View style={[styles.writeContainer, {marginBottom: StatusBar.currentHeight}]}>
                 <View style={styles.bookInfo}>
-                    <Text style={styles.bookTitle}>채식주의자</Text>
-                    <Text style={styles.bookWriter}>한강</Text>
+                    <Text style={styles.bookTitle}>{text?.title}</Text>
+                    <Text style={styles.bookWriter}>{text?.writer}</Text>
                 </View>
-                    <Text style={styles.bookWrite}>꿈을 꿨어
-그렇게 생생할 수 없어, 이빨에 씹히던 날고기의 
-감촉이, 내얼굴이, 눈빛이. 처음보는 얼굴 같은데, 분명 내 얼굴이었어. 아니야, 거꾸로, 수없이 봤던 얼굴 같은데, 내 얼굴이 아니었어.
-설명할 수 없어. 익숙하면서도 낯선.....
-그 생생하고 이상한, 끔찍하게 이상한 느낌을.</Text>
+                    <Text style={styles.bookWrite}>{text?.text}</Text>
             </View>
             <View style={{height: 131}}/>
         </ScrollView>
