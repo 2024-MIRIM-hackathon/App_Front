@@ -122,7 +122,12 @@ const WordQuiz: React.FC<Props> = ({route}) => {
 
   const fetchComplete = async() => {
     try {
-      const res = await axios.post('http://172.30.4.64:3000/api/quiz/complete')
+      let res;
+      if(quizVersion){
+        res = await axios.post('http://192.168.45.135:3000/api/quiz/complete')
+      } else {
+        res = await axios.post('http://192.168.45.135:3000/api/quiz/randomComplet')
+      }
       console.log(res.data);
     } catch (error) {
       console.log(error);
@@ -247,7 +252,7 @@ const WordQuiz: React.FC<Props> = ({route}) => {
                 준비가 다 되셨으면{'\n'}넘겨주세요!
               </Text>
             </View>
-            {data.map((item, index) => (
+            {data.length>0 && data.map((item, index) => (
               <View key={index}>
                 <View style={styles.quizContainer}>
                   {answer !== null && <Answer answer={answer} />}
@@ -402,12 +407,12 @@ const WordQuiz: React.FC<Props> = ({route}) => {
                   style={styles.quizEndImg}
                 />
                 <Text style={styles.quizEndText2}>수고했어요!</Text>
-                <TouchableOpacity onPress={() => {done(); oneMore()}} activeOpacity={1}>
+                <TouchableOpacity onPress={() => {oneMore()}} activeOpacity={1}>
                   <View style={[styles.endView, {backgroundColor: '#FFE400'}]}>
                     <Text style={styles.endText}>한 번 더 하기</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => {done(); navigation.goBack()}} activeOpacity={1}>
+                <TouchableOpacity onPress={() => {navigation.goBack()}} activeOpacity={1}>
                   <View
                     style={[
                       styles.endView,

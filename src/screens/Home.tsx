@@ -1,5 +1,5 @@
 import { CLIENT_ID, CLIENT_SECRET } from '@env';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   Text,
   StatusBar,
@@ -18,20 +18,22 @@ import Book from '../assets/svg/book';
 import Write from '../assets/svg/write';
 
 import CustomScrollView from '../components/CustomScrollView';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import he from 'he';
 
 import styles from '../styles/HomeStyles';
 
-import { useLearnProgress } from '../context/LearnProgressContext';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getDailyLearn } from '../api/learnApi';
 import { Words, TextType, LearnRes } from '../types/learnType';
+import { getDate } from '../api/calendarApi';
 
 function Home() {
   const navigation = useNavigation<StackNavigationProp<any>>();
-  const { learnWord, reading } = useLearnProgress()
+  const [userId, setUserId] = useState<string>()
+  const [learnWord, setLearnWord] = useState()
+  const [reading, setReading] = useState()
   const [words, setWords] = useState<Words[]>([])
   const [text, setText] = useState<TextType>()
   const [news, setNews] = useState<NewsItem[]>([]);
@@ -94,7 +96,7 @@ function Home() {
         const day = koreaTime.toISOString().split('T')[0]
         console.log(day);
         console.log(userId, today.toISOString().split('T')[0]);
-        const res = await axios.get(`http://172.30.4.64:3000/api/daily/todays?user_id=${userId}&date=${day}`)
+        const res = await axios.get(`http://192.168.45.135:3000/api/daily/todays?user_id=${userId}&date=${day}`)
         const data = res.data;
         setWords(data.words)
         setText(data.text)
@@ -103,6 +105,46 @@ function Home() {
       }
     }
     fetch();
+  }, [])
+
+  const fetchDone = async() => {
+    try {
+      if(userId===undefined) throw new Error('userId가 존재하지 않음')
+      const date = new Date()
+      const koreaDate = new Date(date.getTime() + 9 * 60 * 60 * 1000).toISOString().split('T')[0]
+      const res = await getDate({
+        userId,
+        date: koreaDate
+      })
+      console.log(res);
+      setLearnWord(res.status.word_count)
+      setReading(res.status.read_done)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchDone()
+      return;
+    }, [])
+  );
+
+  useEffect(() => {
+    fetchDone()
+  }, [userId])
+
+  useEffect(() => {
+    const getId = async() => {
+      try {
+        const id = await AsyncStorage.getItem('userId')
+        setUserId(id??'')
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getId()
   }, [])
 
   const linkPress = (url: string) => {
@@ -152,11 +194,11 @@ function Home() {
           style={styles.learningContainer}
           activeOpacity={1}
           onPress={() => navigation.navigate('Learning', {words})}>
-          <View style={[styles.learningItem, learnWord === 4 && {backgroundColor: '#FFE400'}]}>
+          <View style={[styles.learningItem, learnWord !== undefined && learnWord >= 4 && {backgroundColor: '#FFE400'}]}>
             <Book />
             <Text style={styles.learningActivity}>책 문장 단어학습</Text>
             <Text style={styles.learningIng}>
-              {learnWord !== 4
+              {learnWord !== undefined && learnWord < 4
                 ?`${learnWord}/4 진행 중` 
                 :'완료!'
               }

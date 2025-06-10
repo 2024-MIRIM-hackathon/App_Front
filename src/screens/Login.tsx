@@ -35,6 +35,8 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn }) => {
         password
       })
       await AsyncStorage.setItem("userId", String(response.user_id)); // 로그인 정보 저장
+      await AsyncStorage.setItem('nickname', nickname)
+      await AsyncStorage.setItem('password', password)
       setIsLoggedIn(true); // 로그인 상태 업데이트
     } catch (error) {
       if (error instanceof Error) {

@@ -20,6 +20,7 @@ import { useQuizProgress } from '../context/QuizProgressContext';
 
 import { getTodayQuiz, getRandomQuiz, getPeopleWrong } from '../api/quizApi';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type QuizData = {
   word_id: number,
@@ -37,53 +38,60 @@ type People = {
 }
 
 function Quiz() {
-    const { todayDone, randomDone } = useQuizProgress();
+    // const { todayDone, randomDone } = useQuizProgress();
     const navigation = useNavigation<StackNavigationProp<any>>();
     const [today, setToday] = useState<QuizData[]>([])
     const [random, setRandom] = useState<QuizData[]>([])
     const [people, setPeople] = useState<People[]>([])
+    const [todayDone, setTodayDone] = useState(false)
+    const [randomDone, setRandomDone] = useState(false)
 
-const fetchToday = async () => {
-  const arr: QuizData[] = [];
-  try {
-    while (arr.length < 4) {
-      const res = await axios.get('http://172.30.4.64:3000/api/quiz/today/21');
-      const data = res.data
-      if (arr.some(item => item.correct_answer === data.correct_answer)) {
-        continue;
+    const fetchToday = async () => {
+      try {
+        const res = await axios.get('http://192.168.45.135:3000/api/quiz/today')
+        const data = res.data
+        setToday(data);
+      } catch (error) {
+        console.log('오늘 퀴즈 에러');
       }
-      arr.push(data);
-    }
-    setToday(arr);
-  } catch (error) {
-    console.log(error);
-  }
-};
-const fetchRandom = async () => {
-  const arr: QuizData[] = [];
-  try {
-    while (arr.length < 4) {
-      const res = await axios.get('http://172.30.4.64:3000/api/quiz/random');
-      const data = res.data
-      if (arr.some(item => item.correct_answer === data.correct_answer)) {
-        continue;
+    };
+    const fetchRandom = async () => {
+      try {
+        const res = await axios.get('http://192.168.45.135:3000/api/quiz/random')
+        const data = res.data
+        console.log(res.data);
+        setRandom(data);
+      } catch (error) {
+        console.log('랜덤 퀴즈 에러');
       }
-      arr.push(data);
+    };
+
+    const fetchDone = async() => {
+      try {
+        const userId = await AsyncStorage.getItem('userId')
+        const todayRes = await axios.get(`http://192.168.45.135:3000/api/date?user_id=${userId}&date=${new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().split('T')[0]}`)
+        const todayData = todayRes.data.status.quiz_done
+        setTodayDone(todayData?true:false)
+        console.log(todayRes.data.status.quiz_done);
+        const randomRes = await axios.get(`http://192.168.45.135:3000/api/quiz/random-status?user_id=${userId}&date=${new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().split('T')[0]}`)
+        const randomData = randomRes.data.quiz_done
+        console.log(randomRes.data);
+        setRandomDone(randomData?true:false)
+      } catch (error) {
+        console.log(error);
+      }
     }
-    setRandom(arr);
-  } catch (error) {
-    console.log(error);
-  }
-};
+    
     useFocusEffect(
-        useCallback(() => {
-            fetchToday();
-            fetchRandom();
-            return () => {
-                setToday([])
-                setRandom([])
-            }
-        }, [])
+      useCallback(() => {
+        fetchDone();
+        fetchToday();
+        fetchRandom();
+        return () => {
+          setToday([])
+          setRandom([])
+        }
+      }, [])
     );
 
     useEffect(() => {
@@ -92,11 +100,12 @@ const fetchRandom = async () => {
             setPeople(res)
         }
         fetchPeople()
+        fetchDone()
     }, [])
 
     const goTodayQuiz = () => {
       const checkInterval = setInterval(() => {
-        if (today.length === 4) {
+        if (today.length > 0) {
           console.log(today);
           clearInterval(checkInterval);
           navigation.navigate('WordQuiz', { quizVersion: true, data: today })
@@ -105,7 +114,7 @@ const fetchRandom = async () => {
     };
     const goRandomQuiz = () => {
         const checkInterval = setInterval(() => {
-          if (random.length === 4) {
+          if (random.length > 0) {
             clearInterval(checkInterval);
             navigation.navigate('WordQuiz', {quizVersion : false, data: random})
           }
@@ -132,14 +141,14 @@ const fetchRandom = async () => {
                 </CustomScrollView>
                 <Text style={styles.learningQuizText}>학습 퀴즈</Text>
                 <TouchableOpacity style={styles.quizContainer} activeOpacity={1} onPress={goTodayQuiz}>
-                    <View style={styles.quizItem}>
+                    <View style={[styles.quizItem, todayDone && {backgroundColor: '#FFE400'}]}>
                         <TodayQuiz />
                         <Text style={styles.QuizText}>오늘 나온 퀴즈 풀기</Text>
                         <Text style={styles.QuizIng}>{todayDone?'완료':'미완료'}</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.quizContainer, { marginBottom: 121 }]} activeOpacity={1} onPress={goRandomQuiz}>
-                    <View style={styles.quizItem}>
+                    <View style={[styles.quizItem, randomDone && {backgroundColor: '#FFE400'}]}>
                         <QuizBook />
                         <Text style={styles.QuizText}>지금까지 나온 단어 퀴즈 풀기</Text>
                         <Text style={styles.QuizIng}>{randomDone?'완료':'미완료'}</Text>

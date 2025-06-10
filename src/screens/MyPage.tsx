@@ -55,70 +55,14 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
 
     const handleLogout = async () => {
         try {
-            await postLogout();
+            await postLogout()
             await AsyncStorage.removeItem("userId"); // 저장된 로그인 정보 삭제
             setIsLoggedIn(false); // 로그인 상태 해제
         } catch (error) {
             console.error("로그아웃 실패:", error);
         }
     };
-
-    // const fetchInfo = async() => {
-    //     try {
-    //         const response = await getInfo()
-    //         console.log(response);
-    //         setName(response.nickname)
-    //         setEmail(response.email)
-    //         setAge(response.age)
-    //         const joinDate = response['join_date'] ? new Date(response['join_date']) : new Date();
-    //         const today = new Date();
-    //         const joinDateStr = joinDate.toISOString().split('T')[0];
-    //         const todayStr = today.toISOString().split('T')[0];
-    //         const join = new Date(joinDateStr);
-    //         const now = new Date(todayStr);
-    //         const diffInMs = now.getTime() - join.getTime();
-    //         const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
-    //         setDate(diffInDays);
-    //     } catch (error) {
-    //         if (error instanceof Error) {
-    //             Alert.alert('에러', error.message);
-    //         }
-    //     }
-    // }
-    // const fetchRecord = async() => {
-    //     let res;
-    //     try {
-    //         res = await getRecord()
-    //         setLearnedWord(res.learned_word_num)
-    //         setLearnedText(res.learned_text_num)
-    //         setWrongWord(res.wrong_word_num)
-    //         setRightWord(res.right_word_num)
-    //     } catch (error) {
-    //         if (error instanceof Error) {
-    //             Alert.alert('에러', error.message);
-    //             console.log(res);
-    //         }
-    //     }
-    // }
-    // const fetchLevel = async() => {
-    //     try {
-    //         const res:Level = await getLevel();
-    //         setNowLevel(res.now_level)
-    //         setNextLevel(res.next_level)
-    //         setNeedNum(res.need_study_num)
-    //         setStudied(res.studied_num+10)
-    //         console.log('지금');
-    //         console.log(
-    //             res.now_level,
-    //             res.next_level,
-    //             res.need_study_num,
-    //             res.studied_num,
-    //             // (100%res.need_study_num*res.studied_num)
-    //         );
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
+    
     useFocusEffect(
         useCallback(() => {
             getInfo()
@@ -130,7 +74,7 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
     
     const getInfo = async() => {
         try {
-            const res = await axios.get('http://172.30.4.64:3000/api/mypage/info', { withCredentials: true })
+            const res = await axios.get('http://192.168.45.135:3000/api/mypage/info')
             const data = res.data
             console.log(res);
             setName(data.nickname)
@@ -143,7 +87,7 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
     }
     const getLevel = async() => {
         try {
-            const res = await axios.get('http://172.30.4.64:3000/api/user/level', { withCredentials: true })
+            const res = await axios.get('http://192.168.45.135:3000/api/user/level')
             const data = res.data
             setNowLevel(data.now_level)
             setNextLevel(data.next_level)
@@ -155,7 +99,7 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
     }
     const getRecord = async() => {
         try {
-            const res = await axios.get('http://172.30.4.64:3000/api/mypage/record', { withCredentials: true })
+            const res = await axios.get('http://192.168.45.135:3000/api/mypage/record')
             console.log(res.data);
             const data = res.data
             setLearnedWord(data.learned_word_num)
@@ -207,14 +151,14 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
                 <View style={styles.levelContainer}>
                     <View style={styles.level}>
                         <Text style={styles.levelText}>{nowLevel+1}레벨</Text>
-                        <Text style={styles.lack}>{nextLevel+1}레벨까지 {needNum-studied}개가 남았어요!</Text>
+                        <Text style={styles.lack}>{nextLevel+1}레벨까지 {needNum}개가 남았어요!</Text>
                     </View>
                     <View style={styles.levelBox}>
                         <Text style={styles.levelSmall}>{nowLevel+1}레벨</Text>
                         <Text style={styles.levelSmall}>{nextLevel+1}레벨</Text>
                     </View>
                     <View style={styles.levelTrack}>
-                        <View style={[styles.levelPercent, {width: `${(100/((nowLevel*10)+10))*(studied)}%`}]}/>
+                        <View style={[styles.levelPercent, {width: `${100/(needNum+studied)*(studied)}%`}]}/>
                     </View>
                 </View>
                 <Text style={styles.containerText}>활동 기록</Text>

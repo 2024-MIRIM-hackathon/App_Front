@@ -20,6 +20,7 @@ export const postUserJoin = async (joinData: Join): Promise<JoinRes> => {
 export const postLoginUser = async (loginData:LoginData) => {
   try {
     const response = await userApi.post('/login', loginData);
+    console.log(loginData);
     return response.data;
   } catch(error) {
     throw error;
@@ -29,6 +30,7 @@ export const postLoginUser = async (loginData:LoginData) => {
 export const postLogout = async () => {
   try {
     const res = await userApi.post('/logout')
+    console.log('로그아웃됨');
     return res.data;
   } catch(error) {
     throw error

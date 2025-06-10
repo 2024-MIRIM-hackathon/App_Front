@@ -106,8 +106,6 @@ function Calendar() {
     const fetchInfo = async() => {
         try {
             if (!userId) throw new Error('userId가 존재하지 않음')
-                console.log('sdfasdfasdfasdfasdfa');
-                // console.log(res);
             const res:InfoData = await getInfo()
             setJoinText((res.join_date).split('T')[0])
             setName(res.nickname)
@@ -117,14 +115,11 @@ function Calendar() {
     }
 
     useEffect(() => {
-        if (!userId) return;
-        fetchDay(todayText)
-        fetchInfo()
-    }, [userId])
-
-    useEffect(() => {
+      if (userId && checkDate) {
         fetchDay(checkDate)
-    }, [checkDate])
+        fetchInfo()
+      }
+    }, [userId, checkDate])
 
     useEffect(() => {
         console.log('아아아아ㅏ');
@@ -133,11 +128,7 @@ function Calendar() {
 
     useFocusEffect(
         useCallback(() => {
-            const today = new Date()
-            const offset = today.getTimezoneOffset()
-            const koreaTime = new Date(today.getTime() - offset * 60 * 1000)
-            const day = koreaTime.toISOString().split('T')[0]
-            setCheckDate(day)
+            setCurrentMonth(today)
             return;
         }, [])
     )
@@ -233,16 +224,6 @@ function Calendar() {
         writeProgress.value = withTiming(writeIng, { duration: 2000 })
         quizProgress.value = withTiming(quizIng, { duration: 2000 })
     },[quizIng]);
-    
-    const wordAnimatedProgress = useAnimatedProps(() => ({
-        strokeDashoffset: circle_length * (1 - wordProgress.value),
-    }))
-    const writeAnimatedProgress = useAnimatedProps(() => ({
-        strokeDashoffset: circle_length * (1 - writeProgress.value),
-    }))
-    const quizAnimatedProgress = useAnimatedProps(() => ({
-        strokeDashoffset: circle_length * (1 - quizProgress.value),
-    }))
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -295,7 +276,7 @@ function Calendar() {
                     <Text style={styles.IngText}>단어 학습</Text>
                     <View style={styles.perContainer}>
                         <View style={styles.perTextContainer}>
-                            <Text style={styles.perText}>{wordIng*100}%</Text>
+                            <Text style={styles.perText}>{Math.min(wordIng*100, 100)}%</Text>
                         </View>
                         <Svg width={100} height={100}>
                             <G rotation={90} origin="50,50" scaleX={-1}>
@@ -314,7 +295,7 @@ function Calendar() {
                                     stroke={'#FFE400'}
                                     strokeWidth={5.36}
                                     strokeDasharray={circle_length}
-                                    strokeDashoffset={circle_length * (1-wordIng)}
+                                    strokeDashoffset={circle_length * (Math.max(1-wordIng, 0))}
                                     strokeLinecap={'round'}
                                     fill='none'/>
                             </G>

@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden'
     },
     levelPercent: {
-        width: '50%',
+        width: 0,
         height: 10,
         backgroundColor: '#FFE400'
     }
