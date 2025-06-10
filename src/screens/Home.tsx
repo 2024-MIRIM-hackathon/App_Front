@@ -89,13 +89,15 @@ function Home() {
         const userId = await AsyncStorage.getItem('userId')
         if(userId===null) throw new Error('userId가 존재하지 않음')
         const today = new Date()
+        const offset = today.getTimezoneOffset()
+        const koreaTime = new Date(today.getTime() - offset * 60 * 1000)
+        const day = koreaTime.toISOString().split('T')[0]
+        console.log(day);
         console.log(userId, today.toISOString().split('T')[0]);
-        const res:LearnRes = await getDailyLearn({
-          userId: userId,
-          date: today.toISOString().split('T')[0]
-        })
-        setWords(res.words)
-        setText(res.text)
+        const res = await axios.get(`http://172.30.4.64:3000/api/daily/todays?user_id=${userId}&date=${day}`)
+        const data = res.data;
+        setWords(data.words)
+        setText(data.text)
       } catch (error) {
         console.log(error);
       }

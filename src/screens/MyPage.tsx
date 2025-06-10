@@ -21,6 +21,7 @@ import WordsReview from '../assets/svg/wordsReview';
 import { postLogout, getInfo, getRecord, getLevel } from '../api/userApi';
 import { Level } from '../types/userType';
 import { useFocusEffect } from '@react-navigation/native';
+import axios from 'axios';
 
 interface MyPageProps {
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -62,69 +63,120 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
         }
     };
 
-    const fetchInfo = async() => {
+    // const fetchInfo = async() => {
+    //     try {
+    //         const response = await getInfo()
+    //         console.log(response);
+    //         setName(response.nickname)
+    //         setEmail(response.email)
+    //         setAge(response.age)
+    //         const joinDate = response['join_date'] ? new Date(response['join_date']) : new Date();
+    //         const today = new Date();
+    //         const joinDateStr = joinDate.toISOString().split('T')[0];
+    //         const todayStr = today.toISOString().split('T')[0];
+    //         const join = new Date(joinDateStr);
+    //         const now = new Date(todayStr);
+    //         const diffInMs = now.getTime() - join.getTime();
+    //         const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+    //         setDate(diffInDays);
+    //     } catch (error) {
+    //         if (error instanceof Error) {
+    //             Alert.alert('에러', error.message);
+    //         }
+    //     }
+    // }
+    // const fetchRecord = async() => {
+    //     let res;
+    //     try {
+    //         res = await getRecord()
+    //         setLearnedWord(res.learned_word_num)
+    //         setLearnedText(res.learned_text_num)
+    //         setWrongWord(res.wrong_word_num)
+    //         setRightWord(res.right_word_num)
+    //     } catch (error) {
+    //         if (error instanceof Error) {
+    //             Alert.alert('에러', error.message);
+    //             console.log(res);
+    //         }
+    //     }
+    // }
+    // const fetchLevel = async() => {
+    //     try {
+    //         const res:Level = await getLevel();
+    //         setNowLevel(res.now_level)
+    //         setNextLevel(res.next_level)
+    //         setNeedNum(res.need_study_num)
+    //         setStudied(res.studied_num+10)
+    //         console.log('지금');
+    //         console.log(
+    //             res.now_level,
+    //             res.next_level,
+    //             res.need_study_num,
+    //             res.studied_num,
+    //             // (100%res.need_study_num*res.studied_num)
+    //         );
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
+    useFocusEffect(
+        useCallback(() => {
+            getInfo()
+            getRecord()
+            getLevel()
+            return;
+        }, [])
+    )
+    
+    const getInfo = async() => {
         try {
-            const response = await getInfo()
-            console.log(response);
-            setName(response.data.nickname)
-            setEmail(response.data.email)
-            setAge(response.data.age)
-            const joinDate = response.data['join_date'] ? new Date(response.data['join_date']) : new Date();
+            const res = await axios.get('http://172.30.4.64:3000/api/user/info')
+            const data = res.data
+            setName(data.name)
+            setAge(data.age)
+            setEmail(data.email)
+            const startDate = new Date(data.join_date);
             const today = new Date();
-            const joinDateStr = joinDate.toISOString().split('T')[0];
-            const todayStr = today.toISOString().split('T')[0];
-            const join = new Date(joinDateStr);
-            const now = new Date(todayStr);
-            const diffInMs = now.getTime() - join.getTime();
-            const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
-            setDate(diffInDays);
-        } catch (error) {
-            if (error instanceof Error) {
-                Alert.alert('에러', error.message);
+            const start = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+            const end = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            const diffTime = end.getTime() - start.getTime();
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))+1;
+            if(!isNaN(diffDays)){
+                setDate(diffDays)
             }
-        }
-    }
-    const fetchRecord = async() => {
-        let res;
-        try {
-            res = await getRecord()
-            setLearnedWord(res.learned_word_num)
-            setLearnedText(res.learned_text_num)
-            setWrongWord(res.wong_word_num)
-            setRightWord(res.right_word_num)
-        } catch (error) {
-            if (error instanceof Error) {
-                Alert.alert('에러', error.message);
-                console.log(res);
-            }
-        }
-    }
-    const fetchLevel = async() => {
-        try {
-            const res:Level = await getLevel();
-            setNowLevel(res.now_level)
-            setNextLevel(res.next_level)
-            setNeedNum(res.need_study_num)
-            setStudied(res.studied_num)
-            console.log('지금');
-            console.log(
-                res.now_level,
-                res.next_level,
-                res.need_study_num,
-                res.studied_num
-            );
         } catch (error) {
             console.log(error);
         }
     }
-    useFocusEffect(
-        useCallback(() => {
-            fetchInfo()
-            fetchRecord()
-            fetchLevel()
-            return;
-        }, [])
-    )
+    const getLevel = async() => {
+        try {
+            const res = await axios.get('http://172.30.4.64:3000/api/user/level')
+            const data = res.data
+            setNowLevel(data.now_level)
+            setNextLevel(data.next_level)
+            setNeedNum(data.need_study_num)
+            setStudied(data.studied_num)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const getRecord = async() => {
+        try {
+            const res = await axios.get('http://172.30.4.64:3000/api/mypage/record')
+            const data = res.data
+            setLearnedWord(data.learned_word_num)
+            setLearnedText(data.learned_text_num)
+            setWrongWord(data.wrong_word_num)
+            setRightWord(data.right_word_num)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    useEffect(() => {
+        getInfo()
+        getLevel()
+        getRecord()
+    }, [])
     
     return (
         <View style={styles.body}>
@@ -168,7 +220,7 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
                         <Text style={styles.levelSmall}>{nextLevel}레벨</Text>
                     </View>
                     <View style={styles.levelTrack}>
-                        <View style={[styles.levelPercent, {width: `${(studied / needNum) * 100}%`}]}/>
+                        <View style={[styles.levelPercent, {width: `${(100/needNum)*(-1*studied)}%`}]}/>
                     </View>
                 </View>
                 <Text style={styles.containerText}>활동 기록</Text>

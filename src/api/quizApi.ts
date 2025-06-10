@@ -1,7 +1,7 @@
 import baseApi   from './index'
 import axios from 'axios';
 
-import { WrongWord } from '../types/quizType';
+import { WrongWord, RightWord } from '../types/quizType';
 
 const quizApi = axios.create({
   ...baseApi.defaults,
@@ -20,11 +20,16 @@ export const getRandomQuiz = async() => {
 }
 
 export const postWrongWord = async(data:WrongWord) => {
-  const res = await quizApi.post('/wong_word', data)
+  const res = await quizApi.post('/wrong_word', data)
+  return res.data
+}
+
+export const postRightWord = async(data:RightWord) => {
+  const res = await quizApi.post('/right_word', data)
   return res.data
 }
 
 export const getPeopleWrong = async() => {
-  const res = await quizApi.get('/peoples_wong_word')
+  const res = await quizApi.get('/peoples_wrong_word')
   return res.data
 }

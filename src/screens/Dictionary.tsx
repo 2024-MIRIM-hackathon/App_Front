@@ -21,87 +21,6 @@ import Fold from '../assets/svg/fold';
 
 import { getAllWords, postBookmark } from '../api/wordDictionaryApi';
 
-const wordData = [
-  {
-    word: '기사',
-    meaning: '특정 목적을 위해 활용되는 지식과 방법.',
-    example: '새로운 기술은 항상 세상을 바꿔놓는다.',
-    bookmarked: true,
-  },
-  {
-    word: '기술',
-    meaning: '특정 목적을 위해 활용되는 지식과 방법.',
-    example: '새로운 기술은 항상 세상을 바꿔놓는다.',
-    bookmarked: true,
-  },
-  {
-    word: '도전',
-    meaning: '어려운 일에 맞서 싸우는 것.',
-    example: '그는 항상 도전을 즐긴다.',
-    bookmarked: true,
-  },
-  {
-    word: '미래',
-    meaning: '앞으로 일어날 시간이나 사건.',
-    example: '우리는 더 나은 미래를 위해 노력한다.',
-    bookmarked: false,
-  },
-  {
-    word: '문화',
-    meaning: '한 사회나 민족이 공유하는 생활 방식.',
-    example: '문화는 국가의 정체성을 형성한다.',
-    bookmarked: false,
-  },
-  {
-    word: '보편',
-    meaning: '모든 것에 두루 미치거나 통함.',
-    example: '사람들은 보편적으로 사랑하는 사람을 행복하게 하고 싶어 해.',
-    bookmarked: true,
-  },
-  {
-    word: '사랑',
-    meaning: '누군가나 무언가에 대해 강한 애정을 느끼는 감정.',
-    example: '그는 사랑하는 사람에게 편지를 썼다.',
-    bookmarked: false,
-  },
-  {
-    word: '소통',
-    meaning: '의사소통을 통해 이해하는 과정.',
-    example: '효과적인 소통이 필요하다.',
-    bookmarked: false,
-  },
-  {
-    word: '행복',
-    meaning: '기쁘고 만족스러운 상태.',
-    example: '그는 항상 행복하게 살고 싶어 한다.',
-    bookmarked: false,
-  },
-  {
-    word: '철학',
-    meaning: '인생, 우주, 인간 존재의 근본 원리를 탐구하는 학문.',
-    example: '그는 어릴 때부터 철학에 관심이 많았다.',
-    bookmarked: false,
-  },
-  {
-    word: '평화',
-    meaning: '전쟁이나 분쟁이 없는 상태.',
-    example: '모든 사람은 평화를 원한다.',
-    bookmarked: true,
-  },
-  {
-    word: '지혜',
-    meaning: '사리분별이 뛰어나고 올바르게 판단하는 능력.',
-    example: '그는 지혜로운 결정을 내렸다.',
-    bookmarked: false,
-  },
-  {
-    word: '혁신',
-    meaning: '낡은 것을 바꾸어 새롭게 함.',
-    example: '기업들은 지속적인 혁신을 통해 경쟁력을 유지한다.',
-    bookmarked: true,
-  },
-];
-
 type WordData = {
   id: number,
   word: string,
@@ -252,7 +171,9 @@ function Dictionary() {
           <Text style={styles.nothing}>일치하는 단어가 없어요!</Text>
         ) : (
           filteredWords.map((item, index) => (
-            <View
+            <TouchableOpacity
+              onPress={() => toggleShowMore(index)}
+              activeOpacity={1}
               key={index}
               style={[
                 styles.wordContainer,
@@ -263,15 +184,13 @@ function Dictionary() {
                   onPress={() => toggleBookmark(index, item.id)}
                   activeOpacity={1}>
                   {item.bookmarked ? (
-                    <BookmarkedIcon style={{marginTop: 4}} />
+                    <BookmarkedIcon style={{marginTop: 2}} />
                   ) : (
-                    <UnbookmarkedIcon style={{marginTop: 4}} />
+                    <UnbookmarkedIcon style={{marginTop: 2}} />
                   )}
                 </TouchableOpacity>
                 <Text style={styles.word}>{item.word}</Text>
-                <TouchableOpacity
-                  onPress={() => toggleShowMore(index)}
-                  activeOpacity={1}>
+                <TouchableOpacity>
                   {expandedItems[index] ? (
                     <Fold style={{marginTop: 6}} />
                   ) : (
@@ -287,7 +206,7 @@ function Dictionary() {
                   <Text style={styles.infoText}>{item.example}</Text>
                 </View>
               )}
-            </View>
+            </TouchableOpacity>
           ))
         )}
         <View style={{height: 101}} />

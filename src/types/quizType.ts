@@ -1,4 +1,8 @@
 export interface WrongWord {
     word_id: number;
-    wong_word: string;
+    wrong_word: string;
+}
+export interface RightWord {
+    word_id: number;
+    right_word: string;
 }
