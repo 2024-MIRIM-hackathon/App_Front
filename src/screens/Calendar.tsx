@@ -299,6 +299,17 @@ function Calendar() {
                         </View>
                         <Svg width={100} height={100}>
                             <G rotation={90} origin="50,50" scaleX={-1}>
+                                <Circle
+                                    cx={50}
+                                    cy={50}
+                                    r={R}
+                                    stroke="#F1F0F5"
+                                    strokeWidth={5.36}
+                                    strokeDasharray={circle_length}
+                                    strokeDashoffset={0}
+                                    strokeLinecap="round"
+                                    fill="none"
+                                />  
                                 <AnimatedCircle cx={50} cy={50} r={R}
                                     stroke={'#FFE400'}
                                     strokeWidth={5.36}
@@ -318,6 +329,17 @@ function Calendar() {
                         </View>
                         <Svg width={100} height={100}>
                             <G rotation={90} origin="50,50" scaleX={-1}>
+                                <Circle
+                                    cx={50}
+                                    cy={50}
+                                    r={R}
+                                    stroke="#F1F0F5"
+                                    strokeWidth={5.36}
+                                    strokeDasharray={circle_length}
+                                    strokeDashoffset={0}
+                                    strokeLinecap="round"
+                                    fill="none"
+                                />
                                 <AnimatedCircle cx={50} cy={50} r={R}
                                     stroke={'#FFE400'}
                                     strokeWidth={5.36}
@@ -333,10 +355,21 @@ function Calendar() {
                     <Text style={styles.IngText}>퀴즈</Text>
                     <View style={styles.perContainer}>
                         <View style={styles.perTextContainer}>
-                            <Text style={styles.perText}>{quizIng}%</Text>
+                            <Text style={styles.perText}>{quizIng*100}%</Text>
                         </View>
                         <Svg width={100} height={100}>
                             <G rotation={90} origin="50,50" scaleX={-1}>
+                                <Circle
+                                    cx={50}
+                                    cy={50}
+                                    r={R}
+                                    stroke="#F1F0F5"
+                                    strokeWidth={5.36}
+                                    strokeDasharray={circle_length}
+                                    strokeDashoffset={0}
+                                    strokeLinecap="round"
+                                    fill="none"
+                                />
                                 <AnimatedCircle cx={50} cy={50} r={R}
                                     stroke={'#FFE400'}
                                     strokeWidth={5.36}
