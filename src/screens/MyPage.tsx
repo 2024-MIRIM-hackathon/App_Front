@@ -130,27 +130,20 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
     
     const getInfo = async() => {
         try {
-            const res = await axios.get('http://172.30.4.64:3000/api/user/info')
+            const res = await axios.get('http://172.30.4.64:3000/api/mypage/info', { withCredentials: true })
             const data = res.data
-            setName(data.name)
+            console.log(res);
+            setName(data.nickname)
             setAge(data.age)
             setEmail(data.email)
-            const startDate = new Date(data.join_date);
-            const today = new Date();
-            const start = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
-            const end = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-            const diffTime = end.getTime() - start.getTime();
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))+1;
-            if(!isNaN(diffDays)){
-                setDate(diffDays)
-            }
+            setDate(data.date + 1)
         } catch (error) {
             console.log(error);
         }
     }
     const getLevel = async() => {
         try {
-            const res = await axios.get('http://172.30.4.64:3000/api/user/level')
+            const res = await axios.get('http://172.30.4.64:3000/api/user/level', { withCredentials: true })
             const data = res.data
             setNowLevel(data.now_level)
             setNextLevel(data.next_level)
@@ -162,7 +155,8 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
     }
     const getRecord = async() => {
         try {
-            const res = await axios.get('http://172.30.4.64:3000/api/mypage/record')
+            const res = await axios.get('http://172.30.4.64:3000/api/mypage/record', { withCredentials: true })
+            console.log(res.data);
             const data = res.data
             setLearnedWord(data.learned_word_num)
             setLearnedText(data.learned_text_num)
@@ -212,15 +206,15 @@ const MyPage: React.FC<MyPageProps> = ({ setIsLoggedIn }) => {
                 </View>
                 <View style={styles.levelContainer}>
                     <View style={styles.level}>
-                        <Text style={styles.levelText}>{nowLevel}레벨</Text>
-                        <Text style={styles.lack}>{nextLevel}레벨까지 단어 {needNum-studied}개가 남았어요!</Text>
+                        <Text style={styles.levelText}>{nowLevel+1}레벨</Text>
+                        <Text style={styles.lack}>{nextLevel+1}레벨까지 {needNum-studied}개가 남았어요!</Text>
                     </View>
                     <View style={styles.levelBox}>
-                        <Text style={styles.levelSmall}>{nowLevel}레벨</Text>
-                        <Text style={styles.levelSmall}>{nextLevel}레벨</Text>
+                        <Text style={styles.levelSmall}>{nowLevel+1}레벨</Text>
+                        <Text style={styles.levelSmall}>{nextLevel+1}레벨</Text>
                     </View>
                     <View style={styles.levelTrack}>
-                        <View style={[styles.levelPercent, {width: `${(100/needNum)*(-1*studied)}%`}]}/>
+                        <View style={[styles.levelPercent, {width: `${(100/((nowLevel*10)+10))*(studied)}%`}]}/>
                     </View>
                 </View>
                 <Text style={styles.containerText}>활동 기록</Text>
