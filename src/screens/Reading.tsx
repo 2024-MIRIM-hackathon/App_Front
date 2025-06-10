@@ -32,17 +32,11 @@ const Learning: React.FC<Props> = ({route}) => {
                 thing: data!.text,
                 learn_date: (new Date()).toISOString().split('T')[0]
             });
-            // const res = await postLearn({
-            //     user_id: Number(userId),
-            //     t_type: 'text',
-            //     thing: data!.text,
-            //     learn_date: (new Date()).toISOString().split('T')[0]
-            // })
-            const res = await axios.post(`http://172.30.4.64:3000/api/learned`, {
+            const res = await axios.post(`http://192.168.45.135:3000/api/learned`, {
                 user_id: userId,
                 t_type: 'text',
                 thing: text.text,
-                learn_date: (new Date()).toISOString().split('T')[0]
+                learn_date: new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().split('T')[0]
             })
             console.log(res);
         } catch (error) {

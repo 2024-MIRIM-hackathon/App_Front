@@ -43,22 +43,22 @@ const Learning: React.FC<Props> = ({route}) => {
         setCurrentIndex(index);
     };
     
-    useEffect(() => {
-        const fetch = async() => {
-            const res = await axios.post(`http://172.30.4.64:3000/api/learned`, {
-                user_id: userId,
-                t_type: 'word',
-                thing: words[currentIndex-1].word,
-                learn_date: (new Date()).toISOString().split('T')[0]
-            })
-            console.log(res);
-            if(currentIndex+1 > learnWord){
-                setLearnWord(currentIndex+1)
-            }
+    const fetch = async() => {
+        const res = await axios.post(`http://192.168.45.135:3000/api/learned`, {
+            user_id: userId,
+            t_type: 'word',
+            thing: words[currentIndex].word,
+            learn_date: new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().split('T')[0]
+        })
+        console.log(res);
+        if(currentIndex+1 > learnWord){
+            setLearnWord(currentIndex+1)
         }
+    }
+    useEffect(() => {
+        fetch();
         if (currentIndex === 3) setIsLearningCompleted(true);
         else setIsLearningCompleted(false);
-        fetch();
     }, [currentIndex])
 
     const indexToOffset = () => {
@@ -72,9 +72,14 @@ const Learning: React.FC<Props> = ({route}) => {
     }
 
     useEffect(() => {
+        fetch()
+    }, [userId])
+
+    useEffect(() => {
         const loadUserId = async () => {
             const id = await AsyncStorage.getItem('userId');
             setUserId(id??'');
+            // fetch();
         };
         loadUserId();
     }, [])

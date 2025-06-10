@@ -48,6 +48,8 @@ const Signup:React.FC<SignupProps> = ({ setIsLoggedIn }) => {
       await postUserJoin(joinData)
       const response = await postLoginUser({nickname, password: password_1})
       await AsyncStorage.setItem("userId", String(response.user_id));
+      await AsyncStorage.setItem('nickname', nickname)
+      await AsyncStorage.setItem('password', password_1)
       setIsLoggedIn(true);
     } catch (error) {
       if (error instanceof Error) {

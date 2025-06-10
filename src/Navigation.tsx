@@ -8,6 +8,7 @@ import LoginScreen from "./screens/Login";
 import App from "./App";  // 바텀 네비게이션
 import { ActivityIndicator, View } from "react-native";
 import SplashScreen from "react-native-splash-screen";
+import { postLoginUser } from "./api/userApi";
 
 const Stack = createStackNavigator();
 
@@ -23,8 +24,18 @@ const Navigation = () => {
     const checkLoginStatus = async () => {
       try {
         const userId = await AsyncStorage.getItem("userId");
-        setIsLoggedIn(userId !== null); // userToken이 있으면 로그인 상태 유지
+        const nickname  = await AsyncStorage.getItem('nickname')
+        const password = await AsyncStorage.getItem('password')
+        console.log(nickname, password, userId);
+        if(nickname && password){
+          await postLoginUser({
+            nickname,
+            password
+          })
+        }
+        setIsLoggedIn(userId !== null); 
       } catch (error) {
+        setIsLoggedIn(false)
         console.error("로그인 상태 확인 실패:", error);
       }
     };
