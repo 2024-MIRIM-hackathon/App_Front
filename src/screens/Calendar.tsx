@@ -333,7 +333,7 @@ function Calendar() {
                     <Text style={styles.IngText}>퀴즈</Text>
                     <View style={styles.perContainer}>
                         <View style={styles.perTextContainer}>
-                            <Text style={styles.perText}>{quizIng}%</Text>
+                            <Text style={styles.perText}>{quizIng*100}%</Text>
                         </View>
                         <Svg width={100} height={100}>
                             <G rotation={90} origin="50,50" scaleX={-1}>
